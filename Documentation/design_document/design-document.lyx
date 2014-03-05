@@ -1,0 +1,1939 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\AtBeginDocument{\addto\captionsenglish{\renewcommand{\abstractname}{Executive Summary}}}
+
+%% format enumerated list:
+\renewcommand{\labelenumi}{\LARGE \textbf{\arabic{enumi}}}
+\renewcommand{\labelenumii}{\normalsize \textbf{\arabic{enumi}.\arabic{enumii}}}
+\renewcommand{\labelenumiii}{\normalsize \textbf{\arabic{enumi}.\arabic{enumii}.\arabic{enumiii}}}
+%% the following according to http://www.eng.cam
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement H
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Wirelessly Integrating Topographic Teleoperation Instrument (WITTI)
+\end_layout
+
+\begin_layout Author
+Brian Smith (bdsmith1@email.arizona.edu)
+\begin_inset Newline newline
+\end_inset
+
+Brianna Heersink (bmheersink@gmail.com) 
+\begin_inset Newline newline
+\end_inset
+
+Alex Warren (amwarren@email.arizona.edu)
+\end_layout
+
+\begin_layout Date
+2/23/2014
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\begin_inset VSpace bigskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+Team Witty
+\end_layout
+
+\begin_layout Standard
+\align center
+ECE 573 - Software Engineering
+\end_layout
+
+\begin_layout Standard
+\align center
+Professor Sprinkle
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Abstract
+The Wirelessly Integrating Topographic Teleoperation Instrument presented
+ in this report is an application used to visualize LiDAR data on a mobile
+ device.
+ This visualization will allow the user to see the environment that an autonomou
+s vehicle is sensing and using to make decisions.
+ The application has the functionality to visualize prerecorded data that
+ is saved on the mobile device, prerecorded data saved on a computer, or
+ data collected live from the Velodyne LiDAR by the computer.
+ The application also provides the functionality for the user to select
+ a vehicle trajectory by touching the visualized LiDAR data on the screen.
+\end_layout
+
+\begin_layout Abstract
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FloatList figure
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset FloatList table
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Project Overview
+\end_layout
+
+\begin_layout Standard
+The Light Detection and Ranging (LiDAR) visualization application is designed
+ to display information collected from the LiDAR on a mobile device.
+ The app will also allow users to draw a path on top of the visualized point
+ cloud and determine if the path is reachable.
+ 
+\end_layout
+
+\begin_layout Standard
+LiDAR devices use an array of lasers to collect data that give the distance
+ and height values of an array of points stemming out of the LiDAR that
+ can be used to determine the physical characteristics of the surrounding
+ landscape.
+ Typically, LiDAR is used to help autonomous vehicles get information on
+ their surroundings.
+ 
+\end_layout
+
+\begin_layout Standard
+This app will give researchers the ability to see a subset of what the vehicle
+ sees while the vehicle is driving or play back previously recorded data.
+ This could be useful in debugging unexpected vehicle behavior or determining
+ the limitations of the LiDAR when driving.
+ This app will also help researchers visualize how and why the vehicle makes
+ certain decisions when determining if a chosen path is reachable.
+ 
+\end_layout
+
+\begin_layout Standard
+This report provides a description of the implementation details and analysis
+ for our application.
+ The analysis section includes a description of how the app will function,
+ class diagrams, a description of the supported use cases, several example
+ sequence diagrams, and a discussion of the important algorithms the application
+ will utilize.
+ Also included in the analysis are sample screen shots of the various user
+ interfaces that will be part of the application.
+ After the application analysis section there is a description of how the
+ application will be completed, including a timeline and a separation of
+ duties.
+ The report concludes that the application will be completed on time and
+ will accomplish the application goals.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Analysis and Models
+\end_layout
+
+\begin_layout Section
+Requirements
+\end_layout
+
+\begin_layout Subsection
+All Requirements
+\end_layout
+
+\begin_layout Enumerate
+System
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Network Exchange: The phone and host computer shall exchange information
+ over local network.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: B 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): None 
+\end_layout
+
+\begin_layout Description
+Difficulty: 3 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+LiDAR Transfer: The phone application software shall communicate with the
+ host computer through network to receive LiDAR data from the host computer.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: B 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 1.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 1
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Output Settings: The phone application software shall be capable of changing
+ the host computer’s Velodyne LiDAR data output settings through network
+ communication.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: B 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 1.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 2 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Trajectory Transfer: The phone application software shall send vehicle trajector
+ies to the host computer through network communication.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: B 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 1.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 1 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Manual Data Refresh: The phone application software shall be capable of
+ refreshing the displayed Velodyne LiDAR data manually based on user input.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: B 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 2.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 2 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Auto Data Refresh: The phone application software shall be capable of refreshing
+ the displayed Velodyne LiDAR data automatically through a set refresh rate.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 2.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 1 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Mesh Display:The phone application software shall be capable of displaying
+ LiDAR data as a mesh.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): None 
+\end_layout
+
+\begin_layout Description
+Difficulty: 4
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Dynamic LiDAR Driver Settings: The phone application software shall be capable
+ of changing the LiDAR driver settings through network communication.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): None 
+\end_layout
+
+\begin_layout Description
+Difficulty: 4 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Vehicle Control: The phone application software shall send phone trajectories
+ to the host computer where it is converted to vehicle control commands
+ sent to CAT Vehicle.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement Level: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): None 
+\end_layout
+
+\begin_layout Description
+Difficulty: 3 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Phone Application
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Display Data: The phone application software shall load and display Velodyne
+ LiDAR data on the phone.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: B 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): None 
+\end_layout
+
+\begin_layout Description
+Difficulty: 4 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Draw Trajectory: The phone application software shall read a trajectory
+ selected by the user through touch events on the phone.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: B 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 2.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 4 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Trajectory Clearance: The phone application software shall reject trajectories
+ that would collide with obstacles.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: B 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 2.2 
+\end_layout
+
+\begin_layout Description
+Difficulty: 3 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Perspective Change: The phone application software shall be capable of changing
+ the perspective of the displayed image on the phone.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 2.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 1 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Trajectory Drivability: The phone application software shall reject trajectories
+ that are not possible to follow.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 2.2 
+\end_layout
+
+\begin_layout Description
+Difficulty: 3 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Host Computer Application
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Convert Data: The host computer software shall convert the Velodyne LiDAR
+ PCAP file to an XYZ-coordinate file with a limited complexity that will
+ be established.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: B 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): None 
+\end_layout
+
+\begin_layout Description
+Difficulty: 3 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+LiDAR Driver Settings: The host computer software shall be capable of reducing
+ the field of view and the range of Velodyne LiDAR data provided to the
+ phone.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 3.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 2
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+JAUS Compatible: The host computer software shall be capable of sending
+ JAUS messages containing converted LiDAR data.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 3.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 4
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Dynamic LiDAR Conversion: The host computer software shall be capable of
+ processing and converting the PCAP files to phone readable data as they
+ are received within a bounded delay that will be established.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 3.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 4
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Ground Mesh: The host computer will generate a mesh representation of the
+ ground, so that hills and dips in the road will be represented.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 3.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 4
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Persistent Mapping: The host computer will combine LiDAR data and IMU data
+ over time to create a map that incorporates data over the course of time.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Requirement: A 
+\end_layout
+
+\begin_layout Description
+Prerequisite(s): 3.1 
+\end_layout
+
+\begin_layout Description
+Difficulty: 6
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Subsection
+Requirements by A/B Group
+\end_layout
+
+\begin_layout Subsubsection
+B Requirements
+\end_layout
+
+\begin_layout Standard
+\noindent
+Network Exchange (1.1)
+\end_layout
+
+\begin_layout Standard
+\noindent
+LiDAR Transfer (1.2)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Output Settings (1.3)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Trajectory Transfer (1.4)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Manual Data Refresh (1.5)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Display Data (2.1)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Draw Trajectory (2.2)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Trajectory Clearance (2.3)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Convert Data (3.1)
+\end_layout
+
+\begin_layout Subsubsection
+A Requirements
+\end_layout
+
+\begin_layout Standard
+\noindent
+Auto Data Refresh (1.6)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Mesh Display (1.7)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Dynamic LiDAR Driver Settings (1.8)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Vehicle Control (1.9)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Perspective Change (2.4)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Trajectory Drivability (2.5)
+\end_layout
+
+\begin_layout Standard
+\noindent
+LiDAR Driver Settings (3.2)
+\end_layout
+
+\begin_layout Standard
+\noindent
+JAUS Compatible (3.3)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Dynamic LiDAR Conversion (3.4)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Ground Mesh (3.5)
+\end_layout
+
+\begin_layout Standard
+\noindent
+Persistent Mapping (3.6)
+\end_layout
+
+\begin_layout Section
+Application Analysis
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Mock Screen Shots
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Home Screen
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename figures/phone_screen_home.jpg
+	lyxscale 50
+	width 35col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Settings Screen
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/phone_screen_settings.jpg
+	lyxscale 50
+	width 35col%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Display Screen
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename figures/phone_screen_display.jpg
+	lyxscale 50
+	width 80col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Overview
+\end_layout
+
+\begin_layout Standard
+When the app initializes, the user is brought to the title screen.
+ Here, the user is presented with three buttons which will choose the next
+ action: Demo, Launch, and Settings.
+ The user can navigate to the settings menu by clicking on the Settings
+ button.
+ The user can navigate to the display interface by clicking on the Demo
+ button or the Launch button.
+ 
+\end_layout
+
+\begin_layout Standard
+The Demo button is used initialize Demo mode, which will read point cloud
+ data directly from a file stored on the device.
+ The Launch button is used to initialize wireless mode, where the phone
+ will connect with a host computer in order to receive point cloud data.
+\end_layout
+
+\begin_layout Standard
+After the Demo button or Launch button is pressed, the user is presented
+ with several settings that must be configured before moving on to the display
+ interface.
+ One option is the data refresh rate.
+ This will be limited in choices, including setting the rate to 0 to refresh
+ the display manually by tapping the screen.
+ The other option will be to set the IP address of the host computer for
+ wireless communication.
+ This option will be grayed when the Demo button is used to initialize the
+ display interface.
+\end_layout
+
+\begin_layout Standard
+After setting the appropriate settings, the user is taken to the display
+ interface where point cloud data immediately starts playing at the set
+ refresh rate and from the set location.
+ While the user is viewing the display interface, there will be several
+ on-screen options.
+ If the user is in tap to refresh mode, a draw path option and a refresh
+ option will be available.
+ If the user is streaming video, the only option will be to pause the playback.
+ After a successful pause, the user will have the option to draw a path.
+ After a valid path is inputted, the app immediately checks for reachability
+ and informs the user of the outcome.
+ The user is then taken back to the display interface in the paused state.
+\end_layout
+
+\begin_layout Standard
+The user is able to navigate back to the title screen by clicking the back
+ button.
+ The user can quit the application by clicking the back button at the title
+ screen.
+ The home button will pause the app and return control to the device.
+ These actions can be reviewed in the State Diagram below.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Phone Application State Diagram
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/StateModel.PNG
+	width 95col%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Use Cases
+\end_layout
+
+\begin_layout Standard
+The phone application has several use cases, as can be seen in the figure
+ below.
+ The actor for all use cases is the user of the phone application who wishes
+ to view the LiDAR data and/or draw vehicle trajectories on a smartphone.
+\end_layout
+
+\begin_layout Subsubsection
+Determine reachability of a drawn path.
+ 
+\end_layout
+
+\begin_layout Description
+
+\series bold
+Summary
+\series default
+: The app determines if the path drawn by the user on the screen is reachable,
+ i.e.
+ no obstacles in the path.
+ 
+\end_layout
+
+\begin_layout Description
+Actors: User 
+\end_layout
+
+\begin_layout Description
+
+\series bold
+Preconditions
+\series default
+: The app is displaying point cloud data.
+ 
+\end_layout
+
+\begin_layout Description
+
+\series bold
+Description
+\series default
+: The user first clicks the pause button if the current mode is set to stream
+ data.
+ Then the user draws a path on the screen of the app.
+ The app first checks if the path is valid, i.e.
+ does not go out of bounds of the image.
+ If the path is valid, the app will calculate reachability of the selected
+ path.
+ The app will then alert the user whether the selected path is reachable.
+ At this point, the app will exit the path drawing state and return to the
+ image viewing with the image paused.
+ 
+\end_layout
+
+\begin_layout Description
+
+\series bold
+Exceptions
+\series default
+: The following exceptions are expected: 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Invalid
+\series medium
+ 
+\series bold
+Path 
+\series default
+The user draws a path outside the boundary of the image.
+ The app will give the use a warning popup and clear the screen.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Description
+
+\series bold
+Postconditions
+\series default
+: The app returns to the image view screen with the current view paused.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Watching live LiDAR data
+\end_layout
+
+\begin_layout Description
+Summary: The user is streaming live LiDAR data.
+ 
+\end_layout
+
+\begin_layout Description
+Actors: User 
+\end_layout
+
+\begin_layout Description
+Preconditions: The user is located anywhere a good connection between the
+ device and the host computer can be established.
+ The app is open to the title screen, HomeActivity.
+\end_layout
+
+\begin_layout Description
+Description: The user selects Launch Mode.
+ The user selects either a constant refresh rate or tapping the screen to
+ get the current LiDAR view.
+ The user enters the host computer's IP address and selects to get live
+ LiDAR data.
+ Once the user acknowledges all settings, a wireless connection between
+ the device and host computer will be established.
+ The device will then begin streaming live LiDAR data.
+ 
+\end_layout
+
+\begin_layout Description
+Exceptions: The following exceptions are expected: 
+\end_layout
+
+\begin_deeper
+\begin_layout Description
+Connection 
+\series bold
+Signal Lost
+\series default
+ The connection between the host computer and the device is lost.
+ The app will do some memory clean up and then return to the Introduction
+ screen.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Description
+Postconditions: The app is open to the DisplayActivity.
+\end_layout
+
+\begin_layout Subsubsection
+Demo mode viewing
+\end_layout
+
+\begin_layout Description
+Summary: The user is viewing prerecorded LiDAR data stored on the mobile
+ device.
+\end_layout
+
+\begin_layout Description
+Actors: User 
+\end_layout
+
+\begin_layout Description
+Preconditions: The app is open to the title screen.
+ 
+\end_layout
+
+\begin_layout Description
+Description: The user selects Demo Mode.
+ The user selects either a constant refresh rate or tapping the screen to
+ update the LiDAR view.
+ Once the user acknowledges all settings, the app beigns displaying the
+ prerecorded LiDAR data.
+\end_layout
+
+\begin_layout Description
+Exceptions: None.
+\end_layout
+
+\begin_layout Description
+Postconditions: The app is open to the DisplayActivity.
+ 
+\end_layout
+
+\begin_layout Section
+Domain Analysis
+\end_layout
+
+\begin_layout Subsection
+Overview
+\end_layout
+
+\begin_layout Standard
+The application will involve many processes transparent to the user.
+ In addition to the software on the phone, hardware and software outside
+ of the phone are involved in providing the full functionality on the Android
+ app.
+\end_layout
+
+\begin_layout Subsection
+Refresh
+\end_layout
+
+\begin_layout Standard
+The main functionality of the app is to provide the user a visualization
+ of the data collected and saved from the Velodyne LiDAR.
+ The objects and methods involved in refreshing the image displayed on the
+ phone can be seen in the sequence model below.
+ The preconditions to this sequence model are as follows: 
+\end_layout
+
+\begin_layout Enumerate
+The app is in the Launch mode rather than the Demo mode.
+\end_layout
+
+\begin_layout Enumerate
+The app settings are configured to have a refresh rate of 0, which requires
+ the user to manually select when the screen should be updated.
+\end_layout
+
+\begin_layout Enumerate
+The app settings are configured to have the LiDAR data read from a PCAP
+ file on the computer’s hard drive.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Refresh Data Sequence
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/RefreshSequenceModel.PNG
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This sequence model shows the objects involved in getting new LiDAR data
+ from the computer and rendering the new image on the app display.
+ This involved wireless communication for the data request as well as the
+ LiDAR data between the phone and the computer.
+\end_layout
+
+\begin_layout Standard
+On the computer side, the data is read by the PcapReader.
+ The CloudProcessor then converts the data into a point cloud and reduces
+ the point cloud sufficiently for the phone to be able to render the data
+ relatively quickly.
+ The point cloud reduction methods include reducing the field of view of
+ the data to only include points in front of the vehicle and using the Point
+ Cloud Library’s VoxelGrid filter to downsample the dataset.
+ Additionally, the CloudProcessor will determine a GroundPlane based on
+ the LiDAR data.
+ This GroundPlane can be used on the phone app in the Draw Path use case
+ in order to determine the car’s path trajectory on the ground based on
+ the user’s touch input.
+ Finally, the CloudProcessor will establish a ValidGrid based on the dataset.
+ This ValidGrid will identify areas that the vehicle will be able to drive
+ over since there are no large objects above the GroundPlan in these areas.
+\end_layout
+
+\begin_layout Standard
+After the data is read and processed, the PcWifiManager will send the three
+ datasets, LidarPoints, GroundPlane, and ValidGrid, to the AppWifiManager
+ using the connection that was established upon initializing the Wi-Fi communica
+tion between the computer and the phone.
+\end_layout
+
+\begin_layout Standard
+The phone will then save the LidarPoints, GroundPlane, and ValidGrid.
+ The LidarSurfaceView object will call the LidarRender object to render
+ the image using the updated data received from the computer.
+\end_layout
+
+\begin_layout Standard
+Another functionality of the app not shown in the sequence diagram above
+ is sensing the user’s touch trajectory for the vehicle.
+ This occurs after the user selects to draw a new path trajectory for the
+ vehicle.
+ This will involve calculating the coordinates on the GroundPlane and determinin
+g whether these coordinates all fall within the ValidGrid.
+ If the path selected by the user leaves the ValidGrid, then the app will
+ display an error message using the Alert object.
+ If the path falls within the ValidGrid, then the translated path coordinates
+ will be sent to the computer through the AppWifiManager and the app will
+ display a notification indicating success using the Alert object.
+ 
+\end_layout
+
+\begin_layout Subsection
+Settings
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Change Settings Sequence
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/SettingsSequenceModel.PNG
+	width 85col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The user is currently viewing the HomeActivity user interface.
+ The user then taps the Settings button which will use the Android touch
+ callback method to call the openSettings() method.
+ This will initialize and create the SettingsActivity menu.
+ In the SettingsActivity menu, the user can make changes to the different
+ settings, including changing the refresh rate and changing the perspective.
+ The SettingsActivity will also use the Android touch callback methods to
+ determine where the user touches and how to respond appropriately, which
+ includes sending messages to the Settings class that holds the values for
+ the various settings during the entire application lifetime.
+ After the user has finished with the SettingsActivity, the back button
+ will be used to initialize the HomeActivity and return the user interface
+ to the title screen.
+\end_layout
+
+\begin_layout Subsection
+System Algorithms
+\end_layout
+
+\begin_layout Subsubsection
+Network exchange
+\end_layout
+
+\begin_layout Standard
+The phone and host computer will communicate using Wi-Fi and a server host
+ relationship.
+ Because the host computer will be running software programmed in C++ and
+ the phone will be running Andriod, this may require developing code to
+ manually marshal and demarshal data.
+ We will develop a standard set of messages with expected header information
+ for socket communication.
+\end_layout
+
+\begin_layout Subsubsection
+Vehicle Control
+\end_layout
+
+\begin_layout Standard
+With proper calibration of the LiDAR to real world distances, it is possible
+ to map a drawn path to a series of GPS coordinates or to a path in relative
+ coordinates.
+ The path following code that is currently developed for the CATVehicle
+ does not allow messages to be transferred directly, but it is possible
+ to create a JAUS message that conveys that information or to have spawn
+ the process with a datafile created to be loaded as it starts.
+\end_layout
+
+\begin_layout Subsubsection
+Ground Plane
+\end_layout
+
+\begin_layout Standard
+The ground plane will be determined by first selecting the points nearest
+ the vehicle that are not on the vehicle itself.
+ The RANSAC algorithm will be used to test possible planes by calculating
+ the number of matching points and determining an estimate for the local
+ terrain.
+ It can be assumed that the four tiresof the vehicle are on a level plane,
+ so any far deviation from this standard will be considered an error.
+\end_layout
+
+\begin_layout Subsection
+Phone Application Algorithms
+\end_layout
+
+\begin_layout Subsubsection
+3d Display
+\end_layout
+
+\begin_layout Standard
+The LiDAR visualization will be accomplished using the OpenGL es2 libraries
+ for Android.
+ There are several different options depending on what we finally display.
+ The ground plane can be displayed as a simple mesh with coloring based
+ on the occupancy grid, which can be done using vertex coloring and smooth
+ interpolation.
+ The points can be displayed as sprites, and if we choose to create a mesh,
+ this will need to be converted from the representation in point cloud library
+ to one that can be loaded in OpenGL.
+\end_layout
+
+\begin_layout Subsubsection
+Path Drawing
+\end_layout
+
+\begin_layout Standard
+The path will be drawn onto the ground plane from a 3d perspective.
+ Because the camera is represented as a matrix that transforms from 3d position
+ to a 2d pixel coordination, it is possible to use linear algebra to find
+ a ray cast from the center of each pixel into the 3d space.
+ After finding this line, it is possible to find its intersection with the
+ ground plane.
+ As the user drags a path accross the map, it may be desirable to smooth
+ the path to prevent noise from making the path undrivable.
+ The path can be displayed as a series of points or as a mesh.
+\end_layout
+
+\begin_layout Subsubsection
+Trajectory Clearance
+\end_layout
+
+\begin_layout Standard
+Clearance of a trajectory will be determined by checking if there is space
+ of a predetermined amount on both sides of the path.
+ To facilitate this, the host computer will send an occupancy grid that
+ it calculates based on a check of whether points exist above each sector
+ with the ground plane as a reference.
+ This will be a grid with a predetermined size in meters and indexing scheme.
+ To save space in transfer, the open sectors will be sent as an array to
+ the vehicle.
+ A simple check would be to see if each point in that path is clear in a
+ radius of sectors.
+\end_layout
+
+\begin_layout Subsubsection
+Trajectory Drivability
+\end_layout
+
+\begin_layout Standard
+To determine if a path is reachable from a control point of view, we will
+ assume that the vehicle is traveling below a safety speed.
+ From this it is possible to assume that a minimum turn radius will be reachable.
+ As long as the path, when suitable interpolated and smoothed, does not
+ have tighter turns that this, the path is determined to be reachable.
+ This problem could easily be expanded to include issues of under and over
+ shoot.
+\end_layout
+
+\begin_layout Subsection
+Host Computer
+\end_layout
+
+\begin_layout Subsubsection
+Point Reduction
+\end_layout
+
+\begin_layout Standard
+Point reduction can be accomplished in many ways.
+ The first method is to limit the output of the Velodyne by setting speed,
+ field of view, and range.
+ Next it is possible to programmatically ignore points that are deemed unnecessa
+ry.
+ One option for reducing the number of points is to use a voxel grid to
+ reduce the resoultion of the 3d space.
+ This can be done using the Point Cloud Library (PCL).
+ Another possibility is to randomly discard data points.
+\end_layout
+
+\begin_layout Subsubsection
+Mesh Creation
+\end_layout
+
+\begin_layout Standard
+The PCL library has a functionality that creates a mesh by gready triangluation
+ where close points are assumed to lie on the same surface.
+ This could be used to create a mesh, although because objects are occluded
+ in a static frame, the mesh would be missing backs.
+ We could look into patching the holes or extended the mesh away from the
+ center.
+ Also, with persistent mapping it would be possible to refine the mesh with
+ more information as the car moves.
+\end_layout
+
+\begin_layout Subsubsection
+Ground Mesh 
+\end_layout
+
+\begin_layout Standard
+Similarly to the ground plane, we can use RANSAC to test possible planes
+ and then check for accuracy.
+ It is also possible that mesh creation will create a ground mesh as a side
+ effect, although we would need to extract it from the other objects.
+ This could be accomplished by starting with the car's natural ground plane
+ and extending outwards by adding nearby triangles.
+\end_layout
+
+\begin_layout Subsubsection
+Persistent Mapping
+\end_layout
+
+\begin_layout Standard
+Persistent Mapping would be challenging due to timing issues where a small
+ difference in angle can change a distant point's position by a large margin.
+ This is an application of Simultaneous Localization and Mapping.
+ It would be necessary to receive data from the Inertial Measurement Unit
+ (IMU) regarding orientation and then use this probabilistically to update
+ the point cloud.
+ Further reseach would be necessary to determine the best approach.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Design and Test
+\end_layout
+
+\begin_layout Section
+Class Design
+\end_layout
+
+\begin_layout Subsection
+Class Diagrams
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+App Classes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/ClassModelPhone.PNG
+	width 90col%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Host Classes
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/host-classd.png
+	width 95col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Testing Strategy
+\end_layout
+
+\begin_layout Enumerate
+System
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The phone sends a message across network and the host computer responds.
+ If any of the remaining system tests pass, this passes.
+ 
+\end_layout
+
+\begin_layout Enumerate
+The phone requests LiDAR data test over network and response is sent back
+ over network.
+ The phone checks received data matches stored test LiDAR.
+\end_layout
+
+\begin_layout Enumerate
+A set settings message is sent from the phone to the host computer and successfu
+lly changes the settings to a comprehensive set of configurations.
+\end_layout
+
+\begin_layout Enumerate
+The phone sends vehicle trajectory test to host computer, and the host checks
+ received data matches stored test trajectory.
+\end_layout
+
+\begin_layout Enumerate
+The phone sends refresh request message and receives complete LiDAR data
+ sets.
+\end_layout
+
+\begin_layout Enumerate
+The phone sends a refresh rate request message, and it receives complete
+ LiDAR data sets at the requested interval.
+\end_layout
+
+\begin_layout Enumerate
+LiDAR is converted to a data format that can be displayed as mesh.
+ Change driver settings commands are sent from the phone to the host computer,
+ and the driver is restarted with the new settings.
+\end_layout
+
+\begin_layout Enumerate
+A test trajectory is sent from the phone to the host where it results in
+ the simulator moving through the trajectory.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Phone Application
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+An already prepared mesh or point cloud intermediary message is stored on
+ the phone and can be loaded into OpenGL and drawn.
+\end_layout
+
+\begin_layout Enumerate
+The phone will generate reasonable paths and determine the user input required
+ to create them.
+ It will simulate this user input and determine if the created path is similar
+ to the initial one.
+\end_layout
+
+\begin_layout Enumerate
+In combination with part 2.2, paths can be generated that are both good and
+ bad.
+ The phone will respond to the simulated inputs with behavior appropriate
+ to the path.
+ The original paths will be created independently by hand using another
+ method to cross verify the results This is all be done with test LiDAR
+ data in 1.2.
+\end_layout
+
+\begin_layout Enumerate
+The phone will simulate user input to change the perspective, and the OpenGL
+ representation of a camera will change to expected values or in the expected
+ way.
+ This will depend on the implementation of the perspective changing.
+\end_layout
+
+\begin_layout Enumerate
+The test for requirement 2.3 will be extended to check if paths that meet
+ drivability requirements based on independently created and judged paths
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Host Computer Application
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Using a reference file of PCAP data converted using a Matlab script, the
+ host software will compare its output to the reference, and may allow some
+ difference in the number of points converted.
+\end_layout
+
+\begin_layout Enumerate
+The host software will check that the data being received from the LiDAR
+ is consistent with the settings given to the LiDAR in terms of range and
+ angle.
+\end_layout
+
+\begin_layout Enumerate
+A JAUS component will be created that will perform the checks in test 3.1
+ given messages it receives from the JAUS compatible LiDAR component.
+\end_layout
+
+\begin_layout Enumerate
+With components that pass the requirement 3.1, the host software will be
+ able to convert the LiDAR data within a predetermined time limit.
+\end_layout
+
+\begin_layout Enumerate
+A test dataset will be created of fake points from a surface and obstacles
+ and noise.
+ The test data will be fed into the host computer and the resulting ground
+ mesh compared to the surface that generated it in order to check if error
+ falls within a threshold.
+\end_layout
+
+\begin_layout Enumerate
+Given a prerecorded set of data for the LiDAR and IMU, the mapping process
+ will create a map that is consistent across time and successfully maps
+ a known object as the car drives around it.
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Integration with Platform
+\end_layout
+
+\begin_layout Standard
+The application will be interacting with the platform’s Wi-Fi in order to
+ communicate with a host computer.
+ When the application starts the wireless mode, an initialization process
+ between the host computer and the device is launched, which includes instantiat
+ing an instance of AppWifiManager.
+ The prerequisite for this is that a PCWifiManager will already be running
+ on the host computer waiting for a connection message from the application.
+ 
+\end_layout
+
+\begin_layout Standard
+After a connection is made, the application will then automatically download
+ new data from the host computer based on the set refresh rate.
+ If the refresh rate is set to zero, the app will only request new data
+ from the host computer when the user taps the screen, indicating a refresh
+ action.
+ The Wi-Fi manager inside of the app will communicate directly with the
+ view activity that is currently in focus, since that is how user input
+ will be managed, i.e.
+ each view activity will have their own versions of the touch callback methods.
+ There are several methods that will be implemented that will help send
+ messages between the AppWifiManager and the current activity, which can
+ be directly seen on the class diagram.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Implementation Plan
+\end_layout
+
+\begin_layout Section
+Task Allocation and Breakdown
+\end_layout
+
+\begin_layout Subsection
+Breakdown
+\end_layout
+
+\begin_layout Standard
+Broadly, the tasks are broken down into three categories as follows: computer
+ software, wireless interface, and application software.
+ Although task allocation may vary throughout the project, the initial allocatio
+ns for the “B requirements” are listed below.
+ The “A requirements” allocation will be determined upon finalization of
+ which requirements will be implemented.
+ 
+\end_layout
+
+\begin_layout Subsection
+Responsiblities
+\end_layout
+
+\begin_layout Subsubsection
+Brian Smith
+\end_layout
+
+\begin_layout Description
+Domain: Computer Software 
+\end_layout
+
+\begin_layout Description
+Requirements: 1.5, 2.3, 3.1
+\end_layout
+
+\begin_layout Description
+Classes: LidarServer, CloudProcessor, LidarPoints, Reader, PcapReader
+\end_layout
+
+\begin_layout Subsubsection
+Brianna Heersink 
+\end_layout
+
+\begin_layout Description
+Domain: Wireless Interface and Data Settings
+\end_layout
+
+\begin_layout Description
+Requirements: 1.1, 1.2, 1.3, 1.4, 1.5
+\end_layout
+
+\begin_layout Description
+Classes: PcDataSettings, PcWifiManager, AppWifiManager, AppSettings, SettingsAct
+ivity
+\end_layout
+
+\begin_layout Subsubsection
+Alex Warren
+\end_layout
+
+\begin_layout Description
+Domain: Application Software 
+\end_layout
+
+\begin_layout Description
+Requirements: 1.5, 2.1, 2.2, 2.3
+\end_layout
+
+\begin_layout Description
+Classes: HomeActivity, DisplayActivity, LidarGLSurfaceView, LidarRender,
+ LidarFrame, PointFrame, CarPath, UserInput, Alert 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Project Timeline
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/Timeline.pdf
+	width 105col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Global/Shared Tasks and Experience
+\end_layout
+
+\begin_layout Standard
+The integration of all components will be a shared task between all group
+ members.
+ Additionally, all members will write tests, either for their own requirements
+ or for other’s requirements depending on the individual workloads.
+ Finally, all members will review each other’s code and contribute to required
+ documentation that is submitted throughout the project.
+ 
+\end_layout
+
+\begin_layout Standard
+The task allocation was determined to allow the work to be divided and then
+ and integrated easily.
+ Alex was interested in gaining more experience with OpenGL, so his task
+ allocation included working on the data visualization.
+ The remaining tasks were split between Brian and Brianna.
+ 
+\end_layout
+
+\end_body
+\end_document
