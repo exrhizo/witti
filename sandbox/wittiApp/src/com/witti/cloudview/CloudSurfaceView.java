@@ -11,7 +11,7 @@ public class CloudSurfaceView  extends GLSurfaceView{
 
     public CloudSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mCloudPoints = new CloudPoints();
+        mCloudPoints = new CloudPoints(this);
     }
     
     public CloudSurfaceView(Context context) {

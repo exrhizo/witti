@@ -1,9 +1,8 @@
-package es2.learning;
+package com.witti.cloudview;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.Random;
 
 import android.opengl.GLES20;
 
@@ -15,11 +14,11 @@ public class CloudPoints {
     //x,y,z,r,g,b,dx,dy,dz,life,age
     float[] fVertices = new float[NUM_PARTICLES * PARTICLE_SIZE];
     FloatBuffer vertexBuffer;
-    ParticleView curView;   
-    ParticleUpdateThread pThread;
-    public ParticleManager(ParticleView view){
-        curView = view;
-        pThread = new ParticleUpdateThread(view);
+    private CloudSurfaceView mCloudSurfaceView;  
+    //ParticleUpdateThread pThread;
+    public CloudPoints(CloudSurfaceView view){
+        mCloudSurfaceView = view;
+        //pThread = new ParticleUpdateThread(view);
         vertexBuffer = ByteBuffer.allocateDirect(fVertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
     }
     
@@ -34,29 +33,14 @@ public class CloudPoints {
         float vel = 0f;
         int angle;
         for (int i = 0; i < NUM_PARTICLES; i++) {
-            vel += inc;
-            angle = (int) (gen.nextFloat() * 360f);
             //x,y,z
             fVertices[i*PARTICLE_SIZE + 0] = centerX;
             fVertices[i*PARTICLE_SIZE + 1] = centerY;
             fVertices[i*PARTICLE_SIZE + 2] = centerZ;
-            //r,g,b
-            fVertices[i*PARTICLE_SIZE + 3] = gen.nextFloat();
-            fVertices[i*PARTICLE_SIZE + 4] = gen.nextFloat();
-            fVertices[i*PARTICLE_SIZE + 5] = gen.nextFloat();
-            //dx,dy,dz
-            fVertices[i*PARTICLE_SIZE + 6] = (float) (Math.cos(Math.toRadians(angle)) * vel);
-            fVertices[i*PARTICLE_SIZE + 7] = (float) (Math.sin(Math.toRadians(angle)) * vel);
-            fVertices[i*PARTICLE_SIZE + 8] = gen.nextFloat() - 0.5f;
-            
-            //life
-            fVertices[i*PARTICLE_SIZE + 9] = Utils.rnd(0.5f, 1f);
-            //age
-            fVertices[i*PARTICLE_SIZE + 10] = Utils.rnd(0.01f, 0.1f);
         }
         vertexBuffer.put(fVertices).position(0);
-        pThread.SetRunning(true);
-        pThread.start();
+        //pThread.SetRunning(true);
+        //pThread.start();
     }
     
     public void update()
