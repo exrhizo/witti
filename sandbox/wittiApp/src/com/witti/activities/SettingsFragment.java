@@ -1,4 +1,6 @@
-package com.example.wittiapp;
+package com.witti.activities;
+
+import com.witti.wittiapp.R;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
