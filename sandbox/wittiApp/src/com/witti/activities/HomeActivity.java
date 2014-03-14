@@ -1,3 +1,8 @@
+//ECE 573 Project
+//Team: Witty
+//Date: 3/13/14
+//Author: Brianna Heersink
+
 package com.witti.activities;
 
 import com.witti.wittiapp.R;
@@ -15,19 +20,25 @@ public class HomeActivity extends Activity {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home);
     }
-	
-    // TODO: Go through settings first and set default settings for Launch
+	 
+	 /**
+     * Opens DisplayActivity with settings for Launch mode (data from computer). 
+     */
     public void openLaunch(View view) {
-        Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
+        // TODO: Configure launch settings.
+		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
         startActivity(intent);
 	}
  
-    // TODO: Go through settings first and set default settings for Demo
+     /**
+     * Opens DisplayActivity with settings for Demo mode (data from phone). 
+     */
     public void openDemo(View view) {
-        Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
+        // TODO: Configure demo settings.
+		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
         startActivity(intent);
 	}
-    
+     
     public void openSettings(View view) {
         Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
         startActivity(intent);

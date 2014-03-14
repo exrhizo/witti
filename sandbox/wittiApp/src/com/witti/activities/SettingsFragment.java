@@ -1,3 +1,8 @@
+//ECE 573 Project
+//Team: Witty
+//Date: 3/13/14
+//Author: Brianna Heersink
+
 package com.witti.activities;
 
 import com.witti.wittiapp.R;
@@ -25,13 +30,17 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: Customize action bar for settings if after Launch/Demo to bring to DisplayActivity
+        // TODO: Possibly customize action bar for settings if after Launch/Demo 
+		// to bring to DisplayActivity
         //getActivity().setTheme(R.style.SettingsVisualizationTheme);
         
         // Loads the preferences from preferences.xml
         addPreferencesFromResource(R.layout.preferences);
     }
-
+    
+	/**
+     * Saves any settings that are changed by the user
+     */
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		// TODO Auto-generated method stub
@@ -56,15 +65,21 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		}
 	}
 	
-	// TODO: Check if this get methods works
+	/**
+     * Returns data refresh rate from settings
+     */	
 	public int getRefreshRate(){
 		int refreshInt = Integer.valueOf(mRefreshValue);
 		return refreshInt;
+		// TODO: Verify this method
 	}
 	
-	// TODO: Check if this get methods works
+	/**
+     * Returns whether the ground plane is selected to be shown
+     */	
 	public boolean getGroundSetting(){
 		return mGroundDisplayed;
+		// TODO: Verify this method
 	}
 	
 	@Override
