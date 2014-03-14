@@ -30,6 +30,10 @@
             android:name="com.witti.activities.DisplayActivity"
             android:label="@string/title_activity_display" >
         </activity>
+        <activity
+            android:name="com.witti.activities.PathTracingActivity"
+            android:label="@string/title_activity_display" >
+        </activity>
     </application>
 
 </manifest>

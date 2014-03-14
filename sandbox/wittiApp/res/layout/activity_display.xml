@@ -9,11 +9,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/black"
     tools:context=".DisplayActivity" >
-
 <com.witti.cloudview.CloudSurfaceView
         android:id="@+id/cloud_surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
 </RelativeLayout>

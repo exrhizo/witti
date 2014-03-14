@@ -44,6 +44,11 @@ public class HomeActivity extends Activity {
         startActivity(intent);
 	}
     
+    public void openPathTracing(View view) {
+        Intent intent = new Intent(HomeActivity.this, PathTracingActivity.class);
+        startActivity(intent);
+	}
+    
     
 
 }

@@ -14,5 +14,7 @@
     <string name="defaultRefreshSetting">0</string>
     <string name="title_activity_display">DisplayActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="imageContent">imageContent</string>
+    <string name="pathTracing">Path Drawing</string>
 
 </resources>
