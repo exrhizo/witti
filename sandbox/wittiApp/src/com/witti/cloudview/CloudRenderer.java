@@ -17,20 +17,17 @@ public class CloudRenderer implements Renderer {
     private CloudSurfaceView mCloudSurfaceView;
     private CloudDrawer mCloudDrawer;
 
-    /**
-     * Store the view matrix. This can be thought of as our camera. This matrix transforms world space to eye space;
-     * it positions things relative to our eye.
-     */
+    //Matricies to store the model, view and projection for the "camera"
+    private float[] mModelMatrix = new float[16];
     private float[] mViewMatrix = new float[16];
-    /** Store the projection matrix. This is used to project the scene onto a 2D viewport. */
     private float[] mProjectionMatrix = new float[16];
-    /** Allocate storage for the final combined matrix. This will be passed into the shader program. */
+    //Combined matrix used in shader
     private float[] mMVPMatrix = new float[16];
 
     public CloudRenderer(CloudSurfaceView view) {
         Log.v(CAT_TAG, "CloudRenderer constructor");
         mCloudSurfaceView = view;
-        mCloudDrawer = new CloudDrawer();
+        mCloudDrawer = new CloudDrawer(view);
     }
 
     @Override
@@ -88,7 +85,7 @@ public class CloudRenderer implements Renderer {
         // NOTE: In OpenGL 1, a ModelView matrix is used, which is a combination of a model and
         // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
         Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
-
+        Matrix.setIdentityM(mModelMatrix, 0);
         //Set the background clear color to black.
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
