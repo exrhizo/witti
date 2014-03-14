@@ -1,3 +1,8 @@
+//ECE 573 Project
+//Team: Witty
+//Date: 3/13/14
+//Authors: Brianna Heersink, Brian Smith, Alex Warren
+
 package com.witti.cloudview;
 
 import java.nio.ByteBuffer;
@@ -32,7 +37,7 @@ public class CloudRenderer implements Renderer {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        //GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
         // (which currently contains model * view).
         Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
@@ -40,7 +45,7 @@ public class CloudRenderer implements Renderer {
         // This multiplies the modelview matrix by the projection matrix, and stores the result in the MVP matrix
         // (which now contains model * view * projection).
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
-
+        //Log.v(CAT_TAG, "MVP matrix: "+floatArrayToString(mMVPMatrix));
         mCloudDrawer.draw(mMVPMatrix);
     }
 
@@ -67,14 +72,14 @@ public class CloudRenderer implements Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         Log.v(CAT_TAG, "CloudRenderer onSurfaceCreated");
         // Position the eye behind the origin.
-        final float eyeX = 0.0f;
+        final float eyeX = 30.0f;
         final float eyeY = 0.0f;
-        final float eyeZ = 25.0f;
+        final float eyeZ = 30.0f;
 
         // We are looking toward the distance
         final float lookX = 0.0f;
         final float lookY = 0.0f;
-        final float lookZ = -5.0f;
+        final float lookZ = 0.0f;
 
         // Set our up vector. This is where our head would be pointing were we holding the camera.
         final float upX = 0.0f;
@@ -88,10 +93,19 @@ public class CloudRenderer implements Renderer {
         Matrix.setIdentityM(mModelMatrix, 0);
         //Set the background clear color to black.
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-        GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE);
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        //GLES20.glEnable(GLES20.GL_BLEND);
+        //GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE);
         
+    }
+    
+    public String floatArrayToString(float[] arr){
+        StringBuilder result = new StringBuilder();
+        for (int ii=0; ii<arr.length; ii++){
+            result.append(arr[ii]);
+            result.append(' ');
+        }
+        return result.toString();
     }
     
 }

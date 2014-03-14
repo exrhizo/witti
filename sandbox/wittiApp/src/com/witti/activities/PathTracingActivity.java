@@ -1,3 +1,8 @@
+//ECE 573 Project
+//Team: Witty
+//Date: 3/13/14
+//Authors: Brianna Heersink, Brian Smith, Alex Warren
+
 package com.witti.activities;
 
 import com.witti.wittiapp.R;

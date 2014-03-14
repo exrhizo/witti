@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="groundSetting"
+        android:title="@string/groundSettingTitle"
+        android:summary="@string/groundSettingSummary"
+        android:defaultValue="true" />
+    <ListPreference
+        android:key="refreshSetting"
+        android:title="@string/refreshSettingTitle"
+        android:dialogTitle="@string/refreshSettingDialog"
+        android:entries="@array/refreshEntries"
+        android:entryValues="@array/refreshEntryValues" 
+        android:defaultValue="@string/defaultRefreshSetting" />
+</PreferenceScreen>

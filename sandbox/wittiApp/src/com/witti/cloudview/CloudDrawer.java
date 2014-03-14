@@ -1,3 +1,8 @@
+//ECE 573 Project
+//Team: Witty
+//Date: 3/13/14
+//Authors: Brianna Heersink, Brian Smith, Alex Warren
+
 package com.witti.cloudview;
 
 import java.io.BufferedReader;
@@ -28,7 +33,7 @@ public class CloudDrawer {
 
     private float mMaxZ;
 
-    final static int MAX_PARTICLES = 7364;
+    final static int MAX_PARTICLES = 500;   //7364;
     final static int PARTICLE_SIZE = 3;
 
     float[] mVertices;
@@ -68,12 +73,13 @@ public class CloudDrawer {
             "attribute vec4 a_Position;" +
             "uniform float a_time;" +
             "uniform float a_max_z;" +
-            "varying float v_color;" +
+            "varying vec4 v_color;" +
             "float time;" +
             "void main(){" +
-                "gl_PointSize = 1.0;" +
+                "gl_PointSize = 20.0;" +
                 "v_color = vec4(.6,.6,.6+.4*(a_Position.z/a_max_z),.5);" +
                 "gl_Position = u_MVPMatrix * a_Position;" +
+                "gl_Position = vec4(0, 0, 0, 1);" +
             "}";
 
         String strFShader = 
@@ -81,10 +87,12 @@ public class CloudDrawer {
             "uniform sampler2D u_texture;" +
             "varying vec4 v_color;" +
             "void main(){" +
-                "vec4 tex = texture2D(u_texture, gl_PointCoord);" +
-                "gl_FragColor = v_color * tex;" +
+                "gl_FragColor = vec4(1, .5, .5, 1);" +
             "}";
-
+        
+        //"vec4 tex = texture2D(u_texture, gl_PointCoord);" +
+        //"gl_FragColor = v_color * tex;" +
+        
         mProgId = Utils.LoadProgram(strVShader, strFShader);
         mTexId = Utils.LoadTexture(mCloudSurfaceView, R.drawable.particle);
         
@@ -122,6 +130,8 @@ public class CloudDrawer {
                 if (parsed_line[2]>mMaxZ) mMaxZ = parsed_line[2];
                 count++;
             }
+            Log.v(CAT_TAG, "loaded "+Integer.toString(count)+" points from file");
+            Log.v(CAT_TAG, "test value "+Float.toString(mVertices[8]));
         } catch (IOException e) {
             Log.e(CAT_TAG, "Couldn't read from resource file.");
         }
@@ -131,6 +141,7 @@ public class CloudDrawer {
             mVertices[count*PARTICLE_SIZE+2] = 0f;
             count++;
         }
+        
     }
 
     private Float[] parseLine(String line) {
