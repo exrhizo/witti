@@ -7,8 +7,8 @@ import java.nio.FloatBuffer;
 import android.opengl.GLES20;
 
 public class CloudPoints {
-    final static int NUM_PARTICLES = 800;
-    final static int PARTICLE_SIZE = 11;
+    final static int NUM_PARTICLES = 1000;
+    final static int PARTICLE_SIZE = 3;
     float nTimeCounter = 0;
     //each particle contains
     //x,y,z,r,g,b,dx,dy,dz,life,age

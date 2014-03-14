@@ -9,6 +9,16 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+/**
+ * Utils - Code for common openGL work
+ * 
+ * This code has been taken from 
+ * http://opengles2learning.blogspot.com/2011/05/particle-system-with-point-spritespart.html
+ * This has been licensed under GPL, so either we change it or
+ * Also use GPL.
+ * @author Sravan Kumar Reddy  
+ */
+
 public class Utils {
     public static int LoadTexture(GLSurfaceView view, int imgResID){
         Log.d("Utils", "Loadtexture");
@@ -80,10 +90,5 @@ public class Utils {
         GLES20.glDeleteShader(iVShader);
         GLES20.glDeleteShader(iFShader);
         return iProgId;
-    }
-    
-    public static float rnd(float min, float max) {
-         float fRandNum = (float)Math.random();
-            return min + (max - min) * fRandNum;
     }
 }
