@@ -20,4 +20,5 @@ Launch/Demo - these go to the display activity which loads opengl renderers and 
 
 Settings - A menu that allows you to browse settings
 
-Path Drawing - A Simple drawing utility that allows the user to create a path for displaying. 
+Path Drawing - A Simple drawing utility that allows the user to create a path for displaying.
+
