@@ -91,7 +91,7 @@ Alex Warren (amwarren@email.arizona.edu)
 \end_layout
 
 \begin_layout Date
-2/23/2014
+03/26/2014
 \end_layout
 
 \begin_layout Standard
@@ -121,13 +121,6 @@ Professor Sprinkle
 \end_layout
 
 \begin_layout Standard
-\begin_inset VSpace bigskip
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 \align center
 The University of Arizona
 \end_layout
@@ -145,15 +138,18 @@ Tucson, Arizona
 \end_layout
 
 \begin_layout Abstract
+
+\size normal
 The Wirelessly Integrating Topographic Teleoperation Instrument presented
  in this report is an application used to visualize LiDAR data on a mobile
  device.
  This visualization will allow the user to see the environment that an autonomou
 s vehicle is sensing and using to make decisions.
  The application has the functionality to visualize prerecorded data that
- is saved on the mobile device, prerecorded data saved on a computer, or
- data collected live from the Velodyne LiDAR by the computer.
- The application also provides the functionality for the user to select
+ is saved on the mobile device or prerecorded data saved on a computer.
+ As one option, the application may be able to collect and display data
+ live from the Velodyne LiDAR via the computer and server.
+ The application may also provide the functionality for the user to select
  a vehicle trajectory by touching the visualized LiDAR data on the screen.
 \end_layout
 
@@ -174,8 +170,22 @@ LatexCommand tableofcontents
 \end_layout
 
 \begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset FloatList figure
 
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
 \end_inset
 
 
@@ -189,6 +199,13 @@ LatexCommand tableofcontents
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Project Overview
 \end_layout
@@ -196,7 +213,7 @@ Project Overview
 \begin_layout Standard
 The Light Detection and Ranging (LiDAR) visualization application is designed
  to display information collected from the LiDAR on a mobile device.
- The app will also allow users to draw a path on top of the visualized point
+ The app may also allow users to draw a path on top of the visualized point
  cloud and determine if the path is reachable.
  
 \end_layout
@@ -213,7 +230,8 @@ LiDAR devices use an array of lasers to collect data that give the distance
 
 \begin_layout Standard
 This app will give researchers the ability to see a subset of what the vehicle
- sees while the vehicle is driving or play back previously recorded data.
+ sees by playing back previously recorded data and optionally displaying
+ live data from the LiDAR.
  This could be useful in debugging unexpected vehicle behavior or determining
  the limitations of the LiDAR when driving.
  This app will also help researchers visualize how and why the vehicle makes
@@ -252,545 +270,210 @@ Analysis and Models
 Requirements
 \end_layout
 
-\begin_layout Subsection
-All Requirements
+\begin_layout Subsection*
+2.1 'B' Requirements
 \end_layout
 
-\begin_layout Enumerate
-System
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Network Exchange: The phone and host computer shall exchange information
- over local network.
- 
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.1 Display Data: The phone application software shall load and display Velodyne
+ LiDAR data on the phone.
 \end_layout
 
 \begin_deeper
-\begin_layout Description
-Requirement: B 
+\begin_layout Standard
+Prerequisite(s): None
 \end_layout
 
-\begin_layout Description
-Prerequisite(s): None 
-\end_layout
-
-\begin_layout Description
-Difficulty: 3 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-LiDAR Transfer: The phone application software shall communicate with the
- host computer through network to receive LiDAR data from the host computer.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: B 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 1.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 1
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Output Settings: The phone application software shall be capable of changing
- the host computer’s Velodyne LiDAR data output settings through network
- communication.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: B 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 1.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 2 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Trajectory Transfer: The phone application software shall send vehicle trajector
-ies to the host computer through network communication.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: B 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 1.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 1 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Manual Data Refresh: The phone application software shall be capable of
- refreshing the displayed Velodyne LiDAR data manually based on user input.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: B 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 2.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 2 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Auto Data Refresh: The phone application software shall be capable of refreshing
- the displayed Velodyne LiDAR data automatically through a set refresh rate.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: A 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 2.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 1 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Mesh Display:The phone application software shall be capable of displaying
- LiDAR data as a mesh.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: A 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): None 
-\end_layout
-
-\begin_layout Description
+\begin_layout Standard
 Difficulty: 4
 \end_layout
 
 \end_deeper
-\begin_layout Enumerate
-Dynamic LiDAR Driver Settings: The phone application software shall be capable
- of changing the LiDAR driver settings through network communication.
- 
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.2 Manual Data Refresh: The phone application software shall be capable
+ of refreshing the displayed Velodyne LiDAR data manually based on user
+ input.
 \end_layout
 
 \begin_deeper
-\begin_layout Description
-Requirement: A 
+\begin_layout Standard
+Prerequisite(s): B.1
 \end_layout
 
-\begin_layout Description
-Prerequisite(s): None 
-\end_layout
-
-\begin_layout Description
-Difficulty: 4 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Vehicle Control: The phone application software shall send phone trajectories
- to the host computer where it is converted to vehicle control commands
- sent to CAT Vehicle.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement Level: A 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): None 
-\end_layout
-
-\begin_layout Description
-Difficulty: 3 
-\end_layout
-
-\end_deeper
-\end_deeper
-\begin_layout Enumerate
-Phone Application
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Display Data: The phone application software shall load and display Velodyne
- LiDAR data on the phone.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: B 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): None 
-\end_layout
-
-\begin_layout Description
-Difficulty: 4 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Draw Trajectory: The phone application software shall read a trajectory
- selected by the user through touch events on the phone.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: B 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 2.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 4 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Trajectory Clearance: The phone application software shall reject trajectories
- that would collide with obstacles.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: B 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 2.2 
-\end_layout
-
-\begin_layout Description
-Difficulty: 3 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Perspective Change: The phone application software shall be capable of changing
- the perspective of the displayed image on the phone.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: A 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 2.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 1 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Trajectory Drivability: The phone application software shall reject trajectories
- that are not possible to follow.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: A 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 2.2 
-\end_layout
-
-\begin_layout Description
-Difficulty: 3 
-\end_layout
-
-\end_deeper
-\end_deeper
-\begin_layout Enumerate
-Host Computer Application
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-Convert Data: The host computer software shall convert the Velodyne LiDAR
- PCAP file to an XYZ-coordinate file with a limited complexity that will
- be established.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: B 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): None 
-\end_layout
-
-\begin_layout Description
-Difficulty: 3 
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-LiDAR Driver Settings: The host computer software shall be capable of reducing
- the field of view and the range of Velodyne LiDAR data provided to the
- phone.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: A 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 3.1 
-\end_layout
-
-\begin_layout Description
+\begin_layout Standard
 Difficulty: 2
 \end_layout
 
 \end_deeper
-\begin_layout Enumerate
-JAUS Compatible: The host computer software shall be capable of sending
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.3 Server Download: The phone application software shall be capable of downloadi
+ng Velodyne LiDAR data in the form of an XYZ-point text file from a remote
+ server.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Prerequisite(s): None
+\end_layout
+
+\begin_layout Standard
+Difficulty: 3
+\end_layout
+
+\end_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.4 Server Upload: The host computer software shall be capable of uploading
+ Velodyne LiDAR data in the form of an XYZ-point text file to a remote server.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Prerequisite(s): None
+\end_layout
+
+\begin_layout Standard
+Difficulty: 3
+\end_layout
+
+\end_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.5 Demo Playback: The phone application shall be able to use XYZ-point text
+ files stored locally for Manual Data Refresh mode.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Prerequisite(s): B.2
+\end_layout
+
+\begin_layout Standard
+Difficulty: 2
+\end_layout
+
+\end_deeper
+\begin_layout Subsection*
+2.2 'A' Requirements
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.1 Automatic Data Refresh: The phone application software shall be capable
+ of refreshing the displayed Velodyne LiDAR data automatically through a
+ set refresh rate.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Prerequisite(s): B.1
+\end_layout
+
+\begin_layout Standard
+Difficulty: 4
+\end_layout
+
+\end_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.2 Draw Trajectory: The phone application software shall read a trajectory
+ selected by the user through touch events on the phone.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Prerequisite(s): B.1
+\end_layout
+
+\begin_layout Standard
+Difficulty: 4
+\end_layout
+
+\end_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.3 Trajectory Clearance: The phone application software shall indicate if
+ the user selected trajectories would be too close to obstacles.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Prerequisite(s): A.2
+\end_layout
+
+\begin_layout Standard
+Difficulty: 3
+\end_layout
+
+\end_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.4 Trajectory Drivability: The phone application software shall reject trajector
+ies that are not possible to follow due to vehicle limitations.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Prerequisite(s): A.2
+\end_layout
+
+\begin_layout Standard
+Difficulty: 3
+\end_layout
+
+\end_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.5 Perspective Change: The phone application software shall be capable of
+ changing the perspective of the displayed data on the phone.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Prerequisite(s): B.1
+\end_layout
+
+\begin_layout Standard
+Difficulty: 3
+\end_layout
+
+\end_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.6 Dynamic LiDAR Conversion: The host computer shall be capable of processing
+ and converting the PCAP files to phone readable data as they are received
+ within a bounded delay that will be established.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Prerequisite(s): None
+\end_layout
+
+\begin_layout Standard
+Difficulty: 4
+\end_layout
+
+\end_deeper
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.7 JAUS Compatible: The host computer software shall be capable of sending
  JAUS messages containing converted LiDAR data.
- 
 \end_layout
 
 \begin_deeper
-\begin_layout Description
-Requirement: A 
+\begin_layout Standard
+Prerequisite(s): None
 \end_layout
 
-\begin_layout Description
-Prerequisite(s): 3.1 
-\end_layout
-
-\begin_layout Description
+\begin_layout Standard
 Difficulty: 4
 \end_layout
 
 \end_deeper
-\begin_layout Enumerate
-Dynamic LiDAR Conversion: The host computer software shall be capable of
- processing and converting the PCAP files to phone readable data as they
- are received within a bounded delay that will be established.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: A 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 3.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 4
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Ground Mesh: The host computer will generate a mesh representation of the
- ground, so that hills and dips in the road will be represented.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: A 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 3.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 4
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Persistent Mapping: The host computer will combine LiDAR data and IMU data
- over time to create a map that incorporates data over the course of time.
- 
-\end_layout
-
-\begin_deeper
-\begin_layout Description
-Requirement: A 
-\end_layout
-
-\begin_layout Description
-Prerequisite(s): 3.1 
-\end_layout
-
-\begin_layout Description
-Difficulty: 6
-\end_layout
-
-\end_deeper
-\end_deeper
-\begin_layout Subsection
-Requirements by A/B Group
-\end_layout
-
-\begin_layout Subsubsection
-B Requirements
-\end_layout
-
-\begin_layout Standard
-\noindent
-Network Exchange (1.1)
-\end_layout
-
-\begin_layout Standard
-\noindent
-LiDAR Transfer (1.2)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Output Settings (1.3)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Trajectory Transfer (1.4)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Manual Data Refresh (1.5)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Display Data (2.1)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Draw Trajectory (2.2)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Trajectory Clearance (2.3)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Convert Data (3.1)
-\end_layout
-
-\begin_layout Subsubsection
-A Requirements
-\end_layout
-
-\begin_layout Standard
-\noindent
-Auto Data Refresh (1.6)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Mesh Display (1.7)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Dynamic LiDAR Driver Settings (1.8)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Vehicle Control (1.9)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Perspective Change (2.4)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Trajectory Drivability (2.5)
-\end_layout
-
-\begin_layout Standard
-\noindent
-LiDAR Driver Settings (3.2)
-\end_layout
-
-\begin_layout Standard
-\noindent
-JAUS Compatible (3.3)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Dynamic LiDAR Conversion (3.4)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Ground Mesh (3.5)
-\end_layout
-
-\begin_layout Standard
-\noindent
-Persistent Mapping (3.6)
-\end_layout
-
 \begin_layout Section
 Application Analysis
 \end_layout
@@ -1115,8 +798,8 @@ Actors: User
 \end_layout
 
 \begin_layout Description
-Preconditions: The user is located anywhere a good connection between the
- device and the host computer can be established.
+Preconditions: The server is accessible to both the host computer and the
+ mobile device.
  The app is open to the title screen, HomeActivity.
 \end_layout
 
@@ -1124,11 +807,8 @@ Preconditions: The user is located anywhere a good connection between the
 Description: The user selects Launch Mode.
  The user selects either a constant refresh rate or tapping the screen to
  get the current LiDAR view.
- The user enters the host computer's IP address and selects to get live
- LiDAR data.
- Once the user acknowledges all settings, a wireless connection between
- the device and host computer will be established.
- The device will then begin streaming live LiDAR data.
+ Once the user acknowledges all settings, the device will open to the DisplayAct
+ivity screen and begin streaming live LiDAR data.
  
 \end_layout
 
@@ -1142,7 +822,8 @@ Connection
 \series bold
 Signal Lost
 \series default
- The connection between the host computer and the device is lost.
+ The connection between the host computer or mobile device and the server
+ is lost.
  The app will do some memory clean up and then return to the Introduction
  screen.
  
@@ -1175,8 +856,8 @@ Preconditions: The app is open to the title screen.
 Description: The user selects Demo Mode.
  The user selects either a constant refresh rate or tapping the screen to
  update the LiDAR view.
- Once the user acknowledges all settings, the app beigns displaying the
- prerecorded LiDAR data.
+ Once the user acknowledges all settings, the app opens to the DisplayActivity
+ screen and begins displaying the prerecorded LiDAR data.
 \end_layout
 
 \begin_layout Description
@@ -1198,9 +879,9 @@ Overview
 
 \begin_layout Standard
 The application will involve many processes transparent to the user.
- In addition to the software on the phone, hardware and software outside
- of the phone are involved in providing the full functionality on the Android
- app.
+ In addition to the software on the mobile device, hardware and software
+ outside of the mobile device are involved in providing the full functionality
+ on the Android app.
 \end_layout
 
 \begin_layout Subsection
@@ -1209,9 +890,9 @@ Refresh
 
 \begin_layout Standard
 The main functionality of the app is to provide the user a visualization
- of the data collected and saved from the Velodyne LiDAR.
+ of the data previously collected and saved from the Velodyne LiDAR.
  The objects and methods involved in refreshing the image displayed on the
- phone can be seen in the sequence model below.
+ mobile device can be seen in the sequence model below.
  The preconditions to this sequence model are as follows: 
 \end_layout
 
@@ -1225,9 +906,12 @@ The app settings are configured to have a refresh rate of 0, which requires
 \end_layout
 
 \begin_layout Enumerate
-The app settings are configured to have the LiDAR data read from a PCAP
- file on the computer’s hard drive.
- 
+The app settings are configured to have the LiDAR data downloaded from the
+ server.
+\end_layout
+
+\begin_layout Enumerate
+The LiDAR data is accessible on the server.
 \end_layout
 
 \begin_layout Standard
