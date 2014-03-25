@@ -310,7 +310,7 @@ Difficulty: 2
 \begin_layout Labeling
 \labelwidthstring 00.00.0000
 B.3 Server Download: The phone application software shall be capable of downloadi
-ng Velodyne LiDAR data in the form of an XYZ-point text file from a remote
+ng Velodyne LiDAR data in the form of an XYZ-point binary file from a remote
  server.
 \end_layout
 
@@ -326,8 +326,9 @@ Difficulty: 3
 \end_deeper
 \begin_layout Labeling
 \labelwidthstring 00.00.0000
-B.4 Server Upload: The host computer software shall be capable of uploading
- Velodyne LiDAR data in the form of an XYZ-point text file to a remote server.
+B.4 Server Availability: The host computer software shall be capable of uploading
+ or directly serving Velodyne LiDAR data in the form of an XYZ-point binary
+ file.
 \end_layout
 
 \begin_deeper
@@ -489,21 +490,20 @@ status open
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Mock Screen Shots
-\end_layout
-
-\end_inset
-
-
 \begin_inset Float figure
 wide false
 sideways false
 status collapsed
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/phone_screen_home.jpg
+	lyxscale 50
+	width 35col%
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -513,18 +513,6 @@ Home Screen
 \end_inset
 
 
-\begin_inset Graphics
-	filename figures/phone_screen_home.jpg
-	lyxscale 50
-	width 35col%
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
 \end_layout
 
 \end_inset
@@ -536,6 +524,14 @@ sideways false
 status collapsed
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/phone_screen_settings.jpg
+	lyxscale 50
+	width 35col%
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -547,17 +543,6 @@ Settings Screen
 
 \end_layout
 
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/phone_screen_settings.jpg
-	lyxscale 50
-	width 35col%
-
-\end_inset
-
-
-\end_layout
-
 \end_inset
 
 
@@ -570,6 +555,14 @@ sideways false
 status collapsed
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/phone_screen_display.jpg
+	lyxscale 50
+	width 80col%
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -579,18 +572,15 @@ Display Screen
 \end_inset
 
 
-\begin_inset Graphics
-	filename figures/phone_screen_display.jpg
-	lyxscale 50
-	width 80col%
+\end_layout
 
 \end_inset
 
 
-\end_layout
+\begin_inset Caption
 
 \begin_layout Plain Layout
-
+Mock Screen Shots
 \end_layout
 
 \end_inset
@@ -669,21 +659,18 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/StateModel.PNG
+	width 95col%
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
 Phone Application State Diagram
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/StateModel.PNG
-	width 95col%
 
 \end_inset
 
@@ -921,21 +908,18 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/RefreshSequenceModel.PNG
+	width 100col%
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
 Refresh Data Sequence
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/RefreshSequenceModel.PNG
-	width 100col%
 
 \end_inset
 
@@ -1015,21 +999,18 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/SettingsSequenceModel.PNG
+	width 85col%
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
 Change Settings Sequence
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/SettingsSequenceModel.PNG
-	width 85col%
 
 \end_inset
 
@@ -1070,27 +1051,14 @@ Network exchange
 \end_layout
 
 \begin_layout Standard
-The phone and host computer will communicate using Wi-Fi and a server host
- relationship.
- Because the host computer will be running software programmed in C++ and
- the phone will be running Andriod, this may require developing code to
- manually marshal and demarshal data.
- We will develop a standard set of messages with expected header information
- for socket communication.
-\end_layout
-
-\begin_layout Subsubsection
-Vehicle Control
-\end_layout
-
-\begin_layout Standard
-With proper calibration of the LiDAR to real world distances, it is possible
- to map a drawn path to a series of GPS coordinates or to a path in relative
- coordinates.
- The path following code that is currently developed for the CATVehicle
- does not allow messages to be transferred directly, but it is possible
- to create a JAUS message that conveys that information or to have spawn
- the process with a datafile created to be loaded as it starts.
+The phone and host computer will communicate using using a local network
+ and http protocol.
+ On the phone this will be accomplished using its libraries.
+ On the host computer, a simple server will be running that will respond
+ to http requests with an index of the available sequences.
+ For a live feed the server will respond to requests that include the last
+ frame obtained, if the server has access to a newer frame it will send
+ it ortherwise respond with an error.
 \end_layout
 
 \begin_layout Subsubsection
@@ -1194,48 +1162,6 @@ ry.
  Another possibility is to randomly discard data points.
 \end_layout
 
-\begin_layout Subsubsection
-Mesh Creation
-\end_layout
-
-\begin_layout Standard
-The PCL library has a functionality that creates a mesh by gready triangluation
- where close points are assumed to lie on the same surface.
- This could be used to create a mesh, although because objects are occluded
- in a static frame, the mesh would be missing backs.
- We could look into patching the holes or extended the mesh away from the
- center.
- Also, with persistent mapping it would be possible to refine the mesh with
- more information as the car moves.
-\end_layout
-
-\begin_layout Subsubsection
-Ground Mesh 
-\end_layout
-
-\begin_layout Standard
-Similarly to the ground plane, we can use RANSAC to test possible planes
- and then check for accuracy.
- It is also possible that mesh creation will create a ground mesh as a side
- effect, although we would need to extract it from the other objects.
- This could be accomplished by starting with the car's natural ground plane
- and extending outwards by adding nearby triangles.
-\end_layout
-
-\begin_layout Subsubsection
-Persistent Mapping
-\end_layout
-
-\begin_layout Standard
-Persistent Mapping would be challenging due to timing issues where a small
- difference in angle can change a distant point's position by a large margin.
- This is an application of Simultaneous Localization and Mapping.
- It would be necessary to receive data from the Inertial Measurement Unit
- (IMU) regarding orientation and then use this probabilistically to update
- the point cloud.
- Further reseach would be necessary to determine the best approach.
-\end_layout
-
 \begin_layout Standard
 \begin_inset Newpage pagebreak
 \end_inset
@@ -1259,24 +1185,22 @@ Class Diagrams
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/ClassModelPhone.PNG
+	lyxscale 50
+	width 90col%
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
 App Classes
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/ClassModelPhone.PNG
-	width 90col%
 
 \end_inset
 
@@ -1289,24 +1213,22 @@ App Classes
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/host-classd.png
+	lyxscale 50
+	width 30col%
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
 Host Classes
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/host-classd.png
-	width 95col%
 
 \end_inset
 
@@ -1326,138 +1248,145 @@ Host Classes
 Testing Strategy
 \end_layout
 
-\begin_layout Enumerate
-System
+\begin_layout Subsection*
+2.1 'B' Verification
 \end_layout
 
-\begin_deeper
-\begin_layout Enumerate
-The phone sends a message across network and the host computer responds.
- If any of the remaining system tests pass, this passes.
- 
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.1 
+\series bold
+Display Data
+\series default
+: An already prepared point cloud file is stored on the phone and can be
+ loaded into OpenGL as a buffer.
 \end_layout
 
-\begin_layout Enumerate
-The phone requests LiDAR data test over network and response is sent back
- over network.
- The phone checks received data matches stored test LiDAR.
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.2 
+\series bold
+Manual Data Refresh
+\series default
+: The phone will also make a new request and get the latest file from the
+ server, this can be simulated with a dummy point cloud where all the values
+ are 1s and then 2s, loaded based on the newest time.
 \end_layout
 
-\begin_layout Enumerate
-A set settings message is sent from the phone to the host computer and successfu
-lly changes the settings to a comprehensive set of configurations.
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.3 
+\series bold
+Server Download
+\series default
+: A prepared point cloud file is loaded both on to the phone and the server,
+ the phone will download and load the file and compare it to results from
+ loading the local file, to ensure that they match.
 \end_layout
 
-\begin_layout Enumerate
-The phone sends vehicle trajectory test to host computer, and the host checks
- received data matches stored test trajectory.
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.4 
+\series bold
+Server Upload
+\series default
+: As in B.3 except the host computer will be the server, or it will upload
+ the file onto a remote server.
 \end_layout
 
-\begin_layout Enumerate
-The phone sends refresh request message and receives complete LiDAR data
- sets.
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+B.5 
+\series bold
+Demo Playback
+\series default
+: A prepared point cloud sequence file is stored on the phone and when loaded,
+ the user refresh button presses change the point cloud that is loaded into
+ an openGL draw function.
 \end_layout
 
-\begin_layout Enumerate
-The phone sends a refresh rate request message, and it receives complete
- LiDAR data sets at the requested interval.
+\begin_layout Subsection*
+2.2 'A' Verification
 \end_layout
 
-\begin_layout Enumerate
-LiDAR is converted to a data format that can be displayed as mesh.
- Change driver settings commands are sent from the phone to the host computer,
- and the driver is restarted with the new settings.
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.1 
+\series bold
+Automatic Data Refresh
+\series default
+: Similar to B.1, but the phone will request at a given request rate, for
+ the newest frames, and dummy value will be suplied with timestamps to show
+ that they are correctly updating.
 \end_layout
 
-\begin_layout Enumerate
-A test trajectory is sent from the phone to the host where it results in
- the simulator moving through the trajectory.
-\end_layout
-
-\end_deeper
-\begin_layout Enumerate
-Phone Application
-\end_layout
-
-\begin_deeper
-\begin_layout Enumerate
-An already prepared mesh or point cloud intermediary message is stored on
- the phone and can be loaded into OpenGL and drawn.
-\end_layout
-
-\begin_layout Enumerate
-The phone will generate reasonable paths and determine the user input required
- to create them.
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.2 
+\series bold
+Draw Trajectory
+\series default
+: The phone will generate reasonable paths and determine the user input
+ required to create them.
  It will simulate this user input and determine if the created path is similar
  to the initial one.
 \end_layout
 
-\begin_layout Enumerate
-In combination with part 2.2, paths can be generated that are both good and
- bad.
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.3 
+\series bold
+Trajectory Clearance
+\series default
+: In combination with part A.2, paths can be generated that are both good
+ and bad.
  The phone will respond to the simulated inputs with behavior appropriate
  to the path.
  The original paths will be created independently by hand using another
- method to cross verify the results This is all be done with test LiDAR
- data in 1.2.
+ method to cross verify the results.
 \end_layout
 
-\begin_layout Enumerate
-The phone will simulate user input to change the perspective, and the OpenGL
- representation of a camera will change to expected values or in the expected
- way.
- This will depend on the implementation of the perspective changing.
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.4 
+\series bold
+Trajectory Drivability
+\series default
+: Same method as in A.3 but checking for impossible paths, given our definition.
 \end_layout
 
-\begin_layout Enumerate
-The test for requirement 2.3 will be extended to check if paths that meet
- drivability requirements based on independently created and judged paths
- 
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.5 
+\series bold
+Perspective Change
+\series default
+: The phone will simulate user input to change the perspective, and the
+ OpenGL representation of a camera will change to expected values or in
+ the expected way.
 \end_layout
 
-\end_deeper
-\begin_layout Enumerate
-Host Computer Application
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.6 
+\series bold
+Dynamic LiDAR Conversion
+\series default
+: Given the tests B.3 and B.4, the data uploaded will be created by a program
+ based on current code to capture LiDAR frames, a time stamp will be used
+ to verify that the data is transferred within an acceptable delay.
 \end_layout
 
-\begin_deeper
-\begin_layout Enumerate
-Using a reference file of PCAP data converted using a Matlab script, the
- host software will compare its output to the reference, and may allow some
- difference in the number of points converted.
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+A.7 
+\series bold
+JAUS Compatible
+\series default
+: The JAUS compatible messages will be read by another JAUS component and
+ checked that they match a preprocessed file.
 \end_layout
 
-\begin_layout Enumerate
-The host software will check that the data being received from the LiDAR
- is consistent with the settings given to the LiDAR in terms of range and
- angle.
-\end_layout
-
-\begin_layout Enumerate
-A JAUS component will be created that will perform the checks in test 3.1
- given messages it receives from the JAUS compatible LiDAR component.
-\end_layout
-
-\begin_layout Enumerate
-With components that pass the requirement 3.1, the host software will be
- able to convert the LiDAR data within a predetermined time limit.
-\end_layout
-
-\begin_layout Enumerate
-A test dataset will be created of fake points from a surface and obstacles
- and noise.
- The test data will be fed into the host computer and the resulting ground
- mesh compared to the surface that generated it in order to check if error
- falls within a threshold.
-\end_layout
-
-\begin_layout Enumerate
-Given a prerecorded set of data for the LiDAR and IMU, the mapping process
- will create a map that is consistent across time and successfully maps
- a known object as the car drives around it.
-\end_layout
-
-\end_deeper
 \begin_layout Section
 Integration with Platform
 \end_layout
@@ -1583,21 +1512,18 @@ status open
 \end_layout
 
 \begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/Timeline.pdf
+	width 105col%
+
+\end_inset
+
+
 \begin_inset Caption
 
 \begin_layout Plain Layout
 Project Timeline
 \end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename figures/Timeline.pdf
-	width 105col%
 
 \end_inset
 
