@@ -659,6 +659,7 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename figures/StateModel.PNG
 	width 95col%
@@ -908,8 +909,9 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
-	filename figures/RefreshSequenceModel.PNG
+	filename figures/RefreshSequenceModel_Updated.PNG
 	width 100col%
 
 \end_inset
@@ -937,55 +939,34 @@ Refresh Data Sequence
 
 \begin_layout Standard
 This sequence model shows the objects involved in getting new LiDAR data
- from the computer and rendering the new image on the app display.
- This involved wireless communication for the data request as well as the
- LiDAR data between the phone and the computer.
+ from the server and rendering the new image on the app display.
+ This involves downloading and parsing the next data file on the server
+ and displaying the point cloud using OpenGL.
 \end_layout
 
 \begin_layout Standard
-On the computer side, the data is read by the PcapReader.
- The CloudProcessor then converts the data into a point cloud and reduces
- the point cloud sufficiently for the phone to be able to render the data
- relatively quickly.
- The point cloud reduction methods include reducing the field of view of
- the data to only include points in front of the vehicle and using the Point
- Cloud Library’s VoxelGrid filter to downsample the dataset.
- Additionally, the CloudProcessor will determine a GroundPlane based on
- the LiDAR data.
- This GroundPlane can be used on the phone app in the Draw Path use case
- in order to determine the car’s path trajectory on the ground based on
- the user’s touch input.
- Finally, the CloudProcessor will establish a ValidGrid based on the dataset.
- This ValidGrid will identify areas that the vehicle will be able to drive
- over since there are no large objects above the GroundPlan in these areas.
+On the computer, the data ahs already been sufficiently reduced and converted
+ to XYZ coordinates for the Witti app to process.
+ This file is available on the server, where the app's CloudDownloadTask
+ object identifies and downloads the file in the background.
+ Upon completion, the CloudParseFileTask parses the data file for use by
+ OpenGL.
+ The CloudSequence object is used to save the new frame from the server
+ as well as track the frames already displayed on the app.
+ The PointCloud Artist is used to draw the point cloud frame, which requires
+ rendering and drawing the frame using the CloudSurfaceView and CloudArtistManag
+er objects.
 \end_layout
 
 \begin_layout Standard
-After the data is read and processed, the PcWifiManager will send the three
- datasets, LidarPoints, GroundPlane, and ValidGrid, to the AppWifiManager
- using the connection that was established upon initializing the Wi-Fi communica
-tion between the computer and the phone.
-\end_layout
-
-\begin_layout Standard
-The phone will then save the LidarPoints, GroundPlane, and ValidGrid.
- The LidarSurfaceView object will call the LidarRender object to render
- the image using the updated data received from the computer.
-\end_layout
-
-\begin_layout Standard
-Another functionality of the app not shown in the sequence diagram above
- is sensing the user’s touch trajectory for the vehicle.
+Another optional functionality of the app not shown in the sequence diagram
+ above is sensing the user’s touch trajectory for the vehicle.
  This occurs after the user selects to draw a new path trajectory for the
  vehicle.
- This will involve calculating the coordinates on the GroundPlane and determinin
-g whether these coordinates all fall within the ValidGrid.
- If the path selected by the user leaves the ValidGrid, then the app will
- display an error message using the Alert object.
- If the path falls within the ValidGrid, then the translated path coordinates
- will be sent to the computer through the AppWifiManager and the app will
- display a notification indicating success using the Alert object.
- 
+ This will involve calculating the coordinates on the Ground and determining
+ whether this trajectory is clear of obstacles for the vehicle.
+ If the path selected by the useris not valid, the the app will display
+ an error message.
 \end_layout
 
 \begin_layout Subsection
@@ -999,9 +980,10 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
-	filename figures/SettingsSequenceModel.PNG
-	width 85col%
+	filename figures/SettingsSequenceModel_Updated.PNG
+	width 60col%
 
 \end_inset
 
@@ -1028,15 +1010,17 @@ Change Settings Sequence
 
 \begin_layout Standard
 The user is currently viewing the HomeActivity user interface.
- The user then taps the Settings button which will use the Android touch
- callback method to call the openSettings() method.
+ The user then taps the Settings button which will use GestureManager to
+ process the Motionevent and then call the HomeActivity's openSettings()
+ method.
  This will initialize and create the SettingsActivity menu.
  In the SettingsActivity menu, the user can make changes to the different
- settings, including changing the refresh rate and changing the perspective.
- The SettingsActivity will also use the Android touch callback methods to
- determine where the user touches and how to respond appropriately, which
- includes sending messages to the Settings class that holds the values for
- the various settings during the entire application lifetime.
+ settings, including changing the refresh rate and setting the demo file
+ to be used.
+ The SettingsActivity will also use the GestureManager to determine where
+ the user touches and how to respond appropriately, which includes settng
+ values for the various settings in the WittiSettings object during the
+ entire application lifetime.
  After the user has finished with the SettingsActivity, the back button
  will be used to initialize the HomeActivity and return the user interface
  to the title screen.
@@ -1185,13 +1169,13 @@ Class Diagrams
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Graphics
 	filename figures/ClassModelPhone.PNG
 	lyxscale 50
-	width 90col%
+	width 100col%
 
 \end_inset
 
@@ -1213,9 +1197,10 @@ App Classes
 \begin_inset Float figure
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename figures/host-classd.png
 	lyxscale 50
@@ -1438,12 +1423,14 @@ Breakdown
 \end_layout
 
 \begin_layout Standard
-Broadly, the tasks are broken down into three categories as follows: computer
- software, wireless interface, and application software.
+Broadly, the tasks are broken down into managing the host computer and server
+ activities, downloading and processing files onto the app, displaying the
+ point cloud data using OpenGL, managing the app settings, and handling
+ touch events on the app.
  Although task allocation may vary throughout the project, the initial allocatio
-ns for the “B requirements” are listed below.
- The “A requirements” allocation will be determined upon finalization of
- which requirements will be implemented.
+ns for these “B requirement” tasks are listed below.
+ The “A requirements” task allocation will be determined upon finalization
+ of which requirements will be implemented.
  
 \end_layout
 
@@ -1456,15 +1443,11 @@ Brian Smith
 \end_layout
 
 \begin_layout Description
-Domain: Computer Software 
+Requirements: B.4 and B.5
 \end_layout
 
 \begin_layout Description
-Requirements: 1.5, 2.3, 3.1
-\end_layout
-
-\begin_layout Description
-Classes: LidarServer, CloudProcessor, LidarPoints, Reader, PcapReader
+Classes: WittiServer, WittiLidarAgent, DisplayActivity, and GestureManager
 \end_layout
 
 \begin_layout Subsubsection
@@ -1472,16 +1455,12 @@ Brianna Heersink
 \end_layout
 
 \begin_layout Description
-Domain: Wireless Interface and Data Settings
+Requirements: B.2 and B.3
 \end_layout
 
 \begin_layout Description
-Requirements: 1.1, 1.2, 1.3, 1.4, 1.5
-\end_layout
-
-\begin_layout Description
-Classes: PcDataSettings, PcWifiManager, AppWifiManager, AppSettings, SettingsAct
-ivity
+Classes: WittiSettings, SettingsActivity, HomeActivity, CloudDownloadTask,
+ CloudParseFileTask, and CloudSequence
 \end_layout
 
 \begin_layout Subsubsection
@@ -1489,16 +1468,12 @@ Alex Warren
 \end_layout
 
 \begin_layout Description
-Domain: Application Software 
+Requirements: B.1
 \end_layout
 
 \begin_layout Description
-Requirements: 1.5, 2.1, 2.2, 2.3
-\end_layout
-
-\begin_layout Description
-Classes: HomeActivity, DisplayActivity, LidarGLSurfaceView, LidarRender,
- LidarFrame, PointFrame, CarPath, UserInput, Alert 
+Classes: CloudSurfaceView, CloudArtistManager, CloudArtist, ButtonArtist,
+ PointCloudArtist, and PointCloud
 \end_layout
 
 \begin_layout Standard
@@ -1512,9 +1487,10 @@ status open
 \end_layout
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename figures/Timeline.pdf
-	width 105col%
+	width 100col%
 
 \end_inset
 
@@ -1546,8 +1522,8 @@ Global/Shared Tasks and Experience
 \begin_layout Standard
 The integration of all components will be a shared task between all group
  members.
- Additionally, all members will write tests, either for their own requirements
- or for other’s requirements depending on the individual workloads.
+ Additionally, all members will write tests, although the tests may cover
+ more than just the classes they wrote themselves.
  Finally, all members will review each other’s code and contribute to required
  documentation that is submitted throughout the project.
  
