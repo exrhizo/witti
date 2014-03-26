@@ -20,7 +20,7 @@ import android.util.Log;
 public class CloudRenderer implements Renderer {
     private static final String CAT_TAG = "WITTI_Renderer";
     private CloudSurfaceView mCloudSurfaceView;
-    private CloudDrawer mCloudDrawer;
+    private PointCloudArtist mPointCloudArtist;
 
     //Matricies to store the model, view and projection for the "camera"
     private float[] mModelMatrix = new float[16];
@@ -32,7 +32,7 @@ public class CloudRenderer implements Renderer {
     public CloudRenderer(CloudSurfaceView view) {
         Log.v(CAT_TAG, "CloudRenderer constructor");
         mCloudSurfaceView = view;
-        mCloudDrawer = new CloudDrawer(view);
+        mPointCloudArtist = new PointCloudArtist(view);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class CloudRenderer implements Renderer {
         // (which now contains model * view * projection).
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVPMatrix, 0);
         //Log.v(CAT_TAG, "MVP matrix: "+floatArrayToString(mMVPMatrix));
-        mCloudDrawer.draw(mMVPMatrix);
+        mPointCloudArtist.draw(mMVPMatrix);
     }
 
     @Override

@@ -19,7 +19,7 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
-public class CloudDrawer {
+public class PointCloudArtist {
     private static final String CAT_TAG = "WITTI_Cloud_Drawer";
     private CloudSurfaceView mCloudSurfaceView;
 
@@ -39,30 +39,38 @@ public class CloudDrawer {
     float[] mVertices;
     FloatBuffer mVertexBuffer;
 
-    public CloudDrawer(CloudSurfaceView view){
+    public PointCloudArtist(CloudSurfaceView view){
         mCloudSurfaceView = view;
         loadDemo();
         initializeShaders();
     }
 
     public void draw(float[] mMVPMatrix){
+        Log.v(CAT_TAG, "Program id: " + Integer.toString(mProgId));
+        Utils.checkGlError("Before Program");
         GLES20.glUseProgram(mProgId);
+        Utils.checkGlError("Use program");
+        
         
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexId);
+        Utils.checkGlError("Bind Texture");
         
         GLES20.glUniform1i(mTextureHandle, 0);
+        Utils.checkGlError("Texture handle");
         
         mVertexBuffer.position(0);
         GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, PARTICLE_SIZE * 4, mVertexBuffer);
         GLES20.glEnableVertexAttribArray(mPositionHandle);
-        
+        Utils.checkGlError("Buffer");
 
         GLES20.glUniform1f(mTimeHandle, 0f);
         GLES20.glUniform1f(mMaxZHandle, mMaxZ);
         GLES20.glUniformMatrix4fv(mMVPHandle, 1, false, mMVPMatrix, 0);
+        Utils.checkGlError("Uniforms");
         
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, MAX_PARTICLES);
+        Utils.checkGlError("Dreaw");
     }
 
     private void initializeShaders(){
@@ -77,7 +85,8 @@ public class CloudDrawer {
             "float time;" +
             "void main(){" +
                 "gl_PointSize = 20.0;" +
-                "v_color = vec4(.6,.6,.6+.4*(a_Position.z/a_max_z),.5);" +
+                "//v_color = vec4(.6,.6,.6+.4*(a_Position.z/a_max_z),.5);" +
+                "v_color = vec4(.7, .7, .3, 1);"
                 "gl_Position = u_MVPMatrix * a_Position;" +
                 "gl_Position = vec4(0, 0, 0, 1);" +
             "}";
@@ -92,6 +101,7 @@ public class CloudDrawer {
         
         //"vec4 tex = texture2D(u_texture, gl_PointCoord);" +
         //"gl_FragColor = v_color * tex;" +
+        
         
         mProgId = Utils.LoadProgram(strVShader, strFShader);
         mTexId = Utils.LoadTexture(mCloudSurfaceView, R.drawable.particle);

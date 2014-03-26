@@ -11,7 +11,7 @@ import java.nio.FloatBuffer;
 
 import android.opengl.GLES20;
 
-public class CloudPoints {
+public class PointCloud {
     final static int NUM_PARTICLES = 1000;
     final static int PARTICLE_SIZE = 3;
     float nTimeCounter = 0;
@@ -21,7 +21,7 @@ public class CloudPoints {
     FloatBuffer vertexBuffer;
     private CloudSurfaceView mCloudSurfaceView;  
     //ParticleUpdateThread pThread;
-    public CloudPoints(CloudSurfaceView view){
+    public PointCloud(CloudSurfaceView view){
         mCloudSurfaceView = view;
         //pThread = new ParticleUpdateThread(view);
         vertexBuffer = ByteBuffer.allocateDirect(fVertices.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();

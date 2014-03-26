@@ -14,7 +14,7 @@ import android.util.Log;
 public class CloudSurfaceView  extends GLSurfaceView{
     private static final String CAT_TAG = "WITTI_CloudSurfaceView";
     Renderer mRenderer;
-    CloudPoints mCloudPoints;
+    PointCloud mCloudPoints;
 
     public CloudSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,6 +34,6 @@ public class CloudSurfaceView  extends GLSurfaceView{
 
     private void initialize(){
         Log.v(CAT_TAG, "CloudRenderer initialize");
-        mCloudPoints = new CloudPoints(this);
+        mCloudPoints = new PointCloud(this);
     }
 }

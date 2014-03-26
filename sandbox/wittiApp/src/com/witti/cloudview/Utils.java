@@ -25,6 +25,8 @@ import android.util.Log;
  */
 
 public class Utils {
+    private static final String CAT_TAG = "WITTI_Utils";
+    
     public static int LoadTexture(GLSurfaceView view, int imgResID){
         Log.d("Utils", "Loadtexture");
         Bitmap img = null;
@@ -47,7 +49,7 @@ public class Utils {
     
     public static int LoadShader(String strSource, int iType)
     {
-        Log.d("Utils", "LoadShader");
+        Log.d(CAT_TAG, "LoadShader");
         int[] compiled = new int[1];
         int iShader = GLES20.glCreateShader(iType);
         GLES20.glShaderSource(iShader, strSource);
@@ -62,7 +64,7 @@ public class Utils {
     
     public static int LoadProgram(String strVSource, String strFSource)
     {
-        Log.d("Utils", "LoadProgram");
+        Log.d(CAT_TAG, "LoadProgram");
         int iVShader;
         int iFShader;
         int iProgId;
@@ -70,13 +72,13 @@ public class Utils {
         iVShader = LoadShader(strVSource, GLES20.GL_VERTEX_SHADER);
         if (iVShader == 0)
         {
-            Log.d("Load Program", "Vertex Shader Failed");
+            Log.d(CAT_TAG, "Load Vertex Shader Failed");
             return 0;
         }
         iFShader = LoadShader(strFSource, GLES20.GL_FRAGMENT_SHADER);
         if(iFShader == 0)
         {
-            Log.d("Load Program", "Fragment Shader Failed");
+            Log.d(CAT_TAG, "Load Fragment Shader Failed");
             return 0;
         }
         
@@ -88,12 +90,26 @@ public class Utils {
         GLES20.glLinkProgram(iProgId);
         
         GLES20.glGetProgramiv(iProgId, GLES20.GL_LINK_STATUS, link, 0);
-        if (link[0] <= 0) {
-            Log.d("Load Program", "Linking Failed");
+        if (link[0] == GLES20.GL_FALSE) {
+            Log.d(CAT_TAG, "Linking Failed");
+            return 0;
+        }
+        GLES20.glGetProgramiv(iProgId, GLES20.GL_VALIDATE_STATUS, link, 0);
+        if (link[0] == GLES20.GL_FALSE) {
+            Log.d(CAT_TAG, "Validating Failed");
             return 0;
         }
         GLES20.glDeleteShader(iVShader);
         GLES20.glDeleteShader(iFShader);
         return iProgId;
+    }
+    
+    //http://stackoverflow.com/questions/16599489/error-when-creating-program-and-trying-to-get-attribute-location-opengl-es-2-0
+    public static void checkGlError(String op) {
+        int error;
+        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+            Log.e(CAT_TAG, op + ": glError " + error);
+            throw new RuntimeException(op + ": glError " + error);
+        }
     }
 }
