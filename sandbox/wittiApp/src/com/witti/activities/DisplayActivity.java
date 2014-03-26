@@ -11,10 +11,27 @@ import com.witti.wittiapp.R;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 
 public class DisplayActivity extends Activity {
     private static final String CAT_TAG = "WITTI_Display";
+    private static final int PLAY_RATE = 20; //Hz
+
     private CloudSurfaceView mCloudSurfaceView;
+    private CloudRenderer mRenderer;
+
+    Handler timerHandler = new Handler();
+    Runnable timerRunnable = new Runnable() {
+        @Override
+        public void run() {
+        mRenderer.mTime += .02;
+        mRenderer.setCamera((float) (10*Math.cos(mRenderer.mTime)), (float) (10*Math.sin(mRenderer.mTime)), (float) (5+5*Math.sin(.01*mRenderer.mTime)),
+                                      0.0f,   0.0f,  0.0f,
+                                      0.0f,   0.0f,  1.0f);
+            timerHandler.postDelayed(this, 1000 / PLAY_RATE);
+        }
+    };
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -22,24 +39,27 @@ public class DisplayActivity extends Activity {
 
         
         mCloudSurfaceView = (CloudSurfaceView) findViewById(R.id.cloud_surface_view);
+  
         // tried doing this in CloudSurfaceView but caused null pointer
         
-        CloudRenderer renderer = new CloudRenderer(mCloudSurfaceView);
+        mRenderer = new CloudRenderer(mCloudSurfaceView);
         mCloudSurfaceView.setEGLContextClientVersion(2);
-        mCloudSurfaceView.setRenderer(renderer);
+        mCloudSurfaceView.setRenderer(mRenderer);
+
+        timerHandler.postDelayed(timerRunnable, 1000);
 	}
 
 	@Override
     protected void onPause() {
         super.onPause();
         mCloudSurfaceView.onPause();
+        timerHandler.removeCallbacks(timerRunnable);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mCloudSurfaceView.onResume();
+        timerHandler.postDelayed(timerRunnable, 1000);
     }
-	
-
 }

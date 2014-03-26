@@ -20,7 +20,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 public class PointCloudArtist {
-    private static final String CAT_TAG = "WITTI_Cloud_Drawer";
+    private static final String CAT_TAG = "WITTI_PointCloudArtist";
     private CloudSurfaceView mCloudSurfaceView;
 
     private int mProgId;
@@ -42,38 +42,38 @@ public class PointCloudArtist {
     public PointCloudArtist(CloudSurfaceView view){
         mCloudSurfaceView = view;
         loadDemo();
-        initializeShaders();
     }
 
     public void draw(float[] mMVPMatrix){
         Log.v(CAT_TAG, "Program id: " + Integer.toString(mProgId));
-        Utils.checkGlError("Before Program");
+        Utils.checkGlError(CAT_TAG, "Draw, Before Use Program");
         GLES20.glUseProgram(mProgId);
-        Utils.checkGlError("Use program");
+        Utils.checkGlError(CAT_TAG, "Use program");
         
         
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexId);
-        Utils.checkGlError("Bind Texture");
+        Utils.checkGlError(CAT_TAG, "Bind Texture");
         
         GLES20.glUniform1i(mTextureHandle, 0);
-        Utils.checkGlError("Texture handle");
+        Utils.checkGlError(CAT_TAG, "Texture handle");
         
         mVertexBuffer.position(0);
         GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, PARTICLE_SIZE * 4, mVertexBuffer);
         GLES20.glEnableVertexAttribArray(mPositionHandle);
-        Utils.checkGlError("Buffer");
+        Utils.checkGlError(CAT_TAG, "Buffer");
 
         GLES20.glUniform1f(mTimeHandle, 0f);
         GLES20.glUniform1f(mMaxZHandle, mMaxZ);
         GLES20.glUniformMatrix4fv(mMVPHandle, 1, false, mMVPMatrix, 0);
-        Utils.checkGlError("Uniforms");
+        Utils.checkGlError(CAT_TAG, "Uniforms");
         
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, MAX_PARTICLES);
-        Utils.checkGlError("Dreaw");
+        Utils.checkGlError(CAT_TAG, "Draw");
     }
 
-    private void initializeShaders(){
+    protected void initializeShaders(){
+        Utils.checkGlError(CAT_TAG, "Before Initialize");
         Log.v(CAT_TAG, "initializeShaders");
         String strVShader = 
             "precision mediump float;" +
@@ -85,10 +85,8 @@ public class PointCloudArtist {
             "float time;" +
             "void main(){" +
                 "gl_PointSize = 20.0;" +
-                "//v_color = vec4(.6,.6,.6+.4*(a_Position.z/a_max_z),.5);" +
-                "v_color = vec4(.7, .7, .3, 1);"
+                "v_color = vec4(.6,.6,.6+.4*(a_Position.z/a_max_z),1);" +
                 "gl_Position = u_MVPMatrix * a_Position;" +
-                "gl_Position = vec4(0, 0, 0, 1);" +
             "}";
 
         String strFShader = 
@@ -96,21 +94,25 @@ public class PointCloudArtist {
             "uniform sampler2D u_texture;" +
             "varying vec4 v_color;" +
             "void main(){" +
-                "gl_FragColor = vec4(1, .5, .5, 1);" +
+                "vec4 tex = texture2D(u_texture, gl_PointCoord);" +
+                "gl_FragColor = v_color * tex;" +
+                "gl_FragColor.w = .7;" +
             "}";
         
-        //"vec4 tex = texture2D(u_texture, gl_PointCoord);" +
-        //"gl_FragColor = v_color * tex;" +
         
         
         mProgId = Utils.LoadProgram(strVShader, strFShader);
+        Utils.checkGlError(CAT_TAG, "After program load");
         mTexId = Utils.LoadTexture(mCloudSurfaceView, R.drawable.particle);
+        Utils.checkGlError(CAT_TAG, "After loading texture");
         
         mPositionHandle = GLES20.glGetAttribLocation(mProgId, "a_Position");
+        Utils.checkGlError(CAT_TAG, "THIS Handle");
         mTextureHandle = GLES20.glGetUniformLocation(mProgId, "u_texture");
         mMVPHandle = GLES20.glGetUniformLocation(mProgId, "u_MVPMatrix");
         mTimeHandle = GLES20.glGetAttribLocation(mProgId, "a_time");
         mMaxZHandle = GLES20.glGetUniformLocation(mProgId, "a_max_z");
+        Utils.checkGlError(CAT_TAG, "After getting handles");
     }
 
     private void loadDemo(){

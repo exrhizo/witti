@@ -18,7 +18,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 public class CloudRenderer implements Renderer {
-    private static final String CAT_TAG = "WITTI_Renderer";
+    private static final String CAT_TAG = "WITTI_CloudRenderer";
     private CloudSurfaceView mCloudSurfaceView;
     private PointCloudArtist mPointCloudArtist;
 
@@ -28,16 +28,22 @@ public class CloudRenderer implements Renderer {
     private float[] mProjectionMatrix = new float[16];
     //Combined matrix used in shader
     private float[] mMVPMatrix = new float[16];
+    public float mTime;
 
     public CloudRenderer(CloudSurfaceView view) {
         Log.v(CAT_TAG, "CloudRenderer constructor");
         mCloudSurfaceView = view;
         mPointCloudArtist = new PointCloudArtist(view);
+        mTime = 0.0f;
+        setCamera(0.0f, -10.0f, 10.0f,
+                  0.0f,  20.0f, 10.0f,
+                  0.0f,   0.0f,  1.0f);
+        Matrix.setIdentityM(mModelMatrix, 0);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        //GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
         // (which currently contains model * view).
         Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
@@ -71,32 +77,19 @@ public class CloudRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         Log.v(CAT_TAG, "CloudRenderer onSurfaceCreated");
-        // Position the eye behind the origin.
-        final float eyeX = 30.0f;
-        final float eyeY = 0.0f;
-        final float eyeZ = 30.0f;
-
-        // We are looking toward the distance
-        final float lookX = 0.0f;
-        final float lookY = 0.0f;
-        final float lookZ = 0.0f;
-
-        // Set our up vector. This is where our head would be pointing were we holding the camera.
-        final float upX = 0.0f;
-        final float upY = 1.0f;
-        final float upZ = 0.0f;
-
-        // Set the view matrix. This matrix can be said to represent the camera position.
-        // NOTE: In OpenGL 1, a ModelView matrix is used, which is a combination of a model and
-        // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
-        Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
-        Matrix.setIdentityM(mModelMatrix, 0);
+        
         //Set the background clear color to black.
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        //GLES20.glEnable(GLES20.GL_BLEND);
-        //GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE);
-        
+        GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE);
+        mPointCloudArtist.initializeShaders();
+    }
+    
+    public void setCamera(float eyeX, float eyeY, float eyeZ, 
+                          float lookX, float lookY, float lookZ, 
+                          float upX, float upY, float upZ) {
+        Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
     }
     
     public String floatArrayToString(float[] arr){
