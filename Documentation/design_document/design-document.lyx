@@ -619,13 +619,14 @@ The Demo button is used initialize Demo mode, which will read point cloud
 After the Demo button or Launch button is pressed, the user is presented
  with several settings that must be configured before moving on to the display
  interface.
- One option is the data refresh rate.
+ One option will be to set the demo filename to be used for data in Demo
+ mode.
+ This option will be grayed when the Launch button is used to initialize
+ the display interface.
+ Another option is the data refresh rate.
  This will be limited in choices, including setting the rate to 0 to refresh
  the display manually by tapping the screen.
- The other option will be to set the IP address of the host computer for
- wireless communication.
- This option will be grayed when the Demo button is used to initialize the
- display interface.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -637,9 +638,9 @@ After setting the appropriate settings, the user is taken to the display
  If the user is in tap to refresh mode, a draw path option and a refresh
  option will be available.
  If the user is streaming video, the only option will be to pause the playback.
- After a successful pause, the user will have the option to draw a path.
- After a valid path is inputted, the app immediately checks for reachability
- and informs the user of the outcome.
+ After a successful pause, the user may have the option to draw a path.
+ After a valid path is inputted, the app may immediately check for reachability
+ and inform the user of the outcome.
  The user is then taken back to the display interface in the paused state.
 \end_layout
 
@@ -691,7 +692,7 @@ Use Cases
 The phone application has several use cases, as can be seen in the figure
  below.
  The actor for all use cases is the user of the phone application who wishes
- to view the LiDAR data and/or draw vehicle trajectories on a smartphone.
+ to view the LiDAR data and optionally draw vehicle trajectories on a smartphone.
 \end_layout
 
 \begin_layout Subsubsection
@@ -953,7 +954,7 @@ On the computer, the data ahs already been sufficiently reduced and converted
  OpenGL.
  The CloudSequence object is used to save the new frame from the server
  as well as track the frames already displayed on the app.
- The PointCloud Artist is used to draw the point cloud frame, which requires
+ The PointCloudArtist is used to draw the point cloud frame, which requires
  rendering and drawing the frame using the CloudSurfaceView and CloudArtistManag
 er objects.
 \end_layout
@@ -983,7 +984,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename figures/SettingsSequenceModel_Updated.PNG
-	width 60col%
+	width 50col%
 
 \end_inset
 
@@ -1010,17 +1011,18 @@ Change Settings Sequence
 
 \begin_layout Standard
 The user is currently viewing the HomeActivity user interface.
- The user then taps the Settings button which will use GestureManager to
- process the Motionevent and then call the HomeActivity's openSettings()
- method.
+ The user then taps the Settings button which will call the HomeActivity's
+ openSettings() method.
  This will initialize and create the SettingsActivity menu.
+ The stored settings will be loaded from the WittiSettings onject upon opening
+ the SettingsActivity.
  In the SettingsActivity menu, the user can make changes to the different
- settings, including changing the refresh rate and setting the demo file
- to be used.
- The SettingsActivity will also use the GestureManager to determine where
- the user touches and how to respond appropriately, which includes settng
- values for the various settings in the WittiSettings object during the
- entire application lifetime.
+ settings, such as setting the demo file to be used in Demo mode.
+ The SettingsActivity will implement the SharedPreferences.OnSharedPreferenceChan
+geListener to listen for changes made to the settings via the user's touch
+ events.
+ Upon changing a setting, the setting value will be set in the WittiSettings
+ object.
  After the user has finished with the SettingsActivity, the back button
  will be used to initialize the HomeActivity and return the user interface
  to the title screen.
@@ -1377,30 +1379,24 @@ Integration with Platform
 \end_layout
 
 \begin_layout Standard
-The application will be interacting with the platform’s Wi-Fi in order to
- communicate with a host computer.
- When the application starts the wireless mode, an initialization process
- between the host computer and the device is launched, which includes instantiat
-ing an instance of AppWifiManager.
- The prerequisite for this is that a PCWifiManager will already be running
- on the host computer waiting for a connection message from the application.
+The application will be interacting with the platform’s server in order
+ to communicate with the host computer.
+ When the application starts the Launch mode, an initialization process
+ between the server and the device is launched.
+ The prerequisite for this is that a WittiServer will already be running
+ and the phone readable LiDAR data is available on the server.
  
 \end_layout
 
 \begin_layout Standard
-After a connection is made, the application will then automatically download
- new data from the host computer based on the set refresh rate.
- If the refresh rate is set to zero, the app will only request new data
- from the host computer when the user taps the screen, indicating a refresh
- action.
- The Wi-Fi manager inside of the app will communicate directly with the
- view activity that is currently in focus, since that is how user input
- will be managed, i.e.
- each view activity will have their own versions of the touch callback methods.
- There are several methods that will be implemented that will help send
- messages between the AppWifiManager and the current activity, which can
- be directly seen on the class diagram.
- 
+After a connection is made, the app will download and parse LiDAR data from
+ the server.
+ After this point, new data from the server will only be downloaded and
+ parsed when the user taps the screen, indicating a refresh action.
+ Optionally, the application may automatically download new data from the
+ host computer based on a set refresh rate.
+ The downloaded data will be managed by the CloudSequence, which will be
+ used to provide the current PointCloud frame to render on the app display.
 \end_layout
 
 \begin_layout Standard
@@ -1489,7 +1485,7 @@ status open
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename figures/Timeline.pdf
+	filename figures/Timeline_032514.PNG
 	width 100col%
 
 \end_inset
