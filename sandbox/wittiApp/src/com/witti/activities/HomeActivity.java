@@ -5,12 +5,13 @@
 
 package com.witti.activities;
 
-import com.witti.wittiapp.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
+
+import com.witti.wittiapp.R;
 
 public class HomeActivity extends Activity {
 
@@ -19,27 +20,33 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home);
+        // Sets the default settings values.
+    	PreferenceManager.setDefaultValues(this, R.layout.preferences, false);
     }
 	 
 	 /**
      * Opens DisplayActivity with settings for Launch mode (data from computer). 
      */
     public void openLaunch(View view) {
-        // TODO: Configure launch settings.
+		WittiSettings settings = new WittiSettings(this);
+		settings.setMode("launch");
 		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
-        startActivity(intent);
+		startActivity(intent);
 	}
  
      /**
      * Opens DisplayActivity with settings for Demo mode (data from phone). 
      */
     public void openDemo(View view) {
-        // TODO: Configure demo settings.
+		WittiSettings settings = new WittiSettings(this);
+		settings.setMode("demo");
 		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
-        startActivity(intent);
+		startActivity(intent);
 	}
      
     public void openSettings(View view) {
+		WittiSettings settings = new WittiSettings(this);
+		settings.setMode("settings");
         Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
         startActivity(intent);
 	}

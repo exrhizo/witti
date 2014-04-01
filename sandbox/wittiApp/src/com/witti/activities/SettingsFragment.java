@@ -1,11 +1,9 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 3/13/14
+//Date: 3/31/14
 //Author: Brianna Heersink
 
 package com.witti.activities;
-
-import com.witti.wittiapp.R;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -14,13 +12,16 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
+import com.witti.wittiapp.R;
+
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 	
-	public static final String KEY_REFRESH_RATE = "refreshSetting";
-	public static final String KEY_GROUND_SETTING = "groundSetting";
+	public static final String KEY_DEMO_FILE = "demoFileSetting";
+	public static final String KEY_TAP_SETTING = "tapToRefreshSetting";
 	
-	private String mRefreshValue;
-	private boolean mGroundDisplayed;
+	private String mDemoFile;
+	private boolean mTapToRefresh;
+	private String mAppMode;
 	
 	
 	public SettingsFragment() {
@@ -36,50 +37,51 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         
         // Loads the preferences from preferences.xml
         addPreferencesFromResource(R.layout.preferences);
+       
+        /*
+         * Edit and verify if we want the functionality to load settings based on current mode
+        // Edits the default settings based on the selected mode
+        WittiSettings settings = new WittiSettings(getActivity().getApplicationContext());
+        mAppMode = settings.getMode();
+        
+        if(mAppMode == "demo"){
+        	settings.setTapToRefresh(true);
+        	settings.setDemoFile("file1");
+        }
+        else if(mAppMode == "launch"){
+        	settings.setTapToRefresh(false);
+        	// TODO: Select NONE or gray out setting
+        	settings.setDemoFile("file1");        
+        }
+        */
+
     }
     
 	/**
-     * Saves any settings that are changed by the user
+     * Saves any settings that are changed by the user within the SettingsFragment
      */
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		// TODO Auto-generated method stub
-		if(key.equals(KEY_REFRESH_RATE)){
+		if(key.equals(KEY_DEMO_FILE)){
 			Preference changedPreference = findPreference(key);
 	        // Set summary to be the user-description for the selected value
-			changedPreference.setSummary(sharedPreferences.getString(key, "")+" Hz");
+			changedPreference.setSummary(sharedPreferences.getString(key, ""));
 			// Save preference to local variable
-			mRefreshValue = sharedPreferences.getString(key,"");
+			mDemoFile = sharedPreferences.getString(key,"");
 		    // Debug values
-            Log.d("setting refresh", mRefreshValue);
+            Log.d("setting refresh", mDemoFile);
 		}
-		else if(key.equals(KEY_GROUND_SETTING)){
-			mGroundDisplayed = sharedPreferences.getBoolean(key, false);
+		else if(key.equals(KEY_TAP_SETTING)){
+			mTapToRefresh = sharedPreferences.getBoolean(key, false);
 			// Debug values
-			if (mGroundDisplayed == false){
-				Log.d("setting ground", "unchecked");
+			if (mTapToRefresh == false){
+				Log.d("setting tap", "unchecked");
 			}
-			else if (mGroundDisplayed == true){
-				Log.d("setting ground", "checked");
+			else if (mTapToRefresh == true){
+				Log.d("setting tap", "checked");
 			}
 		}
-	}
-	
-	/**
-     * Returns data refresh rate from settings
-     */	
-	public int getRefreshRate(){
-		int refreshInt = Integer.valueOf(mRefreshValue);
-		return refreshInt;
-		// TODO: Verify this method
-	}
-	
-	/**
-     * Returns whether the ground plane is selected to be shown
-     */	
-	public boolean getGroundSetting(){
-		return mGroundDisplayed;
-		// TODO: Verify this method
 	}
 	
 	@Override
@@ -95,7 +97,5 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	    getPreferenceScreen().getSharedPreferences()
 	            .unregisterOnSharedPreferenceChangeListener(this);
 	}
-	
-	
 
 }

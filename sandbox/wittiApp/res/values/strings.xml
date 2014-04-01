@@ -6,14 +6,13 @@
     <string name="launch">Launch</string>
     <string name="demo">Demo</string>
     <string name="settings">Settings</string>
-    <string name="groundSettingTitle">Display Drivable Ground</string>
-    <string name="groundSettingSummary">Color the ground plane</string>
-    <string name="refreshSettingTitle">Data Refresh Rate</string>
-    <string name="refreshSettingDialog">Select the desired visulaization refresh rate (select zero for manual refresh)</string>
     <string name="title_activity_settings">SettingsActivity</string>
-    <string name="defaultRefreshSetting">0</string>
+    <string name="tapSettingTitle">Enable Tap to Refresh</string>
+    <string name="tapSettingSummary">Manually tapping the display will update the data visualized</string>
+    <string name="demoFileTitle">Select Demo file</string>
+    <string name="demoFileDialog">Select the desired demo file to be visualized in Demo mode</string>
+    <string name="defaultDemoFile">file1</string>
     <string name="title_activity_display">DisplayActivity</string>
-    <string name="hello_world">Hello world!</string>
     <string name="imageContent">imageContent</string>
     <string name="pathTracing">Path Drawing</string>
 

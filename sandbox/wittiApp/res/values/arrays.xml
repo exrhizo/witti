@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="refreshEntries">
-        <item name="0">Never (Update Manually)</item>
-        <item name="2">Twice a second</item>
-        <item name="1">Once a second</item>
+    <string-array name="demoFileEntries">
+        <item name="1">File 1</item>
+        <item name="2">File 2</item>
+        <item name="3">File 3</item>
     </string-array>
-    <string-array name="refreshEntryValues">
-        <item name="0">0</item>
-        <item name="2">2</item>
-        <item name="1">1</item>
+    <string-array name="demoFileEntryValues">
+        <item name="1">file1</item>
+        <item name="2">file2</item>
+        <item name="3">file3</item>
     </string-array>
      
 </resources>
