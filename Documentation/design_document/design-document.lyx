@@ -616,23 +616,8 @@ The Demo button is used initialize Demo mode, which will read point cloud
 \end_layout
 
 \begin_layout Standard
-After the Demo button or Launch button is pressed, the user is presented
- with several settings that must be configured before moving on to the display
- interface.
- One option will be to set the demo filename to be used for data in Demo
- mode.
- This option will be grayed when the Launch button is used to initialize
- the display interface.
- Another option is the data refresh rate.
- This will be limited in choices, including setting the rate to 0 to refresh
- the display manually by tapping the screen.
- 
-\end_layout
-
-\begin_layout Standard
-After setting the appropriate settings, the user is taken to the display
- interface where point cloud data immediately starts playing at the set
- refresh rate and from the set location.
+The user is taken to the display interface where point cloud data immediately
+ starts playing at the set refresh rate and from the set location.
  While the user is viewing the display interface, there will be several
  on-screen options.
  If the user is in tap to refresh mode, a draw path option and a refresh
