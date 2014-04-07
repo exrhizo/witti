@@ -33,7 +33,7 @@ public class PointCloudArtist {
 
     private float mMaxZ;
 
-    final static int MAX_PARTICLES = 500;   //7364;
+    final static int MAX_PARTICLES = 7364;   //7364;
     final static int PARTICLE_SIZE = 3;
 
     float[] mVertices;
@@ -45,6 +45,8 @@ public class PointCloudArtist {
     }
 
     public void draw(float[] mMVPMatrix){
+
+        //loadDemo();
         Log.v(CAT_TAG, "Program id: " + Integer.toString(mProgId));
         Utils.checkGlError(CAT_TAG, "Draw, Before Use Program");
         GLES20.glUseProgram(mProgId);

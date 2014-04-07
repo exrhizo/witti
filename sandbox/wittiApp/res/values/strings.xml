@@ -15,5 +15,7 @@
     <string name="title_activity_display">DisplayActivity</string>
     <string name="imageContent">imageContent</string>
     <string name="pathTracing">Path Drawing</string>
+    <string name="displaySettingsText">Settings</string>
+    <string name="displayOtherText">Other</string>
 
 </resources>

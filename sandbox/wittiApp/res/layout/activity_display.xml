@@ -13,4 +13,23 @@
         android:id="@+id/cloud_surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+<Button
+    android:id="@+id/displaySettingsButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:color="#80FFFFFF"
+    android:layout_alignBottom="@+id/cloud_surface_view"
+    android:layout_alignLeft="@+id/cloud_surface_view"
+    android:text="@string/displaySettingsText"
+    android:onClick="launchSettingsFromDisplay"/>
+<Button
+    android:id="@+id/displayOtherButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:color="#80FFFFFF"
+    android:layout_alignBottom="@+id/cloud_surface_view"
+    android:layout_alignRight="@+id/cloud_surface_view"
+    android:text="@string/displayOtherText"
+    android:onClick="launchOtherFromDisplay"/>
+
 </RelativeLayout>

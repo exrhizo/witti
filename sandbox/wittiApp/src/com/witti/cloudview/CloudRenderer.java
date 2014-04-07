@@ -12,6 +12,8 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.witti.activities.CloudCamera;
+
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
@@ -24,18 +26,19 @@ public class CloudRenderer implements Renderer {
 
     //Matricies to store the model, view and projection for the "camera"
     private float[] mModelMatrix = new float[16];
-    private float[] mViewMatrix = new float[16];
+    private CloudCamera mCamera;
     private float[] mProjectionMatrix = new float[16];
     //Combined matrix used in shader
     private float[] mMVPMatrix = new float[16];
     public float mTime;
 
-    public CloudRenderer(CloudSurfaceView view) {
+    public CloudRenderer(CloudSurfaceView view, CloudCamera cc) {
         Log.v(CAT_TAG, "CloudRenderer constructor");
         mCloudSurfaceView = view;
         mPointCloudArtist = new PointCloudArtist(view);
         mTime = 0.0f;
-        setCamera(0.0f, -10.0f, 10.0f,
+        mCamera = cc;
+        mCamera.setCamera(0.0f, -10.0f, 10.0f,
                   0.0f,  20.0f, 10.0f,
                   0.0f,   0.0f,  1.0f);
         Matrix.setIdentityM(mModelMatrix, 0);
@@ -46,7 +49,7 @@ public class CloudRenderer implements Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
         // (which currently contains model * view).
-        Matrix.multiplyMM(mMVPMatrix, 0, mViewMatrix, 0, mModelMatrix, 0);
+        Matrix.multiplyMM(mMVPMatrix, 0, mCamera.getViewMatrix(), 0, mModelMatrix, 0);
         
         // This multiplies the modelview matrix by the projection matrix, and stores the result in the MVP matrix
         // (which now contains model * view * projection).
@@ -86,11 +89,7 @@ public class CloudRenderer implements Renderer {
         mPointCloudArtist.initializeShaders();
     }
     
-    public void setCamera(float eyeX, float eyeY, float eyeZ, 
-                          float lookX, float lookY, float lookZ, 
-                          float upX, float upY, float upZ) {
-        Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
-    }
+    
     
     public String floatArrayToString(float[] arr){
         StringBuilder result = new StringBuilder();
@@ -99,6 +98,10 @@ public class CloudRenderer implements Renderer {
             result.append(' ');
         }
         return result.toString();
+    }
+    
+    public void setCamera(CloudCamera cc){
+    	mCamera = cc;
     }
     
 }
