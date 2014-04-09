@@ -5,6 +5,10 @@
         android:title="@string/tapSettingTitle"
         android:summary="@string/tapSettingSummary"
         android:defaultValue="true" />
+    <EditTextPreference
+        android:key="serverLocationSetting" 
+        android:title="@string/serverSettingTitle"
+        android:dialogTitle="@string/serverSettingDialog" />
     <ListPreference
         android:key="demoFileSetting"
         android:title="@string/demoFileTitle"

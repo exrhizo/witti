@@ -8,6 +8,7 @@ package com.witti.activities;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
@@ -18,11 +19,9 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	
 	public static final String KEY_DEMO_FILE = "demoFileSetting";
 	public static final String KEY_TAP_SETTING = "tapToRefreshSetting";
+	public static final String KEY_SERVER_SETTING = "serverLocationSetting";
 	
-	private String mDemoFile;
-	private boolean mTapToRefresh;
-	private String mAppMode;
-	
+	private String defaultServerLocation = "www.default_server_site.com";
 	
 	public SettingsFragment() {
 		// TODO Auto-generated constructor stub
@@ -37,24 +36,15 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         
         // Loads the preferences from preferences.xml
         addPreferencesFromResource(R.layout.preferences);
-       
-        /*
-         * Edit and verify if we want the functionality to load settings based on current mode
-        // Edits the default settings based on the selected mode
-        WittiSettings settings = new WittiSettings(getActivity().getApplicationContext());
-        mAppMode = settings.getMode();
         
-        if(mAppMode == "demo"){
-        	settings.setTapToRefresh(true);
-        	settings.setDemoFile("file1");
-        }
-        else if(mAppMode == "launch"){
-        	settings.setTapToRefresh(false);
-        	// TODO: Select NONE or gray out setting
-        	settings.setDemoFile("file1");        
-        }
-        */
-
+        // Sets default summary for list preference (demo file)
+        Preference listPreference = findPreference(KEY_DEMO_FILE);
+        listPreference.setSummary(listPreference.getSharedPreferences().getString(KEY_DEMO_FILE, ""));
+        
+        // Sets default summary for edit text preference (server location)
+        EditTextPreference editTextPreference = (EditTextPreference) findPreference(KEY_SERVER_SETTING);
+        editTextPreference.setText(defaultServerLocation);
+        editTextPreference.setSummary(defaultServerLocation);
     }
     
 	/**
@@ -62,25 +52,27 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
      */
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		// TODO Auto-generated method stub
+		Preference changedPreference = findPreference(key);
 		if(key.equals(KEY_DEMO_FILE)){
-			Preference changedPreference = findPreference(key);
 	        // Set summary to be the user-description for the selected value
 			changedPreference.setSummary(sharedPreferences.getString(key, ""));
-			// Save preference to local variable
-			mDemoFile = sharedPreferences.getString(key,"");
-		    // Debug values
-            Log.d("setting refresh", mDemoFile);
+		    // Debugging
+            Log.d("setting refresh", sharedPreferences.getString(key,""));
 		}
 		else if(key.equals(KEY_TAP_SETTING)){
-			mTapToRefresh = sharedPreferences.getBoolean(key, false);
-			// Debug values
-			if (mTapToRefresh == false){
+			// Debugging
+			if (sharedPreferences.getBoolean(key, false) == false){
 				Log.d("setting tap", "unchecked");
 			}
-			else if (mTapToRefresh == true){
+			else {
 				Log.d("setting tap", "checked");
 			}
+		}
+		else if(key.equals(KEY_SERVER_SETTING)){
+	        // Set summary to be the user-description for the selected value
+			changedPreference.setSummary(sharedPreferences.getString(key, ""));
+		    // Debugging
+            Log.d("server setting", sharedPreferences.getString(key,""));			
 		}
 	}
 	

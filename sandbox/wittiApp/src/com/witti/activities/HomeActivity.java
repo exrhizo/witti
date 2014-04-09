@@ -28,8 +28,6 @@ public class HomeActivity extends Activity {
      * Opens DisplayActivity with settings for Launch mode (data from computer). 
      */
     public void openLaunch(View view) {
-		WittiSettings settings = new WittiSettings(this);
-		settings.setMode("launch");
 		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
 		startActivity(intent);
 	}
@@ -38,15 +36,11 @@ public class HomeActivity extends Activity {
      * Opens DisplayActivity with settings for Demo mode (data from phone). 
      */
     public void openDemo(View view) {
-		WittiSettings settings = new WittiSettings(this);
-		settings.setMode("demo");
 		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
 		startActivity(intent);
 	}
      
     public void openSettings(View view) {
-		WittiSettings settings = new WittiSettings(this);
-		settings.setMode("settings");
         Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
         startActivity(intent);
 	}
