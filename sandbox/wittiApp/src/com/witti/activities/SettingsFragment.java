@@ -17,9 +17,11 @@ import com.witti.wittiapp.R;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 	
+	private static final String CAT_TAG = "WITTI_SettingsFragment";
 	public static final String KEY_DEMO_FILE = "demoFileSetting";
 	public static final String KEY_TAP_SETTING = "tapToRefreshSetting";
-	public static final String KEY_SERVER_SETTING = "serverLocationSetting";
+	public static final String KEY_SERVER_LOCATION = "serverLocationSetting";
+	public static final String KEY_SERVER_FILE = "serverFileSetting";
 	
 	private String defaultServerLocation = "www.default_server_site.com";
 	
@@ -38,13 +40,17 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         addPreferencesFromResource(R.layout.preferences);
         
         // Sets default summary for list preference (demo file)
-        Preference listPreference = findPreference(KEY_DEMO_FILE);
-        listPreference.setSummary(listPreference.getSharedPreferences().getString(KEY_DEMO_FILE, ""));
+        Preference mDemoFile = findPreference(KEY_DEMO_FILE);
+        mDemoFile.setSummary(mDemoFile.getSharedPreferences().getString(KEY_DEMO_FILE, ""));
         
         // Sets default summary for edit text preference (server location)
-        EditTextPreference editTextPreference = (EditTextPreference) findPreference(KEY_SERVER_SETTING);
-        editTextPreference.setText(defaultServerLocation);
-        editTextPreference.setSummary(defaultServerLocation);
+        EditTextPreference mServerLocation = (EditTextPreference) findPreference(KEY_SERVER_LOCATION);
+        mServerLocation.setText(defaultServerLocation);
+        mServerLocation.setSummary(defaultServerLocation);
+        
+        // Sets default summary for edit text preference (server file)
+        EditTextPreference mServerFile = (EditTextPreference) findPreference(KEY_SERVER_FILE);
+        mServerFile.setSummary(mServerFile.getText());
     }
     
 	/**
@@ -57,22 +63,22 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	        // Set summary to be the user-description for the selected value
 			changedPreference.setSummary(sharedPreferences.getString(key, ""));
 		    // Debugging
-            Log.d("setting refresh", sharedPreferences.getString(key,""));
+            Log.v(CAT_TAG, "setting refresh: "+sharedPreferences.getString(key,""));
 		}
 		else if(key.equals(KEY_TAP_SETTING)){
 			// Debugging
 			if (sharedPreferences.getBoolean(key, false) == false){
-				Log.d("setting tap", "unchecked");
+				Log.v(CAT_TAG, "setting tap: unchecked");
 			}
 			else {
-				Log.d("setting tap", "checked");
+				Log.v(CAT_TAG, "setting tap: checked");
 			}
 		}
-		else if(key.equals(KEY_SERVER_SETTING)){
+		else if(key.equals(KEY_SERVER_LOCATION) || key.equals(KEY_SERVER_FILE)){
 	        // Set summary to be the user-description for the selected value
 			changedPreference.setSummary(sharedPreferences.getString(key, ""));
 		    // Debugging
-            Log.d("server setting", sharedPreferences.getString(key,""));			
+            Log.v(CAT_TAG, "server: "+sharedPreferences.getString(key,""));			
 		}
 	}
 	

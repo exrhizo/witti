@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
+    <PreferenceCategory 
+        android:title="@string/generalCategory"
+        android:key="generalPreferencesKey">
+        <CheckBoxPreference
         android:key="tapToRefreshSetting"
         android:title="@string/tapSettingTitle"
         android:summary="@string/tapSettingSummary"
         android:defaultValue="true" />
-    <EditTextPreference
-        android:key="serverLocationSetting" 
-        android:title="@string/serverSettingTitle"
-        android:dialogTitle="@string/serverSettingDialog" />
-    <ListPreference
+    </PreferenceCategory>
+    
+    <PreferenceCategory 
+        android:title="@string/launchCategory"
+        android:key="launchPreferencesKey">
+	    <EditTextPreference
+	        android:key="serverLocationSetting" 
+	        android:title="@string/serverLocationTitle"
+	        android:dialogTitle="@string/serverLocationDialog" />
+	    <EditTextPreference
+	        android:key="serverFileSetting" 
+	        android:title="@string/serverFileTitle"
+	        android:dialogTitle="@string/serverFileDialog" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory 
+        android:title="@string/demoCategory"
+        android:key="demoPreferencesKey">
+	    <ListPreference
         android:key="demoFileSetting"
         android:title="@string/demoFileTitle"
         android:dialogTitle="@string/demoFileDialog"
         android:entries="@array/demoFileEntries"
         android:entryValues="@array/demoFileEntryValues" 
         android:defaultValue="@string/defaultDemoFile" />
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -13,11 +13,12 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import com.witti.wittiapp.R;
-
+import android.content.Context;
 import android.opengl.GLES20;
-import android.opengl.Matrix;
 import android.util.Log;
+
+import com.witti.activities.WittiSettings;
+import com.witti.wittiapp.R;
 
 public class PointCloudArtist {
     private static final String CAT_TAG = "WITTI_PointCloudArtist";
@@ -128,8 +129,13 @@ public class PointCloudArtist {
     private void loadDemoFile(){
         Log.v(CAT_TAG, "loadDemoFile");
         mVertices = new float[MAX_PARTICLES * PARTICLE_SIZE];
+        Context context = mCloudSurfaceView.getContext().getApplicationContext();
+        // Gets requested demo file from settings and reads it in
+        WittiSettings settings = new WittiSettings(context);
+        String mFile = settings.getDemoFile();
         InputStream is = mCloudSurfaceView.getContext().getApplicationContext()
-                          .getResources().openRawResource(R.raw.yxz_points_less);
+                          .getResources().openRawResource(context.getResources().getIdentifier(mFile, 
+                        		  "raw", context.getPackageName()));
         BufferedReader in = new BufferedReader(new InputStreamReader(is));
         int count = 0;
         String line;

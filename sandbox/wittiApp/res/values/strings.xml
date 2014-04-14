@@ -7,12 +7,19 @@
     <string name="demo">Demo</string>
     <string name="settings">Settings</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="server_data_alert_title">Select data file from server:</string>
+    <string name="generalCategory">General</string>
+    <string name="launchCategory">Launch Mode</string>
+    <string name="demoCategory">Demo Mode</string>
     
     <string name="tapSettingTitle">Enable Tap to Refresh</string>
     <string name="tapSettingSummary">Manually tapping the display will update the data visualized</string>
     
-    <string name="serverSettingTitle">Select Server Location</string>
-    <string name="serverSettingDialog">Enter the desired web address of the server for Launch mode</string>
+    <string name="serverLocationTitle">Select Server Location</string>
+    <string name="serverLocationDialog">Enter the desired web address of the server for Launch mode</string>
+    
+    <string name="serverFileTitle">Select Server File</string>
+    <string name="serverFileDialog">Enter the desired file name from server for Launch mode</string>
     
     <string name="demoFileTitle">Select Demo File</string>
     <string name="demoFileDialog">Select the desired demo file to be visualized in Demo mode</string>

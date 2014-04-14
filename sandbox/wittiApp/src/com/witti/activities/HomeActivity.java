@@ -6,15 +6,25 @@
 package com.witti.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 
 import com.witti.wittiapp.R;
 
 public class HomeActivity extends Activity {
 
+	private static final String CAT_TAG = "WITTI_HomeActivity";
+	
+	public CharSequence[] serverFilesAvailable;
+	
+	private Context mContext = this;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,8 +38,25 @@ public class HomeActivity extends Activity {
      * Opens DisplayActivity with settings for Launch mode (data from computer). 
      */
     public void openLaunch(View view) {
-		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
-		startActivity(intent);
+		WittiSettings settings = new WittiSettings(this);
+		serverFilesAvailable = settings.getServerFilesAvailable();
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Select server data to display");
+		builder.setItems(serverFilesAvailable, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int selection) {
+		        //Toast.makeText(getApplicationContext(), mServerDataAvailable[item], Toast.LENGTH_SHORT).show();
+		    	Log.v(CAT_TAG, "server data selected: "+serverFilesAvailable[selection]);
+		    	
+		    	WittiSettings settings = new WittiSettings(mContext);
+		    	settings.setServerFile(serverFilesAvailable[selection].toString());
+		    	
+		    	Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
+				startActivity(intent);
+		    }
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
  
      /**

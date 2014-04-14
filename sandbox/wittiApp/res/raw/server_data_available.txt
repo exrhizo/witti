@@ -1,0 +1,6 @@
+% The following is a list of available LiDAR data on the server.
+% Each line shows the beginning of the file name prior to the frame number.
+movie1
+movie2
+movie3
+movie4
