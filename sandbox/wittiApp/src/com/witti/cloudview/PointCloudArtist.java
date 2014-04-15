@@ -34,7 +34,7 @@ public class PointCloudArtist {
 
     private float mMaxZ;
 
-    final static int MAX_PARTICLES = 7364;   //7364;
+	final static int MAX_PARTICLES = 7364;   //7364;
     final static int PARTICLE_SIZE = 3;
 
     float[] mVertices;

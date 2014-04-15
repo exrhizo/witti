@@ -4,10 +4,13 @@
         android:title="@string/generalCategory"
         android:key="generalPreferencesKey">
         <CheckBoxPreference
-        android:key="tapToRefreshSetting"
-        android:title="@string/tapSettingTitle"
-        android:summary="@string/tapSettingSummary"
+        android:key="groundSetting"
+        android:title="@string/groundSettingTitle"
+        android:summary="@string/groundSettingSummary"
         android:defaultValue="true" />
+<<<<<<< .mine
+    <ListPreference
+=======
     </PreferenceCategory>
     
     <PreferenceCategory 
@@ -27,11 +30,12 @@
         android:title="@string/demoCategory"
         android:key="demoPreferencesKey">
 	    <ListPreference
-        android:key="demoFileSetting"
-        android:title="@string/demoFileTitle"
-        android:dialogTitle="@string/demoFileDialog"
-        android:entries="@array/demoFileEntries"
-        android:entryValues="@array/demoFileEntryValues" 
-        android:defaultValue="@string/defaultDemoFile" />
+>>>>>>> .r562
+        android:key="refreshSetting"
+        android:title="@string/refreshSettingTitle"
+        android:dialogTitle="@string/refreshSettingDialog"
+        android:entries="@array/refreshEntries"
+        android:entryValues="@array/refreshEntryValues" 
+        android:defaultValue="@string/defaultRefreshSetting" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -15,17 +15,31 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class CloudSurfaceView  extends GLSurfaceView{
+	
     private static final String CAT_TAG = "WITTI_CloudSurfaceView";
     private static final String DEBUG = "DEBUG_TAG";
     CloudRenderer mRenderer;
     private CloudCamera mCamera;
     PointCloud mCloudPoints;
     private GestureDetector mGestureDetector;
+    
+    //Touch vars
+    float initialX, initialY;
+    float prevX, prevY, currX, currY;
+    float eyeX, eyeY;
+    float lookX, lookY, lookZ;
+    float theta;
+    float LENGTH = 100f;
 
     public CloudSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         mGestureDetector = new GestureDetector(getContext(), new CameraGestureListener());
+        eyeX = 0f; eyeY = 0f;
+
+        lookX = 0.0f;
+        lookY = 20.0f;
+        lookZ = 10.0f;
         
         initialize();
     }
@@ -51,11 +65,48 @@ public class CloudSurfaceView  extends GLSurfaceView{
     
     @Override
     public boolean onTouchEvent(MotionEvent me){
-    	mGestureDetector.onTouchEvent(me);
+    	super.onTouchEvent(me);
     	
+    	float tempX;
+    	float tempY;
+    	
+    	switch(me.getAction()){
+    	case MotionEvent.ACTION_UP:
+    		break;
+    	case MotionEvent.ACTION_DOWN:
+    		prevX = initialX = me.getX();
+    		prevY = initialY = me.getY();
+    		break;
+    	case MotionEvent.ACTION_MOVE:
+    		currX = me.getX();
+    		currY = me.getY();
+    		
+    		//theta = (float) Math.atan((currX-prevX)/LENGTH);
+    		theta = (currX-prevX) / 360;
+    		
+    		tempX = (float) ((lookX * Math.cos(theta)) - (lookY * Math.sin(theta)));
+    		tempY = (float) ((lookX * Math.sin(theta)) + (lookY * Math.cos(theta)));
+    		lookX = tempX;
+    		lookY = tempY;
+    		
+    		Log.d(DEBUG, "LookX: " + lookX + " LookY: " + lookY + " theta: " + theta);
+    		
+    		mCamera.setCamera(0.0f, -10.0f, 10.0f,
+    				lookX, lookY, lookZ,
+                    0.0f,   0.0f,  1.0f);
+    		prevX = currX;
+    		prevY = currY;
+    		break;
+    	default:
+    		break;
+    			
+    	}
+    	
+    	//mGestureDetector.onTouchEvent(me);
+    	/*
     	mCamera.setCamera((float) (10*Math.cos(mRenderer.mTime)), (float) (10*Math.sin(mRenderer.mTime)), (float) (5+5*Math.sin(.01*mRenderer.mTime)),
                 0.0f,   0.0f,  0.0f,
-                0.0f,   0.0f,  1.0f);
+                0.0f,   0.0f,  1.0f);*/
     	return true;
     	
     }
@@ -75,7 +126,6 @@ public class CloudSurfaceView  extends GLSurfaceView{
     	@Override
     	public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
     			float arg3) {
-    		mRenderer.mTime += (float)Math.sqrt(Math.pow((double)arg2, (double)2) + Math.pow((double)arg3, (double)2));
     		return false;
     	}
 
