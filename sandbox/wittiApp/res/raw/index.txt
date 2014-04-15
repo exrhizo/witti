@@ -1,0 +1,5 @@
+% The following is a list of available LiDAR data on the server.
+% format:
+% file_name number_of_frames
+% There will be file_name_0000.bin file_name_0001.bin etc..
+sweep 5
