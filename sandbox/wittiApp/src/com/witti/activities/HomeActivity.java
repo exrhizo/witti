@@ -35,11 +35,6 @@ public class HomeActivity extends Activity {
      * Opens DisplayActivity with settings for Launch mode (data from computer). 
      */
     public void openLaunch(View view) {
-<<<<<<< .mine
-        // TODO: Configure launch settings.
-		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
-        startActivity(intent);
-=======
 		WittiSettings settings = new WittiSettings(this);
 		serverFilesAvailable = settings.getServerFilesAvailable();
 
@@ -59,7 +54,6 @@ public class HomeActivity extends Activity {
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
->>>>>>> .r562
 	}
  
      /**
