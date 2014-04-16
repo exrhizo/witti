@@ -41,8 +41,20 @@ public class FileHandler {
 	
 	public void DownloadFileRAW(){
 
+      
+		// TO READ FILE FROM RAW USING DEMO SETTINGS:
+        Context context = mCloudSurfaceView.getContext().getApplicationContext();
+        // Gets requested demo file from settings and reads it in
+        WittiSettings settings = new WittiSettings(context);
+        String mFile = settings.getDemoFile();
         InputStream is = mCloudSurfaceView.getContext().getApplicationContext()
-                          .getResources().openRawResource(R.raw.yxz_points_less);
+        		.getResources().openRawResource(context.getResources().getIdentifier(mFile,
+        		"raw", context.getPackageName()));
+		
+        // HARDCODED INPUT FILE:
+		//InputStream is = mCloudSurfaceView.getContext().getApplicationContext()
+        //                  .getResources().openRawResource(R.raw.yxz_points_less);
+        
         BufferedReader in = new BufferedReader(new InputStreamReader(is));
         
         binaryParse(in);

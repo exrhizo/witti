@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory 
-        android:title="@string/generalCategory"
-        android:key="generalPreferencesKey">
-        <CheckBoxPreference
-        android:key="tapToRefreshSetting"
-        android:title="@string/tapSettingTitle"
-        android:summary="@string/tapSettingSummary"
-        android:defaultValue="true" />
-    </PreferenceCategory>
     
     <PreferenceCategory 
         android:title="@string/launchCategory"

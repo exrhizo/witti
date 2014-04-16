@@ -33,22 +33,6 @@ public class WittiSettings {
 	}
 	
 	/*
-	 * Set whether the app is in Tap to Refresh mode.
-	 */
-	public void setTapToRefresh(boolean bool){
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		SharedPreferences.Editor editor = sharedPrefs.edit();
-    	editor.putBoolean(KEY_TAP_SETTING, bool);
-    	editor.apply();
-	}
-	
-	public Boolean getTapToRefresh(){
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		boolean tap = sharedPreferences.getBoolean(KEY_TAP_SETTING, false);
-		return tap;
-	}
-	
-	/*
 	 * Sets the server web address to be used in Launch mode.
 	 */
 	public void setServerLocation(String webAddress){
@@ -66,6 +50,10 @@ public class WittiSettings {
 		return location;
 	}
 	
+	/*
+	 * Gets the server files available on the server.
+	 * Returns an array in the format "fileName (frameCount frames)"
+	 */	
 	public CharSequence[] getServerFilesAvailable(){
 		InputStream is = mSettingsContext.getResources().openRawResource(R.raw.server_data_available);
         BufferedReader in = new BufferedReader(new InputStreamReader(is));
@@ -90,16 +78,41 @@ public class WittiSettings {
 	    	
 	}
 	
-	public void setServerFile(String fileName){
+	/*
+	 * Sets the server file name and frame count in the format "fileName (frameCount frames)".
+	 */
+	
+	public void setServerFile(String fileNameAndFrames){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		SharedPreferences.Editor editor = sharedPrefs.edit();
-    	editor.putString(KEY_SERVER_FILE, fileName);
+    	editor.putString(KEY_SERVER_FILE, fileNameAndFrames);
     	editor.apply();
-    	Log.v(CAT_TAG, "server file set to "+fileName);
+    	Log.v(CAT_TAG, "server file set to " + fileNameAndFrames);
+	}
+	
+	public String getServerFile(){
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		String mFileSetting = sharedPreferences.getString(KEY_SERVER_FILE, "");
+		String mSplitLine[] = mFileSetting.split(" ");
+		String mFile = mSplitLine[0];
+		// Debugging
+		Log.d(CAT_TAG, "server file name: "+mFile);
+		return mFile;
+	}
+	
+	public Integer getServerFrameCount(){
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		String mFileSetting = sharedPreferences.getString(KEY_SERVER_FILE, "");
+		String mSplitLine[] = mFileSetting.split("\\(");
+		String mSecondSplitLine[] = mSplitLine[1].split("\\s");
+		Integer mFrames = Integer.valueOf(mSecondSplitLine[0]);
+		// Debugging
+		Log.d(CAT_TAG, "server frames count: "+mFrames);
+		return mFrames;
 	}
 	
 	/*
-	 * Sets the demo file to file1, file2, or file3.
+	 * Sets the demo file to be displayed.
 	 */
 	public void setDemoFile(String fileName){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);

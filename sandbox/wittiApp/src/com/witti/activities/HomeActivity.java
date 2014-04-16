@@ -45,6 +45,7 @@ public class HomeActivity extends Activity {
 		        //Toast.makeText(getApplicationContext(), mServerDataAvailable[item], Toast.LENGTH_SHORT).show();
 		    	Log.v(CAT_TAG, "server data selected: "+serverFilesAvailable[selection]);
 		    	
+		    	// Stores file name and number of frames into settings
 		    	WittiSettings settings = new WittiSettings(mContext);
 		    	settings.setServerFile(serverFilesAvailable[selection].toString());
 		    	
