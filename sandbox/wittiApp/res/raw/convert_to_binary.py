@@ -4,7 +4,7 @@ A simple script to convert from the text file
 of LiDAR data to a binary file.
 """
 
-from sys import argv
+from sys import argv, byteorder
 from array import array
 from random import random
 
@@ -30,6 +30,8 @@ def create_binary_frames(in_file_name, out_file_name,
     in_file = open(in_file_name, 'r')
     out_file = open(out_file_name.format(file_index), 'wb')
     point_counter = 0
+    print "Byte order: {} Endian".format(byteorder)
+    is_little_endian = byteorder == 'little'
     for line in in_file:
         if random() < threshold:
             continue
@@ -39,6 +41,8 @@ def create_binary_frames(in_file_name, out_file_name,
             continue
         point_counter += 1
         array_buffer = array('d', [float(x) for x in yxz])
+        if is_little_endian:
+            array_buffer.byteswap()
         array_buffer.tofile(out_file)
         if chunk_size and point_counter % chunk_size == 0:
             out_file.close()

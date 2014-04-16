@@ -60,7 +60,7 @@ public class CloudSurfaceView  extends GLSurfaceView{
 
     private void initialize(){
         Log.v(CAT_TAG, "CloudRenderer initialize");
-        mCloudPoints = new PointCloud(this);
+        mCloudPoints = new PointCloud(this); // not needed
     }
     
     @Override

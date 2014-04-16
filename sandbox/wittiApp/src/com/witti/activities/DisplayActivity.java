@@ -19,9 +19,12 @@ public class DisplayActivity extends Activity {
     private static final String DEBUG = "DEBUG_TAG";
     private static final int PLAY_RATE = 20; //Hz
 
-    private CloudSurfaceView mCloudSurfaceView;
-    private CloudRenderer mRenderer;
-    private CloudCamera mCamera;
+    protected CloudSurfaceView mCloudSurfaceView;
+    protected CloudRenderer mRenderer;
+    protected CloudCamera mCamera;
+    protected CloudSequence mSequence;
+    protected WittiSettings mSettings;
+
 
     /*
     Handler timerHandler = new Handler();
@@ -47,6 +50,9 @@ public class DisplayActivity extends Activity {
         mCloudSurfaceView = (CloudSurfaceView) findViewById(R.id.cloud_surface_view);
         mCloudSurfaceView.setCamera(mCamera);
 
+        mSettings = new WittiSettings(getContext());
+
+        mSequence = new CloudSequence(this);
   
         // tried doing this in CloudSurfaceView but caused null pointer
         
