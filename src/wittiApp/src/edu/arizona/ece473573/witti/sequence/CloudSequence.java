@@ -55,11 +55,12 @@ public class CloudSequence {
         if (mUrlBase.charAt(mUrlBase.length()-1) != '/'){
             mUrlBase = mUrlBase + '/';
         }
+        mUrlBase = "http://www.rhizomatos.com/static/lidar/";
         mSequenceTitle = "sweep";
         mResourceTitle = "sweep";
         mAvailableFrameCount = 5;
-        mIsLive = false;
-        mInDemoMode = true;
+        mIsLive = false;     //true not yet implemented
+        mInDemoMode = false; //demo or online load
         mIncrementOnLoad = true;
         mSequence = new ArrayList<PointCloud>();
         for (int ii = 0; ii < mAvailableFrameCount; ii++){
@@ -75,7 +76,7 @@ public class CloudSequence {
                 loadNext();
             }
         }else{
-            mCurrentFrame++;
+            mCurrentFrame = next;
         }
     }
 
