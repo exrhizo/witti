@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 import edu.arizona.ece473573.witti.cloudview.PointCloud;
 
@@ -35,7 +36,7 @@ public abstract class ParseTask extends AsyncTask<Void, Void, Integer> {
     public PointCloud parseBinary(InputStream is, int size) throws IOException {
         //TODO
         //Check size%12
-        Log.d(CAT_TAG, "parseBinary Size: " + Integer.toString(size));
+        Log.d(CAT_TAG, "parseBinary Byte Size: " + Integer.toString(size));
         //int num_elements = size/(3*4);
         //DataInputStream dis = new DataInputStream(new BufferedInputStream(is));
         ByteBuffer nio_byte_buffer = ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
@@ -54,10 +55,11 @@ public abstract class ParseTask extends AsyncTask<Void, Void, Integer> {
                 }else if (buffer_num_read == 0){
                     continue;
                 }
-                nio_byte_buffer.put(buffer, 0, buffer_num_read); //error is here
+                nio_byte_buffer.put(buffer, 0, buffer_num_read);
                 total_offset += buffer_num_read;
             }
         }else{ 
+            Log.e(CAT_TAG, "Big Endian, there is no hope");
             //NOOOOOOOOOO!!!!!!!!!!!!
             //TODO Fail miserably
         }
@@ -66,7 +68,16 @@ public abstract class ParseTask extends AsyncTask<Void, Void, Integer> {
             mErrorString = "Data parse task cancelled.\n";
             return null;
         }
+        nio_byte_buffer.rewind();
+        //logBuffer(nio_byte_buffer.asFloatBuffer());
         return new PointCloud(nio_byte_buffer.asFloatBuffer());
     }
 
+    public void logBuffer(FloatBuffer fb) {
+        fb.rewind();
+        Log.d(CAT_TAG, "bufer: " + fb.toString());   
+        while(fb.remaining() > 0){
+            Log.d(CAT_TAG, Float.toString(fb.get()));
+        }
+    }
 }
