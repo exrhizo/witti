@@ -12,17 +12,20 @@
 	        android:key="serverFileSetting" 
 	        android:title="@string/serverFileTitle"
 	        android:dialogTitle="@string/serverFileDialog" />
+	    <EditTextPreference
+	        android:key="serverFramesSetting" />
     </PreferenceCategory>
     
     <PreferenceCategory 
         android:title="@string/demoCategory"
         android:key="demoPreferencesKey">
 	    <ListPreference
-        android:key="demoFileSetting"
-        android:title="@string/demoFileTitle"
-        android:dialogTitle="@string/demoFileDialog"
-        android:entries="@array/demoFileEntries"
-        android:entryValues="@array/demoFileEntryValues" 
-        android:defaultValue="@string/defaultDemoFile" />
+	        android:key="demoFileSetting"
+	        android:title="@string/demoFileTitle"
+	        android:dialogTitle="@string/demoFileDialog" 
+	        android:entries="@array/demoFileEntries"
+            android:entryValues="@array/demoFileEntryValues" />
+	    <EditTextPreference
+	        android:key="demoFramesSetting" />
     </PreferenceCategory>
 </PreferenceScreen>

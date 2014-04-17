@@ -1,11 +1,9 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 3/13/14
+//Date: 4/16/14
 //Author: Brianna Heersink
 
 package edu.arizona.ece473573.witti.activities;
-
-import com.witti.wittiapp.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,14 +11,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-public class HomeActivity extends Activity {
+import com.witti.wittiapp.R;
 
-	private static final String CAT_TAG = "WITTI_HomeActivity";
+public class HomeActivity extends Activity {
 	
-	public CharSequence[] serverFilesAvailable;
+	public String[] serverFileNames;
+	public String[] serverFileFrames;
 	
 	private Context mContext = this;
 	
@@ -32,23 +30,34 @@ public class HomeActivity extends Activity {
     }
 	 
 	 /**
-     * Opens DisplayActivity with settings for Launch mode (data from computer). 
+     * Prompts use for server file selection and opens DisplayActivity 
      */
     public void openLaunch(View view) {
 		WittiSettings settings = new WittiSettings(this);
-		serverFilesAvailable = settings.getServerFilesAvailable();
-
+		
+		CharSequence[] mServerFilesAvailable = settings.getServerFilesAvailable();
+		serverFileNames = new String[mServerFilesAvailable.length];
+		serverFileFrames = new String[mServerFilesAvailable.length];
+		
+		// Reformats file name and frame count data to be displayed in  alert dialog
+		String[] mServerFilesDetailed = new String[mServerFilesAvailable.length];
+		for (int i = 0; i < mServerFilesAvailable.length; i++) {
+			String[] mServerFileAndFrames = ((String) mServerFilesAvailable[i]).split("\\s");
+			serverFileNames[i] = mServerFileAndFrames[0];
+			serverFileFrames[i] = mServerFileAndFrames[1];
+			mServerFilesDetailed[i] = serverFileNames[i] + " (" + serverFileFrames[i] + " frames)";
+		}
+        // Builds alert dialog to give user option of which file from server to display
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Select server data to display");
-		builder.setItems(serverFilesAvailable, new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int selection) {
-		        //Toast.makeText(getApplicationContext(), mServerDataAvailable[item], Toast.LENGTH_SHORT).show();
-		    	Log.v(CAT_TAG, "server data selected: "+serverFilesAvailable[selection]);
-		    	
+		builder.setItems(mServerFilesDetailed, new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int selection) {		    	
 		    	// Stores file name and number of frames into settings
 		    	WittiSettings settings = new WittiSettings(mContext);
-		    	settings.setServerFile(serverFilesAvailable[selection].toString());
+		    	settings.setServerFile(serverFileNames[selection]);
+		    	settings.setServerFrameCount(Integer.valueOf(serverFileFrames[selection]));
 		    	
+		    	// Opens DisplayActivity
 		    	Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
 				startActivity(intent);
 		    }
@@ -61,7 +70,6 @@ public class HomeActivity extends Activity {
      * Opens DisplayActivity with settings for Demo mode (data from phone). 
      */
     public void openDemo(View view) {
-        // TODO: Configure demo settings.
 		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
         startActivity(intent);
 	}

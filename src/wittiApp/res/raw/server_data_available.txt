@@ -1,6 +1,8 @@
 % The following is a list of available LiDAR data on the server.
-% Each line shows the beginning of the file name prior to the frame number.
-movie1 (5 frames)
-movie2 (69 frames)
-movie3 (31 frames)
-movie4 (256 frames)
+% format:
+% file_name number_of_frames
+% There will be file_name_0000.bin file_name_0001.bin etc..
+movie1 5
+movie2 69
+movie3 31
+movie4 256

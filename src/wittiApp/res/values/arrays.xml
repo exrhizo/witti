@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="demoFileEntries">
-        <item name="1">yxz_points_less</item>
-        <item name="2">sweep_0000</item>
-        <item name="3">sweep_0001</item>
-        <item name="3">sweep_0002</item>
-        <item name="3">sweep_0003</item>
-        <item name="3">sweep_0004</item>
+        <item name="1">sweep</item>
+        <item name="2">dummy</item>
     </string-array>
     <string-array name="demoFileEntryValues">
-        <item name="1">yxz_points_less</item>
-        <item name="2">sweep_0000</item>
-        <item name="3">sweep_0001</item>
-        <item name="3">sweep_0002</item>
-        <item name="3">sweep_0003</item>
-        <item name="3">sweep_0004</item>
+        <item name="1">sweep</item>
+        <item name="2">dummy</item>
     </string-array>
      
 </resources>

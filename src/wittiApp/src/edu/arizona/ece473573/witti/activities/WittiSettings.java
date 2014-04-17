@@ -1,6 +1,6 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 3/31/14
+//Date: 4/16/14
 //Author: Brianna Heersink
 
 package edu.arizona.ece473573.witti.activities;
@@ -19,14 +19,16 @@ import android.util.Log;
 import com.witti.wittiapp.R;
 
 public class WittiSettings {
-    private static final String CAT_TAG = "WITTI_WittiSettings";
 	
-	private Context mSettingsContext;
+    private static final String CAT_TAG = "WITTI_WittiSettings";
 	public static final String KEY_DEMO_FILE = "demoFileSetting";
+	public static final String KEY_DEMO_FRAMES = "demoFramesSetting";
 	public static final String KEY_TAP_SETTING = "tapToRefreshSetting";
 	public static final String KEY_SERVER_LOCATION = "serverLocationSetting";
 	public static final String KEY_SERVER_FILE = "serverFileSetting";
+	public static final String KEY_SERVER_FRAMES = "serverFramesSetting";
 	
+	private Context mSettingsContext;
 	
 	public WittiSettings(Context context) {
 		this.mSettingsContext = context;
@@ -52,7 +54,7 @@ public class WittiSettings {
 	
 	/*
 	 * Gets the server files available on the server.
-	 * Returns an array in the format "fileName (frameCount frames)"
+	 * Returns an array in the format "fileName frameCount".
 	 */	
 	public CharSequence[] getServerFilesAvailable(){
 		InputStream is = mSettingsContext.getResources().openRawResource(R.raw.server_data_available);
@@ -78,53 +80,59 @@ public class WittiSettings {
 	    	
 	}
 	
-	/*
-	 * Sets the server file name and frame count in the format "fileName (frameCount frames)".
-	 */
 	
-	public void setServerFile(String fileNameAndFrames){
+	public void setServerFile(String fileName){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		SharedPreferences.Editor editor = sharedPrefs.edit();
-    	editor.putString(KEY_SERVER_FILE, fileNameAndFrames);
+    	editor.putString(KEY_SERVER_FILE, fileName);
     	editor.apply();
-    	Log.v(CAT_TAG, "server file set to " + fileNameAndFrames);
+    	Log.v(CAT_TAG, "server file set to " + fileName);
 	}
 	
 	public String getServerFile(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String mFileSetting = sharedPreferences.getString(KEY_SERVER_FILE, "");
-		String mSplitLine[] = mFileSetting.split(" ");
-		String mFile = mSplitLine[0];
-		// Debugging
+		String mFile = sharedPreferences.getString(KEY_SERVER_FILE, "");
 		Log.d(CAT_TAG, "server file name: "+mFile);
 		return mFile;
 	}
 	
+	public void setServerFrameCount(Integer frameCount){
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		SharedPreferences.Editor editor = sharedPrefs.edit();
+    	editor.putString(KEY_SERVER_FRAMES, frameCount.toString());
+    	editor.apply();
+    	Log.v(CAT_TAG, "server frames set to " + frameCount);
+	}
+	
 	public Integer getServerFrameCount(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String mFileSetting = sharedPreferences.getString(KEY_SERVER_FILE, "");
-		String mSplitLine[] = mFileSetting.split("\\(");
-		String mSecondSplitLine[] = mSplitLine[1].split("\\s");
-		Integer mFrames = Integer.valueOf(mSecondSplitLine[0]);
-		// Debugging
-		Log.d(CAT_TAG, "server frames count: "+mFrames);
-		return mFrames;
+		String mFramesString = sharedPreferences.getString(KEY_SERVER_FRAMES, "");
+		Integer mFramesInt = Integer.valueOf(mFramesString);
+		Log.d(CAT_TAG, "server frames count: "+mFramesInt);
+		return mFramesInt;
 	}
 	
 	/*
-	 * Sets the demo file to be displayed.
+	 * Sets the demo file to be displayed as well as associated frame count.
 	 */
-	public void setDemoFile(String fileName){
+	public void setDemoFile(String fileName, Integer frameCount){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		SharedPreferences.Editor editor = sharedPrefs.edit();
     	editor.putString(KEY_DEMO_FILE, fileName);
+    	editor.putString(KEY_DEMO_FRAMES, frameCount.toString());
     	editor.apply();
 	}
 	
 	public String getDemoFile(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String file = sharedPreferences.getString(KEY_DEMO_FILE, "");
-		return file;
+		String mFile = sharedPreferences.getString(KEY_DEMO_FILE, "");
+		return mFile;
+	}
+	
+	public Integer getDemoFrameCount(){
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		String mFrameCount = sharedPreferences.getString(KEY_DEMO_FRAMES, "0");
+		return Integer.valueOf(mFrameCount);
 	}
 
 }
