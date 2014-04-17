@@ -35,7 +35,7 @@ public abstract class ParseTask extends AsyncTask<Void, Void, Integer> {
     public PointCloud parseBinary(InputStream is, int size) throws IOException {
         //TODO
         //Check size%12
-
+        Log.d(CAT_TAG, "parseBinary Size: " + Integer.toString(size));
         //int num_elements = size/(3*4);
         //DataInputStream dis = new DataInputStream(new BufferedInputStream(is));
         ByteBuffer nio_byte_buffer = ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
@@ -54,7 +54,7 @@ public abstract class ParseTask extends AsyncTask<Void, Void, Integer> {
                 }else if (buffer_num_read == 0){
                     continue;
                 }
-                nio_byte_buffer.put(buffer, total_offset, buffer_num_read);
+                nio_byte_buffer.put(buffer, 0, buffer_num_read); //error is here
                 total_offset += buffer_num_read;
             }
         }else{ 

@@ -30,6 +30,7 @@ public class CloudSequence {
     private Boolean mInDemoMode;
     private Boolean mIsLive;
     private Boolean mIncrementOnLoad;
+    //private Boolean mHasSettings;
 
     private String mUrlBase;
     private String mSequenceTitle;
@@ -37,15 +38,19 @@ public class CloudSequence {
     private String mResourceTitle;
 
     private int mAvailableFrameCount;
+
+    //private Lock mSettingsLock;
     
     public CloudSequence(DisplayActivity display){
         mDisplay = display;
-        mCurrentFrame = -1; //There are no frames yet
+        mCurrentFrame = 0; //There are no frames yet
         mSequence = new ArrayList<PointCloud>();
         mTasks = new HashMap<Integer, ParseTask>();
     }
     
     public void loadSettings() {
+        //pause draw if changing settings
+        cancelTasks();
         mUrlBase = mDisplay.mSettings.getServerLocation();
         if (mUrlBase.charAt(mUrlBase.length()-1) != '/'){
             mUrlBase = mUrlBase + '/';
@@ -60,6 +65,7 @@ public class CloudSequence {
         for (int ii = 0; ii < mAvailableFrameCount; ii++){
             mSequence.add(null);
         }
+        mCurrentFrame = 0;
     }
 
     public void refresh(){

@@ -55,10 +55,11 @@ public class DisplayActivity extends Activity {
         mSettings = new WittiSettings(this);
 
         mSequence = new CloudSequence(this);
+        mSequence.loadSettings();
+        mSequence.loadNext();
   
         // tried doing this in CloudSurfaceView but caused null pointer
-        
-        mRenderer = new CloudRenderer(mCloudSurfaceView, mCamera);
+        mRenderer = new CloudRenderer(this, mCamera);
         mCloudSurfaceView.setEGLContextClientVersion(2);
         mCloudSurfaceView.setRenderer(mRenderer);
         

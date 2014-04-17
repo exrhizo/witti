@@ -13,6 +13,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import edu.arizona.ece473573.witti.activities.CloudCamera;
+import edu.arizona.ece473573.witti.activities.DisplayActivity;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
@@ -21,7 +22,7 @@ import android.util.Log;
 
 public class CloudRenderer implements Renderer {
     private static final String CAT_TAG = "WITTI_CloudRenderer";
-    private CloudSurfaceView mCloudSurfaceView;
+    private DisplayActivity mDisplayActivity;
     private PointCloudArtist mPointCloudArtist;
 
     //Matricies to store the model, view and projection for the "camera"
@@ -32,15 +33,15 @@ public class CloudRenderer implements Renderer {
     private float[] mMVPMatrix = new float[16];
     public float mTime;
 
-    public CloudRenderer(CloudSurfaceView view, CloudCamera cc) {
+    public CloudRenderer(DisplayActivity display, CloudCamera cc) {
         Log.v(CAT_TAG, "CloudRenderer constructor");
-        mCloudSurfaceView = view;
-        mPointCloudArtist = new PointCloudArtist(view);
+        mDisplayActivity = display;
+        mPointCloudArtist = new PointCloudArtist(display);
         mTime = 0.0f;
         mCamera = cc;
         mCamera.setCamera(0.0f, -10.0f, 10.0f,
-                  0.0f,  20.0f, 10.0f,
-                  0.0f,   0.0f,  1.0f);
+                          0.0f,  20.0f, 10.0f,
+                          0.0f,   0.0f,  1.0f);
         Matrix.setIdentityM(mModelMatrix, 0);
     }
 

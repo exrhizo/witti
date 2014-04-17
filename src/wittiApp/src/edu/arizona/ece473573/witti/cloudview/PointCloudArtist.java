@@ -19,11 +19,13 @@ import android.util.Log;
 
 import com.witti.wittiapp.R;
 
+import edu.arizona.ece473573.witti.activities.DisplayActivity;
 import edu.arizona.ece473573.witti.activities.WittiSettings;
 
 public class PointCloudArtist {
     private static final String CAT_TAG = "WITTI_PointCloudArtist";
-    private CloudSurfaceView mCloudSurfaceView;
+
+    private DisplayActivity mDisplayActivity;
 
     private int mProgId;
     private int mTexId;
@@ -35,21 +37,19 @@ public class PointCloudArtist {
 
     private float mMaxZ;
 
-	final static int MAX_PARTICLES = 7364;   //7364;
-    final static int PARTICLE_SIZE = 3;
 
-    float[] mVertices;
-    FloatBuffer mVertexBuffer;
-
-    public PointCloudArtist(CloudSurfaceView view){
-        mCloudSurfaceView = view;
-        loadDemo();
+    public PointCloudArtist(DisplayActivity display){
+        mDisplayActivity = display;
     }
 
     public void draw(float[] mMVPMatrix){
-
-        //loadDemo();
-        Log.v(CAT_TAG, "Program id: " + Integer.toString(mProgId));
+        PointCloud pc = mDisplayActivity.mSequence.getCurrentFrame();
+        if (pc == null){
+            Log.v(CAT_TAG, "Null point cloud at draw");
+            return;
+        }
+        FloatBuffer vertex_buffer = pc.mVertexBuffer;
+        
         Utils.checkGlError(CAT_TAG, "Draw, Before Use Program");
         GLES20.glUseProgram(mProgId);
         Utils.checkGlError(CAT_TAG, "Use program");
@@ -62,8 +62,9 @@ public class PointCloudArtist {
         GLES20.glUniform1i(mTextureHandle, 0);
         Utils.checkGlError(CAT_TAG, "Texture handle");
         
-        mVertexBuffer.position(0);
-        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, PARTICLE_SIZE * 4, mVertexBuffer);
+        vertex_buffer.position(0);
+        //TODO make constants for 3 and 4
+        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 3 * 4, vertex_buffer);
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         Utils.checkGlError(CAT_TAG, "Buffer");
 
@@ -72,7 +73,7 @@ public class PointCloudArtist {
         GLES20.glUniformMatrix4fv(mMVPHandle, 1, false, mMVPMatrix, 0);
         Utils.checkGlError(CAT_TAG, "Uniforms");
         
-        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, MAX_PARTICLES);
+        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, vertex_buffer.capacity()/3);
         Utils.checkGlError(CAT_TAG, "Draw");
     }
 
@@ -107,7 +108,7 @@ public class PointCloudArtist {
         
         mProgId = Utils.LoadProgram(strVShader, strFShader);
         Utils.checkGlError(CAT_TAG, "After program load");
-        mTexId = Utils.LoadTexture(mCloudSurfaceView, R.drawable.particle);
+        mTexId = Utils.LoadTexture(mDisplayActivity.mCloudSurfaceView, R.drawable.particle);
         Utils.checkGlError(CAT_TAG, "After loading texture");
         
         mPositionHandle = GLES20.glGetAttribLocation(mProgId, "a_Position");
@@ -117,70 +118,5 @@ public class PointCloudArtist {
         mTimeHandle = GLES20.glGetAttribLocation(mProgId, "a_time");
         mMaxZHandle = GLES20.glGetUniformLocation(mProgId, "a_max_z");
         Utils.checkGlError(CAT_TAG, "After getting handles");
-    }
-
-    private void loadDemo(){
-        Log.v(CAT_TAG, "loadDemo");
-        loadDemoFile();
-        mVertexBuffer = ByteBuffer.allocateDirect(mVertices.length * 4)
-                        .order(ByteOrder.nativeOrder()).asFloatBuffer();
-        mVertexBuffer.put(mVertices).position(0);
-    }
-
-    private void loadDemoFile(){
-        Log.v(CAT_TAG, "loadDemoFile");
-        mVertices = new float[MAX_PARTICLES * PARTICLE_SIZE];
-        Context context = mCloudSurfaceView.getContext().getApplicationContext();
-        // Gets requested demo file from settings and reads it in
-        WittiSettings settings = new WittiSettings(context);
-        String mFile = settings.getDemoFile();
-        InputStream is = mCloudSurfaceView.getContext().getApplicationContext()
-                          .getResources().openRawResource(context.getResources().getIdentifier(mFile, 
-                        		  "raw", context.getPackageName()));
-        BufferedReader in = new BufferedReader(new InputStreamReader(is));
-        int count = 0;
-        String line;
-        Float[] parsed_line;
-        mMaxZ = 0;
-        try {
-            while ((line = in.readLine()) != null && count<MAX_PARTICLES){
-                parsed_line = parseLine(line);
-                mVertices[count*PARTICLE_SIZE]   = parsed_line[0];
-                mVertices[count*PARTICLE_SIZE+1] = parsed_line[1];
-                mVertices[count*PARTICLE_SIZE+2] = parsed_line[2];
-                if (parsed_line[2]>mMaxZ) mMaxZ = parsed_line[2];
-                count++;
-            }
-            Log.v(CAT_TAG, "loaded "+Integer.toString(count)+" points from file");
-            Log.v(CAT_TAG, "test value "+Float.toString(mVertices[8]));
-        } catch (IOException e) {
-            Log.e(CAT_TAG, "Couldn't read from resource file.");
-        }
-        while (count<MAX_PARTICLES){
-            mVertices[count*PARTICLE_SIZE]   = 0f;
-            mVertices[count*PARTICLE_SIZE+1] = 0f;
-            mVertices[count*PARTICLE_SIZE+2] = 0f;
-            count++;
-        }
-        
-    }
-
-    private Float[] parseLine(String line) {
-        Float[] result = {
-                0f, 0f, 0f
-        };
-        String[] tokens = line.split("\\s");
-        if (tokens.length < 3)
-            return result;
-        int count = 0;
-        for (int ii = 0; ii < tokens.length && count < 3; ii++) {
-            try {
-                result[count] = Float.parseFloat(tokens[ii]);
-            } catch (NumberFormatException nfe) {
-                continue;
-            }
-            count++;
-        }
-        return result;
     }
 }
