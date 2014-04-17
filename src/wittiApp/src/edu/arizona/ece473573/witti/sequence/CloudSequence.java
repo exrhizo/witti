@@ -205,7 +205,8 @@ public class CloudSequence {
                 //parseBinary will return NULL if canceled
                 CloudSequence.this.mSequence.set(mPosition, parseBinary(is, length));
             } catch (IOException e) {
-                Log.e(CAT_TAG, "IO Error");
+                Log.e(CAT_TAG, "IO Errorr", e);
+                e.printStackTrace();
                 mErrorString += "IO Error";
                 error_code = CloudSequence.ERROR_IO;
             } finally {
@@ -264,7 +265,7 @@ public class CloudSequence {
                 //parseBinary will return NULL if canceled
                 CloudSequence.this.mSequence.set(mPosition, parseBinary(is, is.available()));
             } catch (IOException e) {
-                Log.e(CAT_TAG, "IO Error");
+                Log.e(CAT_TAG, "IO Error", e);
                 mErrorString += "IO Error";
                 error_code = CloudSequence.ERROR_IO;
             } finally {

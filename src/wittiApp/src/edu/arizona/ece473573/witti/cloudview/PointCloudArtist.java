@@ -45,7 +45,7 @@ public class PointCloudArtist {
     public void draw(float[] mMVPMatrix){
         PointCloud pc = mDisplayActivity.mSequence.getCurrentFrame();
         if (pc == null){
-            Log.v(CAT_TAG, "Null point cloud at draw");
+            //Log.v(CAT_TAG, "Null point cloud at draw");
             return;
         }
         FloatBuffer vertex_buffer = pc.mVertexBuffer;
