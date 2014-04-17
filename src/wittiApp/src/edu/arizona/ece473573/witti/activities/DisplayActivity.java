@@ -86,4 +86,8 @@ public class DisplayActivity extends Activity {
         startActivity(intent);
     	
     }
+    
+    public void refreshFrame(View view){
+        mSequence.refresh();
+    }
 }

@@ -132,7 +132,7 @@ public class CloudSequence {
         Log.v(CAT_TAG, "Load Complete. Position: " + Integer.toString(position));
         if (result == SUCCESS){
             if (mIncrementOnLoad && position == mCurrentFrame + 1){
-                mCurrentFrame ++;
+                mCurrentFrame = (mCurrentFrame + 1) % mAvailableFrameCount;
             }
 
         }else{

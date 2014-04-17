@@ -23,7 +23,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	public static final String KEY_SERVER_LOCATION = "serverLocationSetting";
 	public static final String KEY_SERVER_FILE = "serverFileSetting";
 	
-	private String defaultServerLocation = "www.default_server_site.com";
+	private String defaultServerLocation = "www.rhizomatos.com/static/lidar/"; //http:// ??
 	
 	public SettingsFragment() {
 		// TODO Auto-generated constructor stub

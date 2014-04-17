@@ -30,5 +30,6 @@
     <string name="pathTracing">Path Drawing</string>
     <string name="displaySettingsText">Settings</string>
     <string name="displayOtherText">Other</string>
+    <string name="displayRefreshText">Refresh</string>
 
 </resources>
