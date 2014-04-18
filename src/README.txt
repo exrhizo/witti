@@ -4,13 +4,17 @@ README
 RUNNING WITTI APP 
 -----------------
 There are no special requirements for the witti app.
-From the main menu you are given 
-
-
+From the main menu you are given the options:
+Launch       o- Displays data from a configured HTTP address
+Demo         o- Displays data local to the phone
+Settings     o- Allows modification of the default server location
+             `- and sequence to load.
+Path Drawing o- Demo of path drawing capability.
 
 
 TESTING
 -------
+
 
 
 SERVER SETUP

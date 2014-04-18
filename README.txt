@@ -8,3 +8,4 @@ Application Description: This application visualizes LiDAR data on a mobile devi
 
 Supports: SDK 11 and higher
 Tested on: NexusS Emulator with Android 4.2.2 - API Level 19
+Tested on: Atrix 2 with Android 4.0.4
