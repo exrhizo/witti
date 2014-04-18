@@ -10,7 +10,7 @@ import java.nio.FloatBuffer;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import com.witti.wittiapp.R;
+import edu.arizona.ece473573.witti.R;
 
 import edu.arizona.ece473573.witti.activities.DisplayActivity;
 

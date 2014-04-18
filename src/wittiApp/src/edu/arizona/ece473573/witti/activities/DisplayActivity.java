@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.witti.wittiapp.R;
+import edu.arizona.ece473573.witti.R;
 
 import edu.arizona.ece473573.witti.cloudview.CloudRenderer;
 import edu.arizona.ece473573.witti.cloudview.CloudSurfaceView;

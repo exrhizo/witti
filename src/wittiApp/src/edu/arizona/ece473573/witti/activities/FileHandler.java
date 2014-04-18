@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.witti.wittiapp.R;
+import edu.arizona.ece473573.witti.R;
 
 import edu.arizona.ece473573.witti.cloudview.CloudSurfaceView;
 

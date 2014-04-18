@@ -15,7 +15,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-import com.witti.wittiapp.R;
+import edu.arizona.ece473573.witti.R;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 	

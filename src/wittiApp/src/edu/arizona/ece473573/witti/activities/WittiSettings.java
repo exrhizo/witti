@@ -16,7 +16,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.witti.wittiapp.R;
+import edu.arizona.ece473573.witti.R;
 
 public class WittiSettings {
 	

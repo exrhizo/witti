@@ -5,7 +5,7 @@
 
 package edu.arizona.ece473573.witti.activities;
 
-import com.witti.wittiapp.R;
+import edu.arizona.ece473573.witti.R;
 
 import android.app.Activity;
 import android.os.Bundle;
