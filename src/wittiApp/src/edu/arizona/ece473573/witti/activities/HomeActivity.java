@@ -1,6 +1,6 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 4/17/14
+//Date: 4/18/14
 //Author: Brianna Heersink
 
 package edu.arizona.ece473573.witti.activities;
@@ -10,9 +10,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.TextView;
 
 import com.witti.wittiapp.R;
 
@@ -60,7 +62,7 @@ public class HomeActivity extends Activity {
 		    	settings.setServerFile(serverFileNames[selection]);
 		    	settings.setServerFrameCount(Integer.valueOf(serverFileFrames[selection]));
 		    	
-		    	// Opens DisplayActivity
+		    	// Opens DisplayActivity in launch mode
 		    	Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
 		    	intent.putExtra("inDemoMode", false);
 				startActivity(intent);
@@ -71,22 +73,29 @@ public class HomeActivity extends Activity {
 	}
  
     public void openDemo(View view) {
+    	//Opens DisplayActivity in demo mode
 		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
     	intent.putExtra("inDemoMode", true);
         startActivity(intent);
 	}
      
     public void openSettings(View view) {
+    	//Opens settings
         Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
         startActivity(intent);
 	}
     
     public void openPathTracing(View view) {
-        Intent intent = new Intent(HomeActivity.this, PathTracingActivity.class);
+    	//Opens PathTracingActivity
+    	Intent intent = new Intent(HomeActivity.this, PathTracingActivity.class);
         startActivity(intent);
 	}
     
     public void openAbout(View view) {
+    	//Sets text color as a visited link color (purple)
+    	TextView mAboutText = (TextView) findViewById(R.id.teamNameTextView);
+    	mAboutText.setTextColor(Color.parseColor("#800080"));
+    	//Opens AboutActivity
         Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
         startActivity(intent);
 	}

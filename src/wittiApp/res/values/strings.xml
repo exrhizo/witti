@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">WITTI</string>
-    <string name="teamName">Authored by Team Witty</string>
+    <string name="teamName"><u>Authored by Team Witty</u></string>
     <string name="authors">Application Authors:</string>
     <string name="authorNames">Brianna Heersink\nBrian Smith\nAlex Warren\n</string>
     <string name="createdFor">Application Created For:</string>

@@ -65,8 +65,7 @@
         android:id="@+id/teamNameTextView"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:textColor="#01A9DB"
-        android:textStyle="italic"
+        android:textColor="#0000FF"
         android:onClick="openAbout"
         android:clickable="true"/>
 
