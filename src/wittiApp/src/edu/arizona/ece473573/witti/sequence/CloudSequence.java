@@ -128,6 +128,18 @@ public class CloudSequence {
         }
     }
 
+    public int getCurrentFrameNum(){
+    	return mCurrentFrame;
+    }
+    
+    public PointCloud getSpecifiedFrame(int i){
+    	return mSequence.get(i);
+    }
+    
+    public int getSequenceSize(){
+    	return mSequence.size();
+    }
+
     private void onLoadComplete(int result, int position, String error_string){
         //Runs on UI thread, called by onPostExecute
         Log.v(CAT_TAG, "Load Complete.     Code: " + Integer.toString(result));
