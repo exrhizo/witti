@@ -111,7 +111,7 @@ public class WittiSettings {
      */
 	public String getServerFile(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String mFile = sharedPreferences.getString(KEY_SERVER_FILE, "");
+		String mFile = sharedPreferences.getString(KEY_SERVER_FILE, "5");
 		Log.d(CAT_TAG, "server file name: "+mFile);
 		return mFile;
 	}
