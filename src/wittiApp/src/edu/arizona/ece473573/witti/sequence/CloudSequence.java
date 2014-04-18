@@ -1,8 +1,3 @@
-//ECE 573 Project
-//Team: Witty
-//Date: 4/17/14
-//Author: Alex Warren, Brianna Heersink
-
 package edu.arizona.ece473573.witti.sequence;
 
 import java.io.IOException;
@@ -12,10 +7,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import android.util.Log;
-
-
 import edu.arizona.ece473573.witti.activities.DisplayActivity;
 import edu.arizona.ece473573.witti.cloudview.PointCloud;
 
@@ -26,6 +20,8 @@ public class CloudSequence {
     public static final int ERROR_CANCEL = 3;
 
     private static final String CAT_TAG = "WITTI_CloudSequence";
+    
+    public CountDownLatch signal = new CountDownLatch(1);
 
     private ArrayList<PointCloud> mSequence;
     private Map<Integer, ParseTask> mTasks;
@@ -53,32 +49,19 @@ public class CloudSequence {
         mTasks = new HashMap<Integer, ParseTask>();
     }
     
-    public void loadSettings(Boolean inDemoMode) {
+    public void loadSettings() {
         //pause draw if changing settings
         cancelTasks();
-        mIsLive = false;     //not yet implemented
-        mInDemoMode = inDemoMode; //demo or online load
-        if(inDemoMode){
-        	Log.v(CAT_TAG, "Loading settings for demo.");
-        }
-        else{
-        	Log.v(CAT_TAG, "Loading settings for server.");
-        }
         mUrlBase = mDisplay.mSettings.getServerLocation();
-        if (mUrlBase.charAt(mUrlBase.length()-1) != '/'){
+        if (/*(mUrlBase.length() > 0) && */(mUrlBase.charAt(mUrlBase.length()-1) != '/')){
             mUrlBase = mUrlBase + '/';
         }
-        if (mInDemoMode){
-            //Load demo settings
-        	mSequenceTitle = mDisplay.mSettings.getDemoFile();
-        	mResourceTitle = mDisplay.mSettings.getDemoFile();
-        	mAvailableFrameCount = mDisplay.mSettings.getDemoFrameCount();
-        }else{
-            //Load server settings
-        	mSequenceTitle = mDisplay.mSettings.getServerFile();
-        	mResourceTitle = mDisplay.mSettings.getServerFile();
-        	mAvailableFrameCount = mDisplay.mSettings.getServerFrameCount();
-        }
+        mUrlBase = "http://www.rhizomatos.com/static/lidar/";
+        mSequenceTitle = "sweep";
+        mResourceTitle = "sweep";
+        mAvailableFrameCount = 5;
+        mIsLive = false;     //true not yet implemented
+        mInDemoMode = false; //demo or online load
         mIncrementOnLoad = true;
         mSequence = new ArrayList<PointCloud>();
         for (int ii = 0; ii < mAvailableFrameCount; ii++){
@@ -182,6 +165,18 @@ public class CloudSequence {
         String name = mResourceTitle + String.format("_%04d", position);
         return mDisplay.getResources().getIdentifier(name, "raw", mDisplay.getPackageName());
     }
+    
+    public int getCurrentFrameNum(){
+    	return mCurrentFrame;
+    }
+    
+    public PointCloud getSpecifiedFrame(int i){
+    	return mSequence.get(i);
+    }
+    
+    public int getSequenceSize(){
+    	return mSequence.size();
+    }
 
 
     private class DownloadDataTask extends ParseTask {
@@ -250,6 +245,9 @@ public class CloudSequence {
         protected void onPostExecute(Integer result) {
             //Runs on UI thread
             CloudSequence.this.onLoadComplete(result, mPosition, mErrorString);
+
+            signal.countDown();
+            signal = new CountDownLatch(1);
         }
 
         @Override
@@ -306,6 +304,9 @@ public class CloudSequence {
         protected void onPostExecute(Integer result) {
             //Runs on UI thread
             CloudSequence.this.onLoadComplete(result, mPosition, mErrorString);
+            
+            signal.countDown();
+            signal = new CountDownLatch(1);
         }
 
         @Override
