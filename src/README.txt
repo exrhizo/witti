@@ -14,7 +14,9 @@ Path Drawing o- Demo of path drawing capability.
 
 TESTING
 -------
-
+Before running all tests the app must be downloaded and launched through its Android icon.
+Then choose 'Launch' and select the 'Dummy' files to visualize. After this, the app
+can be exited and successfully tested.
 
 
 SERVER SETUP
