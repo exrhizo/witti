@@ -253,7 +253,7 @@ public class CloudSequence {
             }
 
         }else{
-            //TODO error stuff, tell the main activity
+            mDisplay.displayError(error_string);
         }
         mTasks.remove(position);
     }

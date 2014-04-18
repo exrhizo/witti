@@ -9,7 +9,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
 import edu.arizona.ece473573.witti.R;
 
@@ -45,6 +47,9 @@ public class DisplayActivity extends Activity {
         }
     };*/
 
+     /**
+     * Creation of the activity. Initialize everything.
+     */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,29 +79,50 @@ public class DisplayActivity extends Activity {
         //timerHandler.postDelayed(timerRunnable, 1000);
 	}
 
+     /**
+     * Activity is paused.
+     */
 	@Override
     protected void onPause() {
         super.onPause();
-        mCloudSurfaceView.onPause();
+        mCloudSurfaceView.onPause(); //pause openGl
         //timerHandler.removeCallbacks(timerRunnable);
     }
 
+     /**
+     * Activity is resumed.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         mSequence.loadSettings(mInDemoMode);
         mSequence.loadNext();
-        mCloudSurfaceView.onResume();
+        mCloudSurfaceView.onResume(); //resume openGl
         //timerHandler.postDelayed(timerRunnable, 1000);
     }
     
+    /**
+     * For button press to open settings.
+     */
     public void launchSettingsFromDisplay(View view){
         Intent intent = new Intent(DisplayActivity.this, SettingsActivity.class);
         startActivity(intent);
     	
     }
     
+    /**
+     * For button press to refresh frame.
+     */
     public void refreshFrame(View view){
         mSequence.refresh();
+    }
+
+    /**
+     * Display an error as toast.
+     */
+    public void displayError(String text){
+        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 }
