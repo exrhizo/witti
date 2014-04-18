@@ -1,7 +1,7 @@
 //ECE 573 Project
 //Team: Witty
 //Date: 4/17/14
-//Authors: Alex Warren
+//Author: Alex Warren
 
 //This isn't a file that is used directly in the project
 //It is for convienence of editing the shaders. The shaders

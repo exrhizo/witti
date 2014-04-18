@@ -1,7 +1,8 @@
 //ECE 573 Project
 //Team: Witty
 //Date: 3/13/14
-//Authors: Alex Warren
+//Author: Alex Warren
+//Original Author: Sravan Kumar Reddy  
 
 package edu.arizona.ece473573.witti.cloudview;
 
@@ -21,7 +22,8 @@ import android.util.Log;
  * http://opengles2learning.blogspot.com/2011/05/particle-system-with-point-spritespart.html
  * This has been licensed under GPL, so either we change it or
  * Also use GPL.
- * @author Sravan Kumar Reddy  
+ * @author Sravan Kumar Reddy
+ * @author Alex Warren
  */
 
 public class Utils {

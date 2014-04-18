@@ -8,6 +8,7 @@ package edu.arizona.ece473573.witti.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import edu.arizona.ece473573.witti.R;
@@ -18,8 +19,8 @@ import edu.arizona.ece473573.witti.sequence.CloudSequence;
 
 public class DisplayActivity extends Activity {
     private static final String CAT_TAG = "WITTI_Display";
-    private static final String DEBUG = "DEBUG_TAG";
-    private static final int PLAY_RATE = 20; //Hz
+
+    //private static final int PLAY_RATE = 20; //Hz
 
     public CloudSurfaceView mCloudSurfaceView;
     public CloudRenderer mRenderer;
@@ -29,7 +30,8 @@ public class DisplayActivity extends Activity {
     
     private Boolean mInDemoMode;
 
-
+    //This is kept for later use with autorefresh (A req)
+    //was for spinning camera
     /*
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
@@ -46,6 +48,7 @@ public class DisplayActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.v(CAT_TAG, "onCreate");
 
 		setContentView(R.layout.activity_display);
 		
