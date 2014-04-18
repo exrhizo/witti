@@ -3,10 +3,8 @@
 
     <string name="app_name">WITTI</string>
     <string name="teamName"><u>Authored by Team Witty</u></string>
-    <string name="authors">Application Authors:</string>
-    <string name="authorNames">Brianna Heersink\nBrian Smith\nAlex Warren\n</string>
-    <string name="createdFor">Application Created For:</string>
-    <string name="classDetails">ECE 573\nThe University of Arizona</string>
+    <string name="about"><u>Authors:</u>\nBrianna Heersink\nBrian Smith\nAlex Warren\n\n
+        <u>Created For:</u>\nECE 573\nThe University of Arizona</string>
     <string name="action_settings">Settings</string>
     <string name="launch">Launch</string>
     <string name="demo">Demo</string>
@@ -34,8 +32,5 @@
     <string name="displaySettingsText">Settings</string>
     <string name="displayOtherText">Other</string>
     <string name="displayRefreshText">Refresh</string>
-    <string name="title_activity_about">AboutActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_main">MainActivity</string>
-
+    
 </resources>

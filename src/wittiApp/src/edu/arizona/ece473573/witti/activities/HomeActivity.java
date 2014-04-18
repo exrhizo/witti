@@ -13,9 +13,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import edu.arizona.ece473573.witti.R;
 
 public class HomeActivity extends Activity {
@@ -95,9 +96,12 @@ public class HomeActivity extends Activity {
     	//Sets text color as a visited link color (purple)
     	TextView mAboutText = (TextView) findViewById(R.id.teamNameTextView);
     	mAboutText.setTextColor(Color.parseColor("#800080"));
-    	//Opens AboutActivity
-        Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
-        startActivity(intent);
+    	//Opens a toast with team member names
+    	String mToastText = getResources().getString(R.string.about);
+    	int mDuration = Toast.LENGTH_LONG;
+    	Toast toast = Toast.makeText(getApplicationContext(), mToastText, mDuration);
+    	toast.setGravity(Gravity.CENTER, 0, 0);
+    	toast.show();
 	}
     
     

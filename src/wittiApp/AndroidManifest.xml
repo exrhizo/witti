@@ -38,10 +38,6 @@
             android:name="edu.arizona.ece473573.witti.activities.PathTracingActivity"
             android:label="@string/title_activity_display" >
         </activity>
-        <activity
-            android:name="edu.arizona.ece473573.witti.activities.AboutActivity"
-            android:label="@string/title_activity_about" >
-        </activity>
     </application>
 
 </manifest>
