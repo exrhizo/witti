@@ -2,7 +2,5 @@
 % format:
 % file_name number_of_frames
 % There will be file_name_0000.bin file_name_0001.bin etc..
-movie1 5
-movie2 69
-movie3 31
-movie4 256
+sweep 5
+dummy 5

@@ -1,3 +1,8 @@
+//ECE 573 Project
+//Team: Witty
+//Date: 4/17/14
+//Author: Brian Smith
+
 package edu.arizona.ece473573.witti.activities;
 
 import android.opengl.Matrix;

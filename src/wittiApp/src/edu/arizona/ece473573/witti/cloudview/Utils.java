@@ -1,7 +1,7 @@
 //ECE 573 Project
 //Team: Witty
 //Date: 3/13/14
-//Authors: Brianna Heersink, Brian Smith, Alex Warren
+//Authors: Alex Warren
 
 package edu.arizona.ece473573.witti.cloudview;
 

@@ -1,6 +1,6 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 4/16/14
+//Date: 4/17/14
 //Author: Brianna Heersink
 
 package edu.arizona.ece473573.witti.activities;
@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import com.witti.wittiapp.R;
@@ -25,8 +26,10 @@ public class HomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_home);
+        
+        //Initialize settings
+        PreferenceManager.setDefaultValues(this, R.layout.preferences, false);
     }
 	 
 	 /**
@@ -59,6 +62,7 @@ public class HomeActivity extends Activity {
 		    	
 		    	// Opens DisplayActivity
 		    	Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
+		    	intent.putExtra("inDemoMode", false);
 				startActivity(intent);
 		    }
 		});
@@ -66,11 +70,9 @@ public class HomeActivity extends Activity {
 		alert.show();
 	}
  
-     /**
-     * Opens DisplayActivity with settings for Demo mode (data from phone). 
-     */
     public void openDemo(View view) {
 		Intent intent = new Intent(HomeActivity.this, DisplayActivity.class);
+    	intent.putExtra("inDemoMode", true);
         startActivity(intent);
 	}
      
@@ -81,6 +83,11 @@ public class HomeActivity extends Activity {
     
     public void openPathTracing(View view) {
         Intent intent = new Intent(HomeActivity.this, PathTracingActivity.class);
+        startActivity(intent);
+	}
+    
+    public void openAbout(View view) {
+        Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
         startActivity(intent);
 	}
     

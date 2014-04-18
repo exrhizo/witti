@@ -1,6 +1,6 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 4/16/14
+//Date: 4/17/14
 //Author: Brianna Heersink
 
 package edu.arizona.ece473573.witti.activities;
@@ -34,9 +34,11 @@ public class WittiSettings {
 		this.mSettingsContext = context;
 	}
 	
-	/*
-	 * Sets the server web address to be used in Launch mode.
-	 */
+    /**
+     * Sets the server web address to be used in Launch mode.
+     * 
+     * @param 	webAddress	is a web address at which the server data can be accessed
+     */
 	public void setServerLocation(String webAddress){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -44,6 +46,11 @@ public class WittiSettings {
     	editor.apply();
 	}
 	
+    /**
+     * Gets the server web address to be used in Launch mode.
+     * 
+     * @return 		the server web address
+     */
 	public String getServerLocation(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		String location = sharedPreferences.getString(KEY_SERVER_LOCATION, "");
@@ -52,17 +59,21 @@ public class WittiSettings {
 		return location;
 	}
 	
-	/*
-	 * Gets the server files available on the server.
-	 * Returns an array in the format "fileName frameCount".
-	 */	
+    /**
+     * Gets the server files available on the server.
+     * 
+     * @return 		an array in the format "fileName frameCount".
+     * @throws 	IOException
+     */
 	public CharSequence[] getServerFilesAvailable(){
+		//Read from raw file
 		InputStream is = mSettingsContext.getResources().openRawResource(R.raw.server_data_available);
         BufferedReader in = new BufferedReader(new InputStreamReader(is));
         
 	    CharSequence mStringLine;
 		ArrayList<CharSequence> mArrayListFiles = new ArrayList<CharSequence>();
 	    
+		//parse into array
 	    try {
 			while ((mStringLine = in.readLine()) != null) {
 				if(mStringLine.charAt(0) != '%') {
@@ -80,7 +91,11 @@ public class WittiSettings {
 	    	
 	}
 	
-	
+    /**
+     * Sets the base server file name to be used in Launch mode.
+     * 
+     * @param 	fileName	is a base file name containing Lidar data
+     */	
 	public void setServerFile(String fileName){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -89,6 +104,11 @@ public class WittiSettings {
     	Log.v(CAT_TAG, "server file set to " + fileName);
 	}
 	
+    /**
+     * Gets the currently selected server file.
+     * 
+     * @return 		the selected server file name
+     */
 	public String getServerFile(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		String mFile = sharedPreferences.getString(KEY_SERVER_FILE, "");
@@ -96,6 +116,11 @@ public class WittiSettings {
 		return mFile;
 	}
 	
+    /**
+     * Sets the server file frame count to be used in Launch mode.
+     * 
+     * @param 	frameCount	is the number of frames available for a file on the server
+     */	
 	public void setServerFrameCount(Integer frameCount){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -104,6 +129,11 @@ public class WittiSettings {
     	Log.v(CAT_TAG, "server frames set to " + frameCount);
 	}
 	
+    /**
+     * Gets the frame count for the currently selected server file.
+     * 
+     * @return 		the frame count for the selected server file name
+     */
 	public Integer getServerFrameCount(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		String mFramesString = sharedPreferences.getString(KEY_SERVER_FRAMES, "");
@@ -112,9 +142,12 @@ public class WittiSettings {
 		return mFramesInt;
 	}
 	
-	/*
-	 * Sets the demo file to be displayed as well as associated frame count.
-	 */
+    /**
+     * Sets the demo file to be displayed as well as associated frame count.
+     * 
+     * @param 	fileName	is a base file name containing Lidar data
+     * @param 	frameCount	is the number of frames available for a file on the server
+     */	
 	public void setDemoFile(String fileName, Integer frameCount){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -123,12 +156,22 @@ public class WittiSettings {
     	editor.apply();
 	}
 	
+    /**
+     * Gets the currently selected demo file.
+     * 
+     * @return 		the selected demo file name
+     */
 	public String getDemoFile(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		String mFile = sharedPreferences.getString(KEY_DEMO_FILE, "");
 		return mFile;
 	}
 	
+    /**
+     * Gets the frame count for the currently selected demo file.
+     * 
+     * @return 		the frame count for the selected demo file name
+     */
 	public Integer getDemoFrameCount(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		String mFrameCount = sharedPreferences.getString(KEY_DEMO_FRAMES, "0");

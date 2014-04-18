@@ -57,5 +57,17 @@
     	android:textSize="20sp"
     	android:text="@string/pathTracing"
     	android:onClick="openPathTracing" /> 
+    	
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:text="@string/teamName"
+        android:id="@+id/teamNameTextView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="#01A9DB"
+        android:textStyle="italic"
+        android:onClick="openAbout"
+        android:clickable="true"/>
 
 </RelativeLayout>

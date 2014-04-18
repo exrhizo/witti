@@ -2,6 +2,11 @@
 <resources>
 
     <string name="app_name">WITTI</string>
+    <string name="teamName">Authored by Team Witty</string>
+    <string name="authors">Application Authors:</string>
+    <string name="authorNames">Brianna Heersink\nBrian Smith\nAlex Warren\n</string>
+    <string name="createdFor">Application Created For:</string>
+    <string name="classDetails">ECE 573\nThe University of Arizona</string>
     <string name="action_settings">Settings</string>
     <string name="launch">Launch</string>
     <string name="demo">Demo</string>
@@ -11,25 +16,26 @@
     <string name="generalCategory">General</string>
     <string name="launchCategory">Launch Mode</string>
     <string name="demoCategory">Demo Mode</string>
-    
     <string name="tapSettingTitle">Enable Tap to Refresh</string>
     <string name="tapSettingSummary">Manually tapping the display will update the data visualized</string>
-    
     <string name="serverLocationTitle">Select Server Location</string>
     <string name="serverLocationDialog">Enter the desired web address of the server for Launch mode</string>
-    
+    <string name="defaultServerLocation">http://www.rhizomatos.com/static/lidar/</string>
     <string name="serverFileTitle">Select Server File</string>
     <string name="serverFileDialog">Enter the desired file name from server for Launch mode</string>
-    
+    <string name="defaultServerFile">sweep</string>
     <string name="demoFileTitle">Select Demo File</string>
     <string name="demoFileDialog">Select the desired demo file to be visualized in Demo mode</string>
-    <string name="defaultDemoFile">file1</string>
-    
+    <string name="defaultDemoFile">sweep</string>
+    <string name="defaultDemoFrames">5</string>
     <string name="title_activity_display">DisplayActivity</string>
     <string name="imageContent">imageContent</string>
     <string name="pathTracing">Path Drawing</string>
     <string name="displaySettingsText">Settings</string>
     <string name="displayOtherText">Other</string>
     <string name="displayRefreshText">Refresh</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>

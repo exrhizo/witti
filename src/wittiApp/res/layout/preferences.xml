@@ -7,11 +7,13 @@
 	    <EditTextPreference
 	        android:key="serverLocationSetting" 
 	        android:title="@string/serverLocationTitle"
-	        android:dialogTitle="@string/serverLocationDialog" />
+	        android:dialogTitle="@string/serverLocationDialog" 
+	        android:defaultValue="@string/defaultServerLocation"/>
 	    <EditTextPreference
 	        android:key="serverFileSetting" 
 	        android:title="@string/serverFileTitle"
-	        android:dialogTitle="@string/serverFileDialog" />
+	        android:dialogTitle="@string/serverFileDialog"
+	        android:defaultValue="@string/defaultServerFile" />
 	    <EditTextPreference
 	        android:key="serverFramesSetting" />
     </PreferenceCategory>
@@ -24,8 +26,10 @@
 	        android:title="@string/demoFileTitle"
 	        android:dialogTitle="@string/demoFileDialog" 
 	        android:entries="@array/demoFileEntries"
-            android:entryValues="@array/demoFileEntryValues" />
+            android:entryValues="@array/demoFileEntryValues"
+            android:defaultValue="@string/defaultDemoFile" />
 	    <EditTextPreference
-	        android:key="demoFramesSetting" />
+	        android:key="demoFramesSetting"
+	        android:defaultValue="@string/defaultDemoFrames" />
     </PreferenceCategory>
 </PreferenceScreen>

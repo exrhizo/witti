@@ -1,26 +1,18 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 3/13/14
-//Authors: Brianna Heersink, Brian Smith, Alex Warren
+//Date: 4/17/14
+//Authors: Brian Smith, Alex Warren
 
 package edu.arizona.ece473573.witti.cloudview;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 
 import com.witti.wittiapp.R;
 
 import edu.arizona.ece473573.witti.activities.DisplayActivity;
-import edu.arizona.ece473573.witti.activities.WittiSettings;
 
 public class PointCloudArtist {
     private static final String CAT_TAG = "WITTI_PointCloudArtist";

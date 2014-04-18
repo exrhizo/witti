@@ -1,6 +1,6 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 3/13/14
+//Date: 4/17/14
 //Authors: Brianna Heersink, Brian Smith, Alex Warren
 
 package edu.arizona.ece473573.witti.activities;
@@ -26,6 +26,8 @@ public class DisplayActivity extends Activity {
     public CloudCamera mCamera;
     public CloudSequence mSequence;
     public WittiSettings mSettings;
+    
+    private Boolean mInDemoMode;
 
 
     /*
@@ -47,6 +49,8 @@ public class DisplayActivity extends Activity {
 
 		setContentView(R.layout.activity_display);
 		
+		Intent intent = getIntent();
+		mInDemoMode = intent.getBooleanExtra("inDemoMode", true);
 
         mCamera = new CloudCamera();
         mCloudSurfaceView = (CloudSurfaceView) findViewById(R.id.cloud_surface_view);
@@ -55,7 +59,7 @@ public class DisplayActivity extends Activity {
         mSettings = new WittiSettings(this);
 
         mSequence = new CloudSequence(this);
-        mSequence.loadSettings();
+        mSequence.loadSettings(mInDemoMode);
         mSequence.loadNext();
   
         // tried doing this in CloudSurfaceView but caused null pointer
@@ -77,6 +81,8 @@ public class DisplayActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        mSequence.loadSettings(mInDemoMode);
+        mSequence.loadNext();
         mCloudSurfaceView.onResume();
         //timerHandler.postDelayed(timerRunnable, 1000);
     }

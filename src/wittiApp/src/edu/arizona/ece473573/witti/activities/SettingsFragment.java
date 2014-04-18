@@ -1,6 +1,6 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 4/16/14
+//Date: 4/17/14
 //Author: Brianna Heersink
 
 package edu.arizona.ece473573.witti.activities;
@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -27,8 +28,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	public static final String KEY_SERVER_LOCATION = "serverLocationSetting";
 	public static final String KEY_SERVER_FILE = "serverFileSetting";
 	public static final String KEY_SERVER_FRAMES = "serverFramesSetting";
-
-	private String defaultServerLocation = "www.rhizomatos.com/static/lidar/"; //http:// ??
 	
 	public SettingsFragment() {
 	}
@@ -41,13 +40,12 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         addPreferencesFromResource(R.layout.preferences);
         
         // Sets default summary for list preference (demo file)
-        Preference mDemoFile = findPreference(KEY_DEMO_FILE);
-        mDemoFile.setSummary(mDemoFile.getSharedPreferences().getString(KEY_DEMO_FILE, ""));
+        ListPreference mDemoFile = (ListPreference) findPreference(KEY_DEMO_FILE);
+        mDemoFile.setSummary(mDemoFile.getValue());
         
         // Sets default summary for edit text preference (server location)
         EditTextPreference mServerLocation = (EditTextPreference) findPreference(KEY_SERVER_LOCATION);
-        mServerLocation.setText(defaultServerLocation);
-        mServerLocation.setSummary(defaultServerLocation);
+        mServerLocation.setSummary(mServerLocation.getText());
         
         // Sets default summary for edit text preference (server file)
         EditTextPreference mServerFile = (EditTextPreference) findPreference(KEY_SERVER_FILE);
@@ -83,19 +81,10 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             	editor.putString(KEY_DEMO_FRAMES, "5");
             }
             else if (sharedPreferences.getString(key, "").equals("dummy")){
-            	editor.putString(KEY_DEMO_FRAMES, "3");
+            	editor.putString(KEY_DEMO_FRAMES, "5");
             }
             editor.apply();
             Log.v(CAT_TAG, "setting demo frames to "+sharedPreferences.getString(KEY_DEMO_FRAMES, ""));
-		}
-		else if(key.equals(KEY_TAP_SETTING)){
-			// Debugging
-			if (sharedPreferences.getBoolean(key, false) == false){
-				Log.v(CAT_TAG, "setting tap: unchecked");
-			}
-			else {
-				Log.v(CAT_TAG, "setting tap: checked");
-			}
 		}
 		else if(key.equals(KEY_SERVER_LOCATION) || key.equals(KEY_SERVER_FILE)){
 	        // Sets summary to be the user-description for the selected value

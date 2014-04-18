@@ -1,3 +1,8 @@
+//ECE 573 Project
+//Team: Witty
+//Date: 4/17/14
+//Authors: Alex Warren
+
 package edu.arizona.ece473573.witti.sequence;
 
 import java.io.IOException;
