@@ -11,13 +11,16 @@ Settings     o- Allows modification of the default server location
              `- and sequence to load.
 Path Drawing o- Demo of path drawing capability.
 
+KNOWN ISSUE
+-------
+A bug prevents the user from changing the file source from a Launch after the source
+has been set in the Settings menu.
 
 TESTING
 -------
 Before running all tests the app must be downloaded and launched through its Android icon.
 Then choose 'Launch' and select the 'Dummy' files to visualize. After this, the app
 can be exited and successfully tested.
-
 
 SERVER SETUP
 ------------
