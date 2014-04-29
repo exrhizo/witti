@@ -41,6 +41,7 @@ public class ManualDataRefreshTest extends ActivityInstrumentationTestCase2<Disp
 		
 		Intent intent = new Intent();
 		intent.putExtra("inDemoMode", true);
+		intent.putExtra("inTestMode", true);
 		
 		setActivityIntent(intent);
 		mActivity = getActivity();

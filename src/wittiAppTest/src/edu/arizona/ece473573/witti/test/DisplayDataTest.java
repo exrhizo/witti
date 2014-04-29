@@ -45,6 +45,7 @@ public class DisplayDataTest extends ActivityInstrumentationTestCase2<DisplayAct
 
 		Intent intent = new Intent();
 		intent.putExtra("inDemoMode", true);
+		intent.putExtra("inTestMode", true);
 		
 		setActivityIntent(intent);
 		

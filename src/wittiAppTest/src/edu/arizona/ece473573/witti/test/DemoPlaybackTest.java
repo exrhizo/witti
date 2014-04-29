@@ -9,7 +9,9 @@ import java.nio.FloatBuffer;
 import java.util.concurrent.TimeUnit;
 
 import junit.framework.Assert;
+import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import edu.arizona.ece473573.witti.activities.DisplayActivity;
@@ -48,6 +50,7 @@ public class DemoPlaybackTest extends ActivityInstrumentationTestCase2<DisplayAc
 
 		Intent intent = new Intent();
 		intent.putExtra("inDemoMode", true);
+		intent.putExtra("inTestMode", true);
 		
 		setActivityIntent(intent);
 		mActivity = getActivity();
@@ -81,6 +84,8 @@ public class DemoPlaybackTest extends ActivityInstrumentationTestCase2<DisplayAc
 	}
 
 	public void testDemoPlayback() throws Throwable{
+		
+		//mActivity.setDefaultPreferences();
 		
 		try{
 			mCloudSequence.signal.await(4, TimeUnit.SECONDS);

@@ -50,6 +50,7 @@ public class ServerPlaybackTest extends ActivityInstrumentationTestCase2<Display
 		
 		Intent intent = new Intent();
 		intent.putExtra("inDemoMode", false);
+		intent.putExtra("inTestMode", true);
 		
 		setActivityIntent(intent);
 		
