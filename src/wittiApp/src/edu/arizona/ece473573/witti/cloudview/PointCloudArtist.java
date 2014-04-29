@@ -32,11 +32,11 @@ public class PointCloudArtist {
     private int mTexId;
     private int mPositionHandle;
     private int mTextureHandle;
-    private int mTimeHandle;
-    private int mMaxZHandle;
+    private int mZBottomHandle;
+    private int mHeightHandle;
     private int mMVPHandle;
 
-    private float mMaxZ; //Will be used to visual effects TODO
+    //private float mMinZ;
 
 
     public PointCloudArtist(DisplayActivity display){
@@ -55,40 +55,42 @@ public class PointCloudArtist {
             //Log.v(CAT_TAG, "Null point cloud at draw");
             return;
         }
-        FloatBuffer vertex_buffer = pc.mVertexBuffer;
-        
-        //Utils.checkGlError(CAT_TAG, "Draw, Before Use Program");
+        FloatBuffer vertexBuffer = pc.mVertexBuffer;
+        float height = pc.mHeight/6.0f;
+        float zBottom = pc.mMinZ - height * (mDisplayActivity.mRenderer.mTime % 1.0f - 1.0f);
+        //Log.v(CAT_TAG, "Color center Z: " + Float.toString(colorCenterZ));
+        Utils.checkGlError(CAT_TAG, "Draw, Before Use Program");
         GLES20.glUseProgram(mProgId);
-        //Utils.checkGlError(CAT_TAG, "Use program");
+        Utils.checkGlError(CAT_TAG, "Use program");
         
         
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexId);
-        //Utils.checkGlError(CAT_TAG, "Bind Texture");
+        Utils.checkGlError(CAT_TAG, "Bind Texture");
         
         GLES20.glUniform1i(mTextureHandle, 0);
-        //Utils.checkGlError(CAT_TAG, "Texture handle");
+        Utils.checkGlError(CAT_TAG, "Texture handle");
         
-        vertex_buffer.position(0);
+        vertexBuffer.position(0);
         //TODO make constants for 3 and 4
-        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 3 * 4, vertex_buffer);
+        GLES20.glVertexAttribPointer(mPositionHandle, 3, GLES20.GL_FLOAT, false, 3 * 4, vertexBuffer);
         GLES20.glEnableVertexAttribArray(mPositionHandle);
-        //Utils.checkGlError(CAT_TAG, "Buffer");
+        Utils.checkGlError(CAT_TAG, "Buffer");
 
-        GLES20.glUniform1f(mTimeHandle, 0f);
-        GLES20.glUniform1f(mMaxZHandle, mMaxZ);
+        GLES20.glUniform1f(mZBottomHandle, zBottom);
+        GLES20.glUniform1f(mHeightHandle, height);
         GLES20.glUniformMatrix4fv(mMVPHandle, 1, false, mMVPMatrix, 0);
-        //Utils.checkGlError(CAT_TAG, "Uniforms");
+        Utils.checkGlError(CAT_TAG, "Uniforms");
         
-        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, vertex_buffer.capacity()/3);
-        //Utils.checkGlError(CAT_TAG, "Draw");
+        GLES20.glDrawArrays(GLES20.GL_POINTS, 0, vertexBuffer.capacity()/3);
+        Utils.checkGlError(CAT_TAG, "Draw");
     }
 
     /**
      * Initializes the shaders and registers them with openGL.
      */
     protected void initializeShaders(){
-        //Utils.checkGlError(CAT_TAG, "Before Initialize");
+        Utils.checkGlError(CAT_TAG, "Before Initialize");
         Log.v(CAT_TAG, "initializeShaders");
         //Vertex Shader
         //This gets called for each point.
@@ -97,13 +99,20 @@ public class PointCloudArtist {
             "precision mediump float;" +
             "uniform mat4 u_MVPMatrix;" +
             "attribute vec4 a_Position;" +
-            "uniform float a_time;" +
-            "uniform float a_max_z;" +
+            "uniform float a_z_bottom;" +
+            "uniform float a_height;" +
             "varying vec4 v_color;" +
-            "float time;" +
             "void main(){" +
-                "gl_PointSize = 10.0;" +
-                "v_color = vec4(.6,.6,.6+.4*(a_Position.z/a_max_z),1);" +
+                "gl_PointSize = 8.0;" +
+                "float mix = (a_Position.z-a_z_bottom)/a_height;" +
+                "mix = mix - floor(mix);" +
+                "mix = 4.0 * (mix * mix - mix + .25);" +
+                "mix = mix * mix;" +
+                "mix = mix * mix;" +
+                "mix = mix * mix;" +
+                "v_color = vec4(1.0*mix + .58 - .58*mix," +
+                               "0.4*mix + .41 - .41*mix," +
+                               "0.3*mix + .85 - .85*mix, .7);" +
                 "gl_Position = u_MVPMatrix * a_Position;" +
             "}";
 
@@ -116,23 +125,22 @@ public class PointCloudArtist {
             "void main(){" +
                 "vec4 tex = texture2D(u_texture, gl_PointCoord);" +
                 "gl_FragColor = v_color * tex;" +
-                "gl_FragColor.w = .7;" +
             "}";
         
         
         //Load everything and get handles
 
         mProgId = Utils.LoadProgram(strVShader, strFShader);
-        //Utils.checkGlError(CAT_TAG, "After program load");
+        Utils.checkGlError(CAT_TAG, "After program load");
         mTexId = Utils.LoadTexture(mDisplayActivity.mCloudSurfaceView, R.drawable.particle);
-        //Utils.checkGlError(CAT_TAG, "After loading texture");
+        Utils.checkGlError(CAT_TAG, "After loading texture");
         
         mPositionHandle = GLES20.glGetAttribLocation(mProgId, "a_Position");
-        //Utils.checkGlError(CAT_TAG, "THIS Handle");
+        Utils.checkGlError(CAT_TAG, "THIS Handle");
         mTextureHandle = GLES20.glGetUniformLocation(mProgId, "u_texture");
         mMVPHandle = GLES20.glGetUniformLocation(mProgId, "u_MVPMatrix");
-        mTimeHandle = GLES20.glGetAttribLocation(mProgId, "a_time");
-        mMaxZHandle = GLES20.glGetUniformLocation(mProgId, "a_max_z");
-        //Utils.checkGlError(CAT_TAG, "After getting handles");
+        mZBottomHandle = GLES20.glGetUniformLocation(mProgId, "a_z_bottom");
+        mHeightHandle = GLES20.glGetUniformLocation(mProgId, "a_height");
+        Utils.checkGlError(CAT_TAG, "After getting handles");
     }
 }

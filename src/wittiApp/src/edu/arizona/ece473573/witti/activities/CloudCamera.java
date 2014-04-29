@@ -14,6 +14,7 @@ import android.opengl.Matrix;
  */
 public class CloudCamera {
 	
+    private long mLastUpdateTime;
     private float[] mViewMatrix;
     float eyeX, eyeY;
     float lookX, lookY, lookZ;
@@ -27,6 +28,8 @@ public class CloudCamera {
         lookX = 0.0f;
         lookY = 20.0f;
         lookZ = 10.0f;
+
+        mLastUpdateTime = System.currentTimeMillis();
     	
     }
     
@@ -69,4 +72,10 @@ public class CloudCamera {
                 0.0f,   0.0f,  1.0f);
 		
 	}
+
+    public void update(long time){
+        float dt = mLastUpdateTime - time;
+        mLastUpdateTime = time;
+
+    }
 }

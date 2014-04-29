@@ -8,6 +8,7 @@ package edu.arizona.ece473573.witti.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -22,7 +23,8 @@ import edu.arizona.ece473573.witti.sequence.CloudSequence;
 public class DisplayActivity extends Activity {
     private static final String CAT_TAG = "WITTI_Display";
 
-    //private static final int PLAY_RATE = 20; //Hz
+    private static final int REFRESH_RATE = 2; //Hz
+    private static final int CAMERA_RATE = 50; //Hz
 
     public CloudSurfaceView mCloudSurfaceView;
     public CloudRenderer mRenderer;
@@ -31,21 +33,25 @@ public class DisplayActivity extends Activity {
     public WittiSettings mSettings;
     
     private Boolean mInDemoMode;
+    private Boolean mAutoRefresh;
 
-    //This is kept for later use with autorefresh (A req)
-    //was for spinning camera
-    /*
+    private Long mLastRefreshTime;
+
     Handler timerHandler = new Handler();
     Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
-        mRenderer.mTime += .02;
-        mRenderer.setCamera((float) (10*Math.cos(mRenderer.mTime)), (float) (10*Math.sin(mRenderer.mTime)), (float) (5+5*Math.sin(.01*mRenderer.mTime)),
-                                      0.0f,   0.0f,  0.0f,
-                                      0.0f,   0.0f,  1.0f);
-            timerHandler.postDelayed(this, 1000 / PLAY_RATE);
+            long currentTime = System.currentTimeMillis();
+            mCamera.update(currentTime);
+            if (mAutoRefresh){
+                if (currentTime - mLastRefreshTime > 1000/REFRESH_RATE){
+                    mLastRefreshTime = currentTime;
+                    mSequence.refresh();
+                }
+            }
+            timerHandler.postDelayed(this, 1000/CAMERA_RATE);
         }
-    };*/
+    };
 
      /**
      * Creation of the activity. Initialize everything.
@@ -75,8 +81,9 @@ public class DisplayActivity extends Activity {
         mCloudSurfaceView.setEGLContextClientVersion(2);
         mCloudSurfaceView.setRenderer(mRenderer);
         
-
-        //timerHandler.postDelayed(timerRunnable, 1000);
+        mAutoRefresh = false;
+        mLastRefreshTime = System.currentTimeMillis();
+        timerHandler.postDelayed(timerRunnable, 1000/CAMERA_RATE);
 	}
 
      /**
@@ -86,7 +93,7 @@ public class DisplayActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mCloudSurfaceView.onPause(); //pause openGl
-        //timerHandler.removeCallbacks(timerRunnable);
+        timerHandler.removeCallbacks(timerRunnable);
     }
 
      /**
@@ -98,7 +105,7 @@ public class DisplayActivity extends Activity {
         mSequence.loadSettings(mInDemoMode);
         mSequence.loadNext();
         mCloudSurfaceView.onResume(); //resume openGl
-        //timerHandler.postDelayed(timerRunnable, 1000);
+        timerHandler.postDelayed(timerRunnable, 1000);
     }
     
     /**
@@ -115,6 +122,10 @@ public class DisplayActivity extends Activity {
      */
     public void refreshFrame(View view){
         mSequence.refresh();
+    }
+
+    public void autoRefreshFrame(View view){
+        mAutoRefresh = !mAutoRefresh;
     }
 
     /**

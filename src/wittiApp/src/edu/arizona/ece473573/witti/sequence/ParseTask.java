@@ -100,7 +100,9 @@ public abstract class ParseTask extends AsyncTask<Void, Void, Integer> {
         //part of buffer, which should be empty
         nio_byte_buffer.rewind();
         //logBuffer(nio_byte_buffer.asFloatBuffer());
-        return new PointCloud(nio_byte_buffer.asFloatBuffer());
+        PointCloud result = new PointCloud(nio_byte_buffer.asFloatBuffer());
+        result.setMinMax();
+        return result;
     }
 
     /**

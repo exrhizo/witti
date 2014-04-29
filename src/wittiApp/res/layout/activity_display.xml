@@ -31,5 +31,14 @@
     android:layout_alignRight="@+id/cloud_surface_view"
     android:text="@string/displayRefreshText"
     android:onClick="refreshFrame"/>
+<Button
+    android:id="@+id/displayAutoRefreshButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:color="#80FFFFFF"
+    android:layout_alignBottom="@+id/cloud_surface_view"
+    android:layout_centerInParent = "true"
+    android:text="@string/displayAutoRefreshText"
+    android:onClick="autoRefreshFrame"/>
 
 </RelativeLayout>
