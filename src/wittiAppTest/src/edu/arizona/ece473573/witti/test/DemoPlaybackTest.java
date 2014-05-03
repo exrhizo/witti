@@ -9,9 +9,7 @@ import java.nio.FloatBuffer;
 import java.util.concurrent.TimeUnit;
 
 import junit.framework.Assert;
-import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import edu.arizona.ece473573.witti.activities.DisplayActivity;
