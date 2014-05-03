@@ -129,8 +129,18 @@ public class DisplayActivity extends Activity {
         mSequence.refresh();
     }
 
+    /**
+     * For button press to switch between auto-refresh and manual mode.
+     */
     public void autoRefreshFrame(View view){
         mAutoRefresh = !mAutoRefresh;
+        Button mRefreshModeButton = (Button)findViewById(R.id.displayAutoRefreshButton);
+        if(mAutoRefresh){
+        	mRefreshModeButton.setText(R.string.displayManualRefreshText);
+        }
+        else{
+        	mRefreshModeButton.setText(R.string.displayAutoRefreshText);
+        }
     }
 
     /**
