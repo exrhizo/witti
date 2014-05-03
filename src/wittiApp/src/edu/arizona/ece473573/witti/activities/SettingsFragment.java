@@ -14,7 +14,6 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.util.Log;
-
 import edu.arizona.ece473573.witti.R;
 
 public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
@@ -29,6 +28,10 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	public static final String KEY_SERVER_FILE = "serverFileSetting";
 	public static final String KEY_SERVER_FRAMES = "serverFramesSetting";
 	
+    public WittiSettings mSettings;
+	public String[] serverFileNames;
+	public String[] serverFileFrames;
+	
 	public SettingsFragment() {
 	}
 	
@@ -39,6 +42,26 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         // Loads the preferences from preferences.xml
         addPreferencesFromResource(R.layout.preferences);
         
+        // Gets list of server files available and number of frames
+        mSettings = new WittiSettings(getActivity());
+		CharSequence[] mServerFilesAvailable = mSettings.getServerFilesAvailable();
+		serverFileNames = new String[mServerFilesAvailable.length];
+		serverFileFrames = new String[mServerFilesAvailable.length];
+		
+		// Reformats file name and frame count data to be displayed in  alert dialog
+		for (int i = 0; i < mServerFilesAvailable.length; i++) {
+			String[] mServerFileAndFrames = ((String) mServerFilesAvailable[i]).split("\\s");
+			serverFileNames[i] = mServerFileAndFrames[0];
+			serverFileFrames[i] = mServerFileAndFrames[1];
+		}
+		        
+        // Sets default summary for list preference (server file)
+        ListPreference mServerFileList = (ListPreference) findPreference(KEY_SERVER_FILE);
+        mServerFileList.setSummary(mServerFileList.getValue());
+        // Adds list of server files available to ListPreference
+        mServerFileList.setEntries(serverFileNames);
+        mServerFileList.setEntryValues(serverFileNames);
+        
         // Sets default summary for list preference (demo file)
         ListPreference mDemoFile = (ListPreference) findPreference(KEY_DEMO_FILE);
         mDemoFile.setSummary(mDemoFile.getValue());
@@ -46,10 +69,6 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         // Sets default summary for edit text preference (server location)
         EditTextPreference mServerLocation = (EditTextPreference) findPreference(KEY_SERVER_LOCATION);
         mServerLocation.setSummary(mServerLocation.getText());
-        
-        // Sets default summary for edit text preference (server file)
-        EditTextPreference mServerFile = (EditTextPreference) findPreference(KEY_SERVER_FILE);
-        mServerFile.setSummary(mServerFile.getText());
         
         // Removes settings for server frame counts from display (not necessary for user to see and change)
         PreferenceCategory mLaunchCategory = (PreferenceCategory) findPreference(KEY_SERVER_CATEG);
@@ -86,11 +105,29 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             editor.apply();
             Log.v(CAT_TAG, "setting demo frames to "+sharedPreferences.getString(KEY_DEMO_FRAMES, ""));
 		}
-		else if(key.equals(KEY_SERVER_LOCATION) || key.equals(KEY_SERVER_FILE)){
+		else if(key.equals(KEY_SERVER_FILE)){
 	        // Sets summary to be the user-description for the selected value
 			changedPreference.setSummary(sharedPreferences.getString(key, ""));
 		    // Debugging
-            Log.v(CAT_TAG, "server: "+sharedPreferences.getString(key,""));			
+            Log.v(CAT_TAG, "setting server file to "+sharedPreferences.getString(key,""));
+            
+            // Sets frame values for server file selected
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            Boolean mFileFound = false;
+            for (int i = 0; i < serverFileNames.length; i++) {
+    			if(sharedPreferences.getString(key, "") == serverFileNames[i]){
+    				editor.putString(KEY_SERVER_FRAMES, serverFileFrames[i]);
+    				Log.v(CAT_TAG, "Setting server frames to " + serverFileFrames[i]);
+    				mFileFound = true;
+    			}
+    		}
+            if(mFileFound == false){
+            	// If file is not found in list of server files available, log error.
+            	Log.e(CAT_TAG, "File " + sharedPreferences.getString(key, "") + " not found in list of available server files.");
+            }
+            editor.apply();
+		    // Debugging
+            Log.v(CAT_TAG, "Server frames set to "+sharedPreferences.getString(KEY_SERVER_FRAMES, ""));
 		}
 	}
 	

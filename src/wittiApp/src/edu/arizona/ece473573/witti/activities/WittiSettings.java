@@ -111,7 +111,7 @@ public class WittiSettings {
      */
 	public String getServerFile(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String mFile = sharedPreferences.getString(KEY_SERVER_FILE, "5");
+		String mFile = sharedPreferences.getString(KEY_SERVER_FILE, "");
 		Log.d(CAT_TAG, "server file name: "+mFile);
 		return mFile;
 	}
@@ -143,16 +143,14 @@ public class WittiSettings {
 	}
 	
     /**
-     * Sets the demo file to be displayed as well as associated frame count.
+     * Sets the demo file to be displayed 
      * 
      * @param 	fileName	is a base file name containing Lidar data
-     * @param 	frameCount	is the number of frames available for a file on the server
      */	
-	public void setDemoFile(String fileName, Integer frameCount){
+	public void setDemoFile(String fileName){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		SharedPreferences.Editor editor = sharedPrefs.edit();
     	editor.putString(KEY_DEMO_FILE, fileName);
-    	editor.putString(KEY_DEMO_FRAMES, frameCount.toString());
     	editor.apply();
 	}
 	
@@ -165,6 +163,18 @@ public class WittiSettings {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		String mFile = sharedPreferences.getString(KEY_DEMO_FILE, "");
 		return mFile;
+	}
+	
+    /**
+     * Sets the demo file frame count
+     * 
+     * @param 	frameCount	is the number of frames available for a file on the server
+     */	
+	public void setDemoFrameCount(Integer frameCount){
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		SharedPreferences.Editor editor = sharedPrefs.edit();
+    	editor.putString(KEY_DEMO_FRAMES, frameCount.toString());
+    	editor.apply();
 	}
 	
     /**

@@ -21,10 +21,10 @@
     <string name="defaultServerLocation">http://www.rhizomatos.com/static/lidar/</string>
     <string name="serverFileTitle">Select Server File</string>
     <string name="serverFileDialog">Enter the desired file name from server for Launch mode</string>
-    <string name="defaultServerFile">dummy</string>
+    <string name="defaultServerFile">sweep</string>
     <string name="demoFileTitle">Select Demo File</string>
     <string name="demoFileDialog">Select the desired demo file to be visualized in Demo mode</string>
-    <string name="defaultDemoFile">dummy</string>
+    <string name="defaultDemoFile">sweep</string>
     <string name="defaultDemoFrames">5</string>
     <string name="title_activity_display">DisplayActivity</string>
     <string name="imageContent">imageContent</string>

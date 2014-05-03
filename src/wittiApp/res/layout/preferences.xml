@@ -10,12 +10,13 @@
 	        android:dialogTitle="@string/serverLocationDialog" 
 	        android:defaultValue="@string/defaultServerLocation"/>
 	    <EditTextPreference
-	        android:key="serverFileSetting" 
+	        android:key="serverFramesSetting"
+	        android:defaultValue="@string/defaultDemoFrames" />
+	    <ListPreference
+	        android:key="serverFileSetting"
 	        android:title="@string/serverFileTitle"
-	        android:dialogTitle="@string/serverFileDialog"
-	        android:defaultValue="@string/defaultServerFile" />
-	    <EditTextPreference
-	        android:key="serverFramesSetting" />
+	        android:dialogTitle="@string/serverFileDialog" 
+            android:defaultValue="@string/defaultServerFile" />
     </PreferenceCategory>
     
     <PreferenceCategory 

@@ -143,7 +143,8 @@ public class DisplayActivity extends Activity {
     }
     
     public void setTestSettings(){
-    	mSettings.setDemoFile("dummy", 5);
+    	mSettings.setDemoFile("dummy");
+    	mSettings.setDemoFrameCount(5);
     	mSettings.setServerFile("dummy");
     	mSettings.setServerFrameCount(5);
     	mSettings.setServerLocation("http://www.rhizomatos.com/static/lidar/");
