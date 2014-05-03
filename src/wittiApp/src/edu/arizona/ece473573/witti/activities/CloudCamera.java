@@ -6,6 +6,7 @@
 package edu.arizona.ece473573.witti.activities;
 
 import android.opengl.Matrix;
+import android.util.Log;
 
 /**
  * This class controls the camera matrix. It is the primary way of changing the current view 
@@ -14,10 +15,15 @@ import android.opengl.Matrix;
  */
 public class CloudCamera {
 	
-    private long mLastUpdateTime;
+	private final String debug = "WITTI_DEBUG";
+	
+    //private long mLastUpdateTime;
     private float[] mViewMatrix;
     float eyeX, eyeY;
     float lookX, lookY, lookZ;
+    float mThetaDecay;
+    
+    private float mSpinRate = 0.85f;
 
     public CloudCamera(){
     	
@@ -28,8 +34,10 @@ public class CloudCamera {
         lookX = 0.0f;
         lookY = 20.0f;
         lookZ = 10.0f;
+        
+        mThetaDecay = 0.0f;
 
-        mLastUpdateTime = System.currentTimeMillis();
+        //mLastUpdateTime = System.currentTimeMillis();
     	
     }
     
@@ -57,25 +65,48 @@ public class CloudCamera {
      * @param 	theta: The current angle calculated from the CloudDisplayView based on how far apart
      * 					the motion events were
      */
-	public void rotateCamera(float theta) {
+	public void rotateCamera(float thetaX, float thetaY) {
 		
-		float tempX, tempY;
+		float tempX, tempY, tempZ;
 		
 		//Simple rotation matrix calculations to rotate about the Z-axis
-		tempX = (float) ((lookX * Math.cos(theta)) - (lookY * Math.sin(theta)));
-		tempY = (float) ((lookX * Math.sin(theta)) + (lookY * Math.cos(theta)));
+		tempX = (float) ((lookX * Math.cos(thetaX)) - (lookY * Math.sin(thetaX)));
+		tempY = (float) ((lookX * Math.sin(thetaX)) + (lookY * Math.cos(thetaX)));
 		lookX = tempX;
 		lookY = tempY;
+		
+		//Add the rotation about the y-axis
+		tempX = (float) ((lookX * Math.cos(thetaY)) - (lookZ * Math.sin(thetaY)));
+		tempZ = (float) ((-lookX * Math.sin(thetaY)) + (lookZ * Math.cos(thetaY)));
+		lookX = tempX;
+		lookZ = tempZ;
 
 		this.setCamera(0.0f, -10.0f, 10.0f,
 				lookX, lookY, lookZ,
                 0.0f,   0.0f,  1.0f);
 		
 	}
+	
+	public void rotateCameraPassiveInit(float theta)
+	{
+		mThetaDecay = theta;
+	}
 
     public void update(long time){
-        float dt = mLastUpdateTime - time;
-        mLastUpdateTime = time;
+        //float dt = mLastUpdateTime - time;
+        //mLastUpdateTime = time;
+        
+        
+        if(Math.abs(mThetaDecay) > 0.005f)
+        {
+            //Log.d(debug, "theta: " + mThetaDecay);
+        	mThetaDecay = mThetaDecay * mSpinRate;
+        	rotateCamera(mThetaDecay, 0.0f);
+        }
+        else
+        {
+        	mThetaDecay = 0.0f;
+        }
 
     }
 }

@@ -48,6 +48,8 @@ public class CloudRenderer implements Renderer {
 
     //TODO implement time based effects
     public float mTime; //For visual effects
+    
+    private int mZoom;
 
     /**
      * Constructor for CloudSequence provides initialization.
@@ -65,6 +67,8 @@ public class CloudRenderer implements Renderer {
                           0.0f,  20.0f, 10.0f,
                           0.0f,   0.0f,  1.0f);
         Matrix.setIdentityM(mModelMatrix, 0);
+        
+        mZoom = 1;
     }
 
     /**
@@ -152,6 +156,12 @@ public class CloudRenderer implements Renderer {
      */
     public void setCamera(CloudCamera cc){
     	mCamera = cc;
+    }
+    
+    public void setZoom(float theta)
+    {
+    	Log.d("WITTI_DEBUG", "zoom: " + mZoom);
+    	mZoom = (int)theta;
     }
     
 }

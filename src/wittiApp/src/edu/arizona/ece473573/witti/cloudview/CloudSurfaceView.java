@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 public class CloudSurfaceView  extends GLSurfaceView{
 	
     private static final String CAT_TAG = "WITTI_CloudSurfaceView";
+	private final String debug = "WITTI_DEBUG";
     CloudRenderer mRenderer;
     private CloudCamera mCamera;
     PointCloud mCloudPoints;
@@ -23,7 +24,7 @@ public class CloudSurfaceView  extends GLSurfaceView{
     //Touch vars
     float initialX, initialY;
     float prevX, prevY, currX, currY;
-    float theta;
+    float thetaX, thetaY;
 
     public CloudSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -64,8 +65,9 @@ public class CloudSurfaceView  extends GLSurfaceView{
     	 */
     	switch(me.getAction()){
     	case MotionEvent.ACTION_UP:
-    		break; 	//Nothing done since the prev values are reset on a new
-    				//Motion Down anyways
+    		mCamera.rotateCameraPassiveInit(thetaX);
+    		//Log.d(debug, "Action up theta: " + theta);
+    		break;
     	case MotionEvent.ACTION_DOWN:
     		prevX = initialX = me.getX();
     		prevY = initialY = me.getY();
@@ -76,9 +78,12 @@ public class CloudSurfaceView  extends GLSurfaceView{
     		
     		//theta = (float) Math.atan((currX-prevX)/LENGTH);
     		//Much simpler angle calculation
-    		theta = (currX-prevX) / 360;
+    		thetaX = (currX-prevX) / 360;
+    		thetaY = (currY - prevY) / 360;
     		
-    		mCamera.rotateCamera(theta);
+    		//mRenderer.setZoom(theta);
+    		
+    		mCamera.rotateCamera(thetaX, thetaY);
     		
     		prevX = currX;
     		prevY = currY;
