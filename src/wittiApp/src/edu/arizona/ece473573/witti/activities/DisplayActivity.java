@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -71,6 +72,10 @@ public class DisplayActivity extends Activity {
         mCloudSurfaceView.setCamera(mCamera);
 
         mSettings = new WittiSettings(this);
+
+		if(intent.getBooleanExtra("inTestMode", false)){
+			setTestSettings();
+		}
 
         mSequence = new CloudSequence(this);
         mSequence.loadSettings(mInDemoMode);
@@ -135,5 +140,12 @@ public class DisplayActivity extends Activity {
         Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+    }
+    
+    public void setTestSettings(){
+    	mSettings.setDemoFile("dummy", 5);
+    	mSettings.setServerFile("dummy");
+    	mSettings.setServerFrameCount(5);
+    	mSettings.setServerLocation("http://www.rhizomatos.com/static/lidar/");
     }
 }
