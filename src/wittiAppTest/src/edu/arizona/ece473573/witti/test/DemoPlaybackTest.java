@@ -63,8 +63,7 @@ public class DemoPlaybackTest extends ActivityInstrumentationTestCase2<DisplayAc
 				testVal = testVal - 2.0f;
 			
 			testArray_1[i] = testVal;
-			testVal = testVal + 1.0f;
-			
+			testVal = testVal + 1.0f;	
 		}
 		
 		testArray_2 = new float[30];
@@ -77,14 +76,11 @@ public class DemoPlaybackTest extends ActivityInstrumentationTestCase2<DisplayAc
 			testArray_2[i] = testVal;
 			testVal = testVal + 1.0f;
 			
-		}
-		
+		}	
 	}
 
 	public void testDemoPlayback() throws Throwable{
-		
-		//mActivity.setDefaultPreferences();
-		
+		// App opens in manual refresh mode; wait for async task for render of first frame
 		try{
 			mCloudSequence.signal.await(4, TimeUnit.SECONDS);
 		}catch(InterruptedException e){
@@ -94,11 +90,12 @@ public class DemoPlaybackTest extends ActivityInstrumentationTestCase2<DisplayAc
 		mPointCloud = mCloudSequence.getCurrentFrame();
 		AUT = mPointCloud.mVertexBuffer;
 		
-		//Check that teh buffer contains expected values
+		//Check that the buffer contains expected values
 		for(int i = 0; i < AUT.capacity(); i++){
 			Assert.assertTrue(AUT.get(i) == testArray_1[i]);
 		}
 		
+		// click button to refresh data manually
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run(){
@@ -106,6 +103,7 @@ public class DemoPlaybackTest extends ActivityInstrumentationTestCase2<DisplayAc
 			}
 		});
 		
+		// wait for async task for render of second frame
 		try{
 			mCloudSequence.signal.await(4, TimeUnit.SECONDS);
 		}catch(InterruptedException e){
@@ -115,11 +113,12 @@ public class DemoPlaybackTest extends ActivityInstrumentationTestCase2<DisplayAc
 		mPointCloud = mCloudSequence.getCurrentFrame();
 		AUT = mPointCloud.mVertexBuffer;
 		
-		//Check that teh buffer contains expected values
+		//Check that the buffer contains expected values
 		for(int i = 0; i < AUT.capacity(); i++){
 			Assert.assertTrue(AUT.get(i) == testArray_2[i]);
 		}
 		
+		//Verify that the second frame is loaded
 		Assert.assertTrue(mCloudSequence.getCurrentFrameNum() == 1);
 	}
 

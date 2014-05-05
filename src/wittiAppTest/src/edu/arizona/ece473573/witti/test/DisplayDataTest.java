@@ -73,7 +73,8 @@ public class DisplayDataTest extends ActivityInstrumentationTestCase2<DisplayAct
      * 
      */
 	public void testDisplayData(){
-
+        
+		//Wait for async task for render of first frame
 		try{
 			mCloudSequence.signal.await(4, TimeUnit.SECONDS);
 		}catch(InterruptedException e){
@@ -88,12 +89,10 @@ public class DisplayDataTest extends ActivityInstrumentationTestCase2<DisplayAct
 		//Check that the buffer contains correct # of values
 		Assert.assertTrue(AUT.capacity() == 30);
 		
-		//Check that teh buffer contains expected values
+		//Check that the buffer contains expected values
 		for(int i = 0; i < AUT.capacity(); i++){
 			Assert.assertTrue(AUT.get(i) == testArray[i]);
 		}
-		
-		//PointCloud class has correct metadata (??)
 		
 		return;
 	}

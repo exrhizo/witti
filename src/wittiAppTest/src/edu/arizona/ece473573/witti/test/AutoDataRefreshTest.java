@@ -1,7 +1,7 @@
 //ECE 573 Project
 //Team: Witty
-//Date: 4/18/14
-//Author: Brian Smith
+//Date: 5/4/14
+//Author: Brianna Heersink
 
 package edu.arizona.ece473573.witti.test;
 
@@ -16,22 +16,23 @@ import edu.arizona.ece473573.witti.sequence.CloudSequence;
 
 /**
  * 
- * 	B.2 Manual Refresh Requirement: “The phone application software shall be capable of refreshing the
- * displayed Velodyne LiDAR data manually based on user input.”
+ * 	A.1 Auto Data Refresh Requirement: “The phone application software shall be capable of refreshing the
+displayed Velodyne LiDAR data automatically through a set refresh rate.”
  */
-public class ManualDataRefreshTest extends ActivityInstrumentationTestCase2<DisplayActivity>{
+public class AutoDataRefreshTest extends ActivityInstrumentationTestCase2<DisplayActivity>{
 
 	private CloudSequence mCloudSequence;
 	private DisplayActivity mActivity;
-	private Button mRefreshButton;
+	private Button mAutoRefreshButton;
 	
-	public ManualDataRefreshTest(){
+	public AutoDataRefreshTest(){
 		super(DisplayActivity.class);
 	}
 	
     /**
-     * Launches the DisplayActivity 
-     */
+     * Launches the DisplayActivity
+     * 
+     */	
 	@Override
 	protected void setUp() throws Exception{
 		
@@ -45,12 +46,13 @@ public class ManualDataRefreshTest extends ActivityInstrumentationTestCase2<Disp
 		setActivityIntent(intent);
 		mActivity = getActivity();
 		mCloudSequence = mActivity.mSequence;
-		mRefreshButton = (Button)mActivity.findViewById(edu.arizona.ece473573.witti.R.id.displayRefreshButton);
+		mAutoRefreshButton = (Button)mActivity.findViewById(edu.arizona.ece473573.witti.R.id.displayAutoRefreshButton);
 		
 	}
 	
-	public void testManualRefresh() throws Throwable{
-		// wait for async task for render of first frame
+	public void testAutoRefresh() throws Throwable{
+		
+		// App opens in manual refresh mode; wait for async task for render of first frame
 		try{
 			mCloudSequence.signal.await(4, TimeUnit.SECONDS);
 		}catch(InterruptedException e){
@@ -60,23 +62,33 @@ public class ManualDataRefreshTest extends ActivityInstrumentationTestCase2<Disp
 		// Verify first frame is loaded
 		Assert.assertTrue(mCloudSequence.getCurrentFrameNum() == 0);
 		
-		// Click button to refresh data manually
+		// Click button to switch to auto refresh mode
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run(){
-				mRefreshButton.performClick();
+				mAutoRefreshButton.performClick();
 			}
 		});
 		
-		// wait for async task for render of second frame
+		// Wait 0.5 seconds for next frame to be loaded
 		try{
-			mCloudSequence.signal.await(4, TimeUnit.SECONDS);
+			Thread.sleep(500);
 		}catch(InterruptedException e){
-			fail("ASyncTask failed");
+			fail("Sleep interrupted");
 		}
 		
 		// Verify second frame is loaded
 		Assert.assertTrue(mCloudSequence.getCurrentFrameNum() == 1);
+		
+		// Wait 0.5 seconds for next frame to be loaded
+		try{
+			Thread.sleep(500);
+		}catch(InterruptedException e){
+			fail("Sleep interrupted");
+		}
+		
+		// Verify third frame is loaded
+		Assert.assertTrue(mCloudSequence.getCurrentFrameNum() == 2);
 	}
 
 }

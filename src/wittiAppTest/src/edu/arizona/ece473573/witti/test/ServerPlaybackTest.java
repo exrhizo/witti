@@ -21,8 +21,7 @@ import edu.arizona.ece473573.witti.sequence.CloudSequence;
 /**
  * 
  * 	B.3 Server Download Requirement: “The phone application software shall be capable of downloading
- * 	Velodyne LiDAR data in the form of an XYZpoint
- * 	binary file from a remote server.”
+ * 	Velodyne LiDAR data in the form of an XYZpoint binary file from a remote server.”
  */
 public class ServerPlaybackTest extends ActivityInstrumentationTestCase2<DisplayActivity>{
 	
@@ -86,23 +85,8 @@ public class ServerPlaybackTest extends ActivityInstrumentationTestCase2<Display
 	}
 
 	public void testServerPlayback() throws Throwable{
-
-		/*Instrumentation instrumentation = new Instrumentation();
-		Instrumentation.ActivityMonitor mon = instrumentation.addMonitor(DisplayActivity.class.getName(), null, false);
 		
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run(){
-				mLaunchButton.performClick();
-			}
-		});
-		
-		mDisplayActivity = (DisplayActivity) getInstrumentation().waitForMonitorWithTimeout(mon, 5);
-		
-		Assert.assertNotNull(mDisplayActivity);
-		
-		mCloudSequence = mDisplayActivity.mSequence;*/
-		
+		//Wait for async task for render of first frame
 		try{
 			mCloudSequence.signal.await(4, TimeUnit.SECONDS);
 		}catch(InterruptedException e){
@@ -115,11 +99,12 @@ public class ServerPlaybackTest extends ActivityInstrumentationTestCase2<Display
 		Assert.assertNotNull(mPointCloud);
 		AUT = mPointCloud.mVertexBuffer;
 		
-		//Check that teh buffer contains expected values
+		//Check that the buffer contains expected values
 		for(int i = 0; i < AUT.capacity(); i++){
 			Assert.assertTrue(AUT.get(i) == testArray_1[i]);
 		}
 		
+		//Click button to refresh data manually
 		runTestOnUiThread(new Runnable() {
 			@Override
 			public void run(){
@@ -127,6 +112,7 @@ public class ServerPlaybackTest extends ActivityInstrumentationTestCase2<Display
 			}
 		});
 		
+		//Wait for async task for render of second frame
 		try{
 			mCloudSequence.signal.await(4, TimeUnit.SECONDS);
 		}catch(InterruptedException e){
@@ -136,11 +122,12 @@ public class ServerPlaybackTest extends ActivityInstrumentationTestCase2<Display
 		mPointCloud = mCloudSequence.getCurrentFrame();
 		AUT = mPointCloud.mVertexBuffer;
 		
-		//Check that teh buffer contains expected values
+		//Check that the buffer contains expected values
 		for(int i = 0; i < AUT.capacity(); i++){
 			Assert.assertTrue(AUT.get(i) == testArray_2[i]);
 		}
 		
+		//Verify that the second frame is loaded
 		Assert.assertTrue(mCloudSequence.getCurrentFrameNum() == 1);
 	}
 
