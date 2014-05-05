@@ -21,6 +21,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	private static final String CAT_TAG = "WITTI_SettingsFragment";
 	public static final String KEY_DEMO_CATEG = "demoPreferencesKey";
 	public static final String KEY_SERVER_CATEG = "launchPreferencesKey";
+	public static final String KEY_RESET_SETTINGS = "resetPreferencesSetting";
 	public static final String KEY_DEMO_FILE = "demoFileSetting";
 	public static final String KEY_DEMO_FRAMES = "demoFramesSetting";
 	public static final String KEY_TAP_SETTING = "tapToRefreshSetting";
@@ -80,6 +81,15 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         Preference mDemoFrames = (Preference) findPreference(KEY_DEMO_FRAMES);
         mDemoCategory.removePreference(mDemoFrames);
         
+        Preference button = (Preference)findPreference("resetPreferencesSetting");
+        button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        	@Override
+            public boolean onPreferenceClick(Preference arg0) { 
+        		mSettings.resetSettings(); 
+                return true;
+            }
+        });
+        
     }
     
 	/**
@@ -91,24 +101,26 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		if(key.equals(KEY_DEMO_FILE)){
 	        // Sets summary to be the user-description for the selected value
 			changedPreference.setSummary(sharedPreferences.getString(key, ""));
-		    // Debugging
             Log.v(CAT_TAG, "setting demo file to "+sharedPreferences.getString(key,""));
             
             // Sets frame values for demo file selected
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if(sharedPreferences.getString(key, "").equals("sweep")){
-            	editor.putString(KEY_DEMO_FRAMES, "5");
+            	editor.putString(KEY_DEMO_FRAMES, getActivity().getString(R.string.defaultDemoFrames));
             }
             else if (sharedPreferences.getString(key, "").equals("dummy")){
-            	editor.putString(KEY_DEMO_FRAMES, "5");
+            	editor.putString(KEY_DEMO_FRAMES, getActivity().getString(R.string.defaultDemoFrames));
             }
             editor.apply();
             Log.v(CAT_TAG, "setting demo frames to "+sharedPreferences.getString(KEY_DEMO_FRAMES, ""));
+            
+            // Update value to ensure old value is not still being shown
+            ListPreference mDemoFile = (ListPreference) findPreference(KEY_DEMO_FILE);
+            mDemoFile.setValue(sharedPreferences.getString(key, ""));
 		}
 		else if(key.equals(KEY_SERVER_FILE)){
 	        // Sets summary to be the user-description for the selected value
 			changedPreference.setSummary(sharedPreferences.getString(key, ""));
-		    // Debugging
             Log.v(CAT_TAG, "setting server file to "+sharedPreferences.getString(key,""));
             
             // Sets frame values for server file selected
@@ -126,9 +138,22 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             	Log.e(CAT_TAG, "File " + sharedPreferences.getString(key, "") + " not found in list of available server files.");
             }
             editor.apply();
-		    // Debugging
             Log.v(CAT_TAG, "Server frames set to "+sharedPreferences.getString(KEY_SERVER_FRAMES, ""));
+            
+            // Update value to ensure old value is not still being shown
+            ListPreference mServerFileList = (ListPreference) findPreference(KEY_SERVER_FILE);
+            mServerFileList.setValue(sharedPreferences.getString(key, ""));
 		}
+		else if(key.equals(KEY_SERVER_LOCATION)){
+	        // Sets summary to be the user-description for the selected value
+			changedPreference.setSummary(sharedPreferences.getString(key, ""));
+            Log.v(CAT_TAG, "setting server URL to "+sharedPreferences.getString(key,""));
+            
+            // Update text value to ensure old value is not still being shown
+            EditTextPreference mServerLocation = (EditTextPreference) findPreference(KEY_SERVER_LOCATION);
+            mServerLocation.setText(sharedPreferences.getString(key,""));
+		}
+		
 	}
 	
 	@Override

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    
+    <Preference android:key="resetPreferencesSetting"
+        android:title="@string/resetSettingsTitle"
+        android:summary="@string/resetSettingsSummary"/>
     <PreferenceCategory 
         android:title="@string/launchCategory"
         android:key="launchPreferencesKey">
@@ -11,7 +13,7 @@
 	        android:defaultValue="@string/defaultServerLocation"/>
 	    <EditTextPreference
 	        android:key="serverFramesSetting"
-	        android:defaultValue="@string/defaultDemoFrames" />
+	        android:defaultValue="@string/defaultServerFrames" />
 	    <ListPreference
 	        android:key="serverFileSetting"
 	        android:title="@string/serverFileTitle"

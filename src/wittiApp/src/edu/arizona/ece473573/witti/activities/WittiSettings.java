@@ -23,7 +23,6 @@ public class WittiSettings {
     private static final String CAT_TAG = "WITTI_WittiSettings";
 	public static final String KEY_DEMO_FILE = "demoFileSetting";
 	public static final String KEY_DEMO_FRAMES = "demoFramesSetting";
-	public static final String KEY_TAP_SETTING = "tapToRefreshSetting";
 	public static final String KEY_SERVER_LOCATION = "serverLocationSetting";
 	public static final String KEY_SERVER_FILE = "serverFileSetting";
 	public static final String KEY_SERVER_FRAMES = "serverFramesSetting";
@@ -32,6 +31,15 @@ public class WittiSettings {
 	
 	public WittiSettings(Context context) {
 		this.mSettingsContext = context;
+	}
+	
+	/**
+     * Resets all settings to default values
+     */
+	public void resetSettings(){
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		sharedPrefs.edit().clear().commit();
+		PreferenceManager.setDefaultValues(mSettingsContext, R.layout.preferences, true);
 	}
 	
     /**
