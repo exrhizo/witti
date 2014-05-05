@@ -3,6 +3,13 @@
     <Preference android:key="resetPreferencesSetting"
         android:title="@string/resetSettingsTitle"
         android:summary="@string/resetSettingsSummary"/>
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="refreshSetting"
+        android:title="@string/refreshSettingTitle"
+        android:summaryOff="@string/refreshSummaryOff"
+        android:summaryOn="@string/refreshSummaryOn" />
+    
     <PreferenceCategory 
         android:title="@string/launchCategory"
         android:key="launchPreferencesKey">

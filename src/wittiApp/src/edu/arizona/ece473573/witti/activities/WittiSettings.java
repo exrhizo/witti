@@ -21,6 +21,7 @@ import edu.arizona.ece473573.witti.R;
 public class WittiSettings {
 	
     private static final String CAT_TAG = "WITTI_WittiSettings";
+    public static final String KEY_REFRESH_MODE = "refreshSetting";
 	public static final String KEY_DEMO_FILE = "demoFileSetting";
 	public static final String KEY_DEMO_FRAMES = "demoFramesSetting";
 	public static final String KEY_SERVER_LOCATION = "serverLocationSetting";
@@ -40,6 +41,18 @@ public class WittiSettings {
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		sharedPrefs.edit().clear().commit();
 		PreferenceManager.setDefaultValues(mSettingsContext, R.layout.preferences, true);
+	}
+	
+	/**
+     * Gets state of auto refresh setting
+     * 
+     * @return 		true if auto-refresh is enabled, false if manual mode is enabled
+     */
+	public boolean getAutoRefresh(){
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		boolean refreshMode = sharedPreferences.getBoolean(KEY_REFRESH_MODE, false);
+		Log.d(CAT_TAG, "auto refresh is: "+Boolean.toString(refreshMode));
+		return refreshMode;
 	}
 	
     /**

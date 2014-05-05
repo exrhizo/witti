@@ -13,6 +13,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.util.Log;
 import edu.arizona.ece473573.witti.R;
 
@@ -22,6 +23,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	public static final String KEY_DEMO_CATEG = "demoPreferencesKey";
 	public static final String KEY_SERVER_CATEG = "launchPreferencesKey";
 	public static final String KEY_RESET_SETTINGS = "resetPreferencesSetting";
+	public static final String KEY_REFRESH_MODE = "refreshSetting";
 	public static final String KEY_DEMO_FILE = "demoFileSetting";
 	public static final String KEY_DEMO_FRAMES = "demoFramesSetting";
 	public static final String KEY_TAP_SETTING = "tapToRefreshSetting";
@@ -152,6 +154,11 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             // Update text value to ensure old value is not still being shown
             EditTextPreference mServerLocation = (EditTextPreference) findPreference(KEY_SERVER_LOCATION);
             mServerLocation.setText(sharedPreferences.getString(key,""));
+		}
+		else if(key.equals(KEY_REFRESH_MODE)){
+            // Update switch position to ensure old value is not still being shown
+            SwitchPreference mRefreshMode = (SwitchPreference) findPreference(KEY_REFRESH_MODE);
+            mRefreshMode.setChecked(sharedPreferences.getBoolean(key, false));
 		}
 		
 	}

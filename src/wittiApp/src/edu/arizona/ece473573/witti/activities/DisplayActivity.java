@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import edu.arizona.ece473573.witti.R;
 import edu.arizona.ece473573.witti.cloudview.CloudRenderer;
@@ -30,9 +29,9 @@ public class DisplayActivity extends Activity {
     public CloudCamera mCamera;
     public CloudSequence mSequence;
     public WittiSettings mSettings;
+    public Boolean mAutoRefresh;
     
     private Boolean mInDemoMode;
-    private Boolean mAutoRefresh;
 
     private Long mLastRefreshTime;
 
@@ -128,17 +127,10 @@ public class DisplayActivity extends Activity {
     }
 
     /**
-     * For button press to switch between auto-refresh and manual mode.
+     * For button press to reset camera.
      */
-    public void autoRefreshFrame(View view){
-        mAutoRefresh = !mAutoRefresh;
-        Button mRefreshModeButton = (Button)findViewById(R.id.displayAutoRefreshButton);
-        if(mAutoRefresh){
-        	mRefreshModeButton.setText(R.string.displayManualRefreshText);
-        }
-        else{
-        	mRefreshModeButton.setText(R.string.displayAutoRefreshText);
-        }
+    public void resetDisplayCamera(View view){
+    	mCamera.resetCamera();
     }
 
     /**

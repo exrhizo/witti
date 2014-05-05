@@ -116,6 +116,12 @@ public class CloudSequence {
         	mResourceTitle = mDisplay.mSettings.getServerFile();
         	mAvailableFrameCount = mDisplay.mSettings.getServerFrameCount();
         }
+        if(mDisplay.mSettings.getAutoRefresh()){
+        	mDisplay.mAutoRefresh = true;
+        }
+        else{
+        	mDisplay.mAutoRefresh = false;
+        }
         mIncrementOnLoad = true; //no prefetching so autoincrementing is ok
 
         //initialize the sequence to null

@@ -1,12 +1,11 @@
 //ECE 573 Project
 //Team: Witty
 //Date: 4/17/14
-//Author: Brian Smith
+//Author: Brian Smith, Brianna Heersink
 
 package edu.arizona.ece473573.witti.activities;
 
 import android.opengl.Matrix;
-import android.util.Log;
 
 /**
  * This class controls the camera matrix. It is the primary way of changing the current view 
@@ -60,7 +59,7 @@ public class CloudCamera {
     }
 
     /**
-     * Sets the server web address to be used in Launch mode.
+     * Rotates the camera based on motion events
      * 
      * @param 	theta: The current angle calculated from the CloudDisplayView based on how far apart
      * 					the motion events were
@@ -108,5 +107,14 @@ public class CloudCamera {
         	mThetaDecay = 0.0f;
         }
 
+    }
+    
+    /**
+     * Resets camera position to the original view.
+     */
+    public void resetCamera(){
+    	this.setCamera(0.0f, -10.0f, 10.0f,
+                0.0f,  20.0f, 10.0f,
+                0.0f,   0.0f,  1.0f);
     }
 }
