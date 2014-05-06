@@ -36,8 +36,6 @@ public class PointCloudArtist {
     private int mHeightHandle;
     private int mMVPHandle;
 
-    //private float mMinZ;
-
 
     public PointCloudArtist(DisplayActivity display){
         mDisplayActivity = display;
@@ -52,13 +50,11 @@ public class PointCloudArtist {
         //Get the current PointCloud
         PointCloud pc = mDisplayActivity.mSequence.getCurrentFrame();
         if (pc == null){
-            //Log.v(CAT_TAG, "Null point cloud at draw");
             return;
         }
         FloatBuffer vertexBuffer = pc.mVertexBuffer;
         float height = pc.mHeight/6.0f;
         float zBottom = pc.mMinZ - height * (mDisplayActivity.mRenderer.mTime % 1.0f - 1.0f);
-        //Log.v(CAT_TAG, "Color center Z: " + Float.toString(colorCenterZ));
         Utils.checkGlError(CAT_TAG, "Draw, Before Use Program");
         GLES20.glUseProgram(mProgId);
         Utils.checkGlError(CAT_TAG, "Use program");

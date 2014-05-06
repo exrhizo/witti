@@ -5,12 +5,9 @@
 
 package edu.arizona.ece473573.witti.test;
 
-import java.util.concurrent.TimeUnit;
-
 import junit.framework.Assert;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.Button;
 import edu.arizona.ece473573.witti.activities.DisplayActivity;
 import edu.arizona.ece473573.witti.sequence.CloudSequence;
 
@@ -23,7 +20,6 @@ public class AutoDataRefreshTest extends ActivityInstrumentationTestCase2<Displa
 
 	private CloudSequence mCloudSequence;
 	private DisplayActivity mActivity;
-	private Button mAutoRefreshButton;
 	
 	public AutoDataRefreshTest(){
 		super(DisplayActivity.class);
@@ -46,49 +42,35 @@ public class AutoDataRefreshTest extends ActivityInstrumentationTestCase2<Displa
 		setActivityIntent(intent);
 		mActivity = getActivity();
 		mCloudSequence = mActivity.mSequence;
-		mAutoRefreshButton = (Button)mActivity.findViewById(edu.arizona.ece473573.witti.R.id.displayAutoRefreshButton);
+		
 		
 	}
 	
 	public void testAutoRefresh() throws Throwable{
 		
-		// App opens in manual refresh mode; wait for async task for render of first frame
+		// App opens in manual refresh mode; begin auto-refresh mode by changing preference
+		mActivity.mSettings.setAutoRefresh(true);
+		mActivity.mSequence.loadSettings(true);
+		
+		// Wait 0.1 seconds for first frame to be loaded
 		try{
-			mCloudSequence.signal.await(4, TimeUnit.SECONDS);
+			Thread.sleep(100);
 		}catch(InterruptedException e){
-			fail("ASyncTask failed");
+			fail("Sleep interrupted");
 		}
 		
-		// Verify first frame is loaded
-		Assert.assertTrue(mCloudSequence.getCurrentFrameNum() == 0);
-		
-		// Click button to switch to auto refresh mode
-		runTestOnUiThread(new Runnable() {
-			@Override
-			public void run(){
-				mAutoRefreshButton.performClick();
+		// Iterate to test five refresh sequences at 2Hz
+		for(int i = 0; i < 5; i++){
+			// Verify frame is loaded
+			Assert.assertTrue(mCloudSequence.getCurrentFrameNum() == i);
+			
+			// Wait 0.5 seconds for next frame to be loaded
+			try{
+				Thread.sleep(500);
+			}catch(InterruptedException e){
+				fail("Sleep interrupted");
 			}
-		});
-		
-		// Wait 0.5 seconds for next frame to be loaded
-		try{
-			Thread.sleep(500);
-		}catch(InterruptedException e){
-			fail("Sleep interrupted");
 		}
-		
-		// Verify second frame is loaded
-		Assert.assertTrue(mCloudSequence.getCurrentFrameNum() == 1);
-		
-		// Wait 0.5 seconds for next frame to be loaded
-		try{
-			Thread.sleep(500);
-		}catch(InterruptedException e){
-			fail("Sleep interrupted");
-		}
-		
-		// Verify third frame is loaded
-		Assert.assertTrue(mCloudSequence.getCurrentFrameNum() == 2);
 	}
 
 }

@@ -50,8 +50,5 @@ public class PointCloud {
         Log.v(CAT_TAG, "setMinMax. Min: " + Float.toString(mMinZ)
                                  +"Max: " + Float.toString(mMaxZ));
     }
-    // public void loadVertices(FloatBuffer buffer){
-    //     mVertexBuffer = buffer;
-    // }
     
 }

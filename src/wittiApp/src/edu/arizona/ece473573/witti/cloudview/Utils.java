@@ -101,8 +101,6 @@ public class Utils {
         GLES20.glGetProgramiv(iProgId, GLES20.GL_VALIDATE_STATUS, link, 0);
         if (link[0] == GLES20.GL_FALSE) {
             Log.d(CAT_TAG, "Validating Failed");
-            //Log.e(CAT_TAG, GLES20.glGetProgramInfoLog(iProgId));
-            //return 0;
         }
         GLES20.glDeleteShader(iVShader);
         GLES20.glDeleteShader(iFShader);

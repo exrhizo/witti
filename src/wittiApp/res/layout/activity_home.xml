@@ -48,16 +48,6 @@
     	android:text="@string/settings"
     	android:onClick="openSettings" /> 
     	
-    <Button 
-        android:id="@+id/pathTracingButton"
-        android:layout_below="@id/settingsButton"
-        android:layout_centerHorizontal="true"
-        android:layout_width="150dp"
-    	android:layout_height="wrap_content"
-    	android:textSize="20sp"
-    	android:text="@string/pathTracing"
-    	android:onClick="openPathTracing" /> 
-    	
     <TextView 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 

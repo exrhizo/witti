@@ -38,7 +38,7 @@ public class CloudRenderer implements Renderer {
     
     private PointCloudArtist mPointCloudArtist;
 
-    //Matricies to store the model, view and projection for the "camera"
+    //Matrices to store the model, view and projection for the "camera"
     private float[] mModelMatrix = new float[16];
     private CloudCamera mCamera;
     private float[] mProjectionMatrix = new float[16];
@@ -46,7 +46,6 @@ public class CloudRenderer implements Renderer {
     //Combined matrix used in shader
     private float[] mMVPMatrix = new float[16];
 
-    //TODO implement time based effects
     public float mTime; //For visual effects
     
     private int mZoom;
@@ -59,7 +58,6 @@ public class CloudRenderer implements Renderer {
      */
     public CloudRenderer(DisplayActivity display, CloudCamera cc) {
         Log.v(CAT_TAG, "CloudRenderer constructor");
-        //mDisplayActivity = display;
         mPointCloudArtist = new PointCloudArtist(display);
         mTime = 0.0f;
         mCamera = cc;

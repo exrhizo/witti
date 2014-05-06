@@ -78,7 +78,6 @@ public class DisplayActivity extends Activity {
         mSequence.loadSettings(mInDemoMode);
         mSequence.loadNext();
   
-        // tried doing this in CloudSurfaceView but caused null pointer
         mRenderer = new CloudRenderer(this, mCamera);
         mCloudSurfaceView.setEGLContextClientVersion(2);
         mCloudSurfaceView.setRenderer(mRenderer);
@@ -142,11 +141,15 @@ public class DisplayActivity extends Activity {
         toast.show();
     }
     
+    /**
+     * Sets preferences for test mode using dummy data files in manual mode.
+     */
     public void setTestSettings(){
     	mSettings.setDemoFile("dummy");
     	mSettings.setDemoFrameCount(5);
     	mSettings.setServerFile("dummy");
     	mSettings.setServerFrameCount(5);
     	mSettings.setServerLocation("http://www.rhizomatos.com/static/lidar/");
+    	mSettings.setAutoRefresh(false);
     }
 }

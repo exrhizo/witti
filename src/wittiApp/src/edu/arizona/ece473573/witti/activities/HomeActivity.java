@@ -26,7 +26,7 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         
-        //Initialize settings
+        //Initialize settings to default values
         PreferenceManager.setDefaultValues(this, R.layout.preferences, false);
     }
 	 
@@ -47,12 +47,6 @@ public class HomeActivity extends Activity {
     public void openSettings(View view) {
     	//Opens settings
         Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
-        startActivity(intent);
-	}
-    
-    public void openPathTracing(View view) {
-    	//Opens PathTracingActivity
-    	Intent intent = new Intent(HomeActivity.this, PathTracingActivity.class);
         startActivity(intent);
 	}
     

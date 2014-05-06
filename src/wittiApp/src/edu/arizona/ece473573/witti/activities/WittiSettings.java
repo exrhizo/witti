@@ -51,8 +51,21 @@ public class WittiSettings {
 	public boolean getAutoRefresh(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		boolean refreshMode = sharedPreferences.getBoolean(KEY_REFRESH_MODE, false);
-		Log.d(CAT_TAG, "auto refresh is: "+Boolean.toString(refreshMode));
+		Log.d(CAT_TAG, "get: auto refresh is: "+Boolean.toString(refreshMode));
 		return refreshMode;
+	}
+	
+	/**
+     * Sets the state of auto refresh setting
+     * 
+     * @param 		true for auto-refresh enabled, false for manual mode enabled
+     */
+	public void setAutoRefresh(boolean bool){
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putBoolean(KEY_REFRESH_MODE, bool);
+    	editor.apply();
+		Log.d(CAT_TAG, "set: auto refresh is: "+Boolean.toString(sharedPreferences.getBoolean(KEY_REFRESH_MODE, false)));
 	}
 	
     /**
@@ -75,7 +88,6 @@ public class WittiSettings {
 	public String getServerLocation(){
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
 		String location = sharedPreferences.getString(KEY_SERVER_LOCATION, "");
-		// Debugging
 		Log.d(CAT_TAG, "server location: "+location);
 		return location;
 	}
