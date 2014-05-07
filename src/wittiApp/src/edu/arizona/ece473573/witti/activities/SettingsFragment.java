@@ -30,10 +30,13 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 	public static final String KEY_SERVER_LOCATION = "serverLocationSetting";
 	public static final String KEY_SERVER_FILE = "serverFileSetting";
 	public static final String KEY_SERVER_FRAMES = "serverFramesSetting";
+	public static final String KEY_LIVE_MODE = "liveSetting";
 	
     public WittiSettings mSettings;
 	public String[] serverFileNames;
 	public String[] serverFileFrames;
+	public String[] demoFileNames;
+	public String[] demoFileFrames;
 	
 	public SettingsFragment() {
 	}
@@ -51,23 +54,38 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		serverFileNames = new String[mServerFilesAvailable.length];
 		serverFileFrames = new String[mServerFilesAvailable.length];
 		
-		// Reformats file name and frame count data to be displayed in  alert dialog
+		// Parses file name and frame count data into separate arrays for use in settings
 		for (int i = 0; i < mServerFilesAvailable.length; i++) {
 			String[] mServerFileAndFrames = ((String) mServerFilesAvailable[i]).split("\\s");
 			serverFileNames[i] = mServerFileAndFrames[0];
 			serverFileFrames[i] = mServerFileAndFrames[1];
 		}
-		        
+		
         // Sets default summary for list preference (server file)
         ListPreference mServerFileList = (ListPreference) findPreference(KEY_SERVER_FILE);
         mServerFileList.setSummary(mServerFileList.getValue());
         // Adds list of server files available to ListPreference
         mServerFileList.setEntries(serverFileNames);
         mServerFileList.setEntryValues(serverFileNames);
+		
+        // Gets list of demo files available and number of frames
+		CharSequence[] mDemoFilesAvailable = mSettings.getDemoFilesAvailable();
+		demoFileNames = new String[mDemoFilesAvailable.length];
+		demoFileFrames = new String[mDemoFilesAvailable.length];
+		
+		// Parses file name and frame count data into separate arrays for use in settings
+		for (int i = 0; i < mDemoFilesAvailable.length; i++) {
+			String[] mDemoFileAndFrames = ((String) mDemoFilesAvailable[i]).split("\\s");
+			demoFileNames[i] = mDemoFileAndFrames[0];
+			demoFileFrames[i] = mDemoFileAndFrames[1];
+		}
         
         // Sets default summary for list preference (demo file)
         ListPreference mDemoFile = (ListPreference) findPreference(KEY_DEMO_FILE);
         mDemoFile.setSummary(mDemoFile.getValue());
+        // Adds list of demo files available to ListPreference
+        mDemoFile.setEntries(demoFileNames);
+        mDemoFile.setEntryValues(demoFileNames);
         
         // Sets default summary for edit text preference (server location)
         EditTextPreference mServerLocation = (EditTextPreference) findPreference(KEY_SERVER_LOCATION);
@@ -105,16 +123,22 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 			changedPreference.setSummary(sharedPreferences.getString(key, ""));
             Log.v(CAT_TAG, "setting demo file to "+sharedPreferences.getString(key,""));
             
-            // Sets frame values for demo file selected
+         // Sets frame values for demo file selected
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            if(sharedPreferences.getString(key, "").equals("sweep")){
-            	editor.putString(KEY_DEMO_FRAMES, getActivity().getString(R.string.defaultDemoFrames));
-            }
-            else if (sharedPreferences.getString(key, "").equals("dummy")){
-            	editor.putString(KEY_DEMO_FRAMES, getActivity().getString(R.string.defaultDemoFrames));
+            Boolean mFileFound = false;
+            for (int i = 0; i < demoFileNames.length; i++) {
+    			if(sharedPreferences.getString(key, "") == demoFileNames[i]){
+    				editor.putString(KEY_DEMO_FRAMES, demoFileFrames[i]);
+    				Log.v(CAT_TAG, "Setting demo frames to " + demoFileFrames[i]);
+    				mFileFound = true;
+    			}
+    		}
+            if(mFileFound == false){
+            	// If file is not found in list of server files available, log error.
+            	Log.e(CAT_TAG, "File " + sharedPreferences.getString(key, "") + " not found in list of available demo files.");
             }
             editor.apply();
-            Log.v(CAT_TAG, "setting demo frames to "+sharedPreferences.getString(KEY_DEMO_FRAMES, ""));
+            Log.v(CAT_TAG, "Demo frames set to "+sharedPreferences.getString(KEY_DEMO_FRAMES, ""));
             
             // Update value to ensure old value is not still being shown
             ListPreference mDemoFile = (ListPreference) findPreference(KEY_DEMO_FILE);
@@ -158,6 +182,11 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 		else if(key.equals(KEY_REFRESH_MODE)){
             // Update switch position to ensure old value is not still being shown
             SwitchPreference mRefreshMode = (SwitchPreference) findPreference(KEY_REFRESH_MODE);
+            mRefreshMode.setChecked(sharedPreferences.getBoolean(key, false));
+		}		
+		else if(key.equals(KEY_LIVE_MODE)){
+            // Update switch position to ensure old value is not still being shown
+            SwitchPreference mRefreshMode = (SwitchPreference) findPreference(KEY_LIVE_MODE);
             mRefreshMode.setChecked(sharedPreferences.getBoolean(key, false));
 		}
 		

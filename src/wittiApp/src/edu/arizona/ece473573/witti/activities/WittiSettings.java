@@ -27,6 +27,7 @@ public class WittiSettings {
 	public static final String KEY_SERVER_LOCATION = "serverLocationSetting";
 	public static final String KEY_SERVER_FILE = "serverFileSetting";
 	public static final String KEY_SERVER_FRAMES = "serverFramesSetting";
+	public static final String KEY_LIVE_MODE = "liveSetting";
 	
 	private Context mSettingsContext;
 	
@@ -49,9 +50,9 @@ public class WittiSettings {
      * @return 		true if auto-refresh is enabled, false if manual mode is enabled
      */
 	public boolean getAutoRefresh(){
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		boolean refreshMode = sharedPreferences.getBoolean(KEY_REFRESH_MODE, false);
-		Log.d(CAT_TAG, "get: auto refresh is: "+Boolean.toString(refreshMode));
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		boolean refreshMode = sharedPrefs.getBoolean(KEY_REFRESH_MODE, false);
+		Log.d(CAT_TAG, "auto refresh mode is "+Boolean.toString(refreshMode));
 		return refreshMode;
 	}
 	
@@ -61,11 +62,38 @@ public class WittiSettings {
      * @param 		true for auto-refresh enabled, false for manual mode enabled
      */
 	public void setAutoRefresh(boolean bool){
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		SharedPreferences.Editor editor = sharedPreferences.edit();
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		SharedPreferences.Editor editor = sharedPrefs.edit();
 		editor.putBoolean(KEY_REFRESH_MODE, bool);
     	editor.apply();
-		Log.d(CAT_TAG, "set: auto refresh is: "+Boolean.toString(sharedPreferences.getBoolean(KEY_REFRESH_MODE, false)));
+		Log.d(CAT_TAG, "auto refresh mode has been set to "+Boolean.toString
+				(sharedPrefs.getBoolean(KEY_REFRESH_MODE, false)));
+	}
+	
+	/**
+     * Gets state of live data setting
+     * 
+     * @return 		true if auto-refresh is enabled, false if manual mode is enabled
+     */
+	public boolean getLiveMode(){
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		boolean liveMode = sharedPrefs.getBoolean(KEY_LIVE_MODE, false);
+		Log.d(CAT_TAG, "live mode is "+Boolean.toString(liveMode));
+		return liveMode;
+	}
+	
+	/**
+     * Sets the state of live data setting
+     * 
+     * @param 		true for auto-refresh enabled, false for manual mode enabled
+     */
+	public void setLiveMode(boolean bool){
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		SharedPreferences.Editor editor = sharedPrefs.edit();
+		editor.putBoolean(KEY_LIVE_MODE, bool);
+    	editor.apply();
+		Log.d(CAT_TAG, "live mode has been set to "+Boolean.toString
+				(sharedPrefs.getBoolean(KEY_LIVE_MODE, false)));
 	}
 	
     /**
@@ -86,8 +114,8 @@ public class WittiSettings {
      * @return 		the server web address
      */
 	public String getServerLocation(){
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String location = sharedPreferences.getString(KEY_SERVER_LOCATION, "");
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		String location = sharedPrefs.getString(KEY_SERVER_LOCATION, "");
 		Log.d(CAT_TAG, "server location: "+location);
 		return location;
 	}
@@ -120,8 +148,7 @@ public class WittiSettings {
 	    // Convert to CharSequence
 	    CharSequence[] mCharSequenceFiles = mArrayListFiles.toArray(new CharSequence[mArrayListFiles.size()]);
 	    
-	    return mCharSequenceFiles;
-	    	
+	    return mCharSequenceFiles; 	
 	}
 	
     /**
@@ -143,8 +170,8 @@ public class WittiSettings {
      * @return 		the selected server file name
      */
 	public String getServerFile(){
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String mFile = sharedPreferences.getString(KEY_SERVER_FILE, "");
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		String mFile = sharedPrefs.getString(KEY_SERVER_FILE, "");
 		Log.d(CAT_TAG, "server file name: "+mFile);
 		return mFile;
 	}
@@ -168,11 +195,42 @@ public class WittiSettings {
      * @return 		the frame count for the selected server file name
      */
 	public Integer getServerFrameCount(){
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String mFramesString = sharedPreferences.getString(KEY_SERVER_FRAMES, "");
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		String mFramesString = sharedPrefs.getString(KEY_SERVER_FRAMES, "");
 		Integer mFramesInt = Integer.valueOf(mFramesString);
 		Log.d(CAT_TAG, "server frames count: "+mFramesInt);
 		return mFramesInt;
+	}
+	
+    /**
+     * Gets the demo files available on the mobile device.
+     * 
+     * @return 		an array in the format "fileName frameCount".
+     * @throws 	IOException
+     */
+	public CharSequence[] getDemoFilesAvailable(){
+		//Read from raw file
+		InputStream is = mSettingsContext.getResources().openRawResource(R.raw.demo_data_available);
+        BufferedReader in = new BufferedReader(new InputStreamReader(is));
+        
+	    CharSequence mStringLine;
+		ArrayList<CharSequence> mArrayListFiles = new ArrayList<CharSequence>();
+	    
+		//parse into array
+	    try {
+			while ((mStringLine = in.readLine()) != null) {
+				if(mStringLine.charAt(0) != '%') {
+					mArrayListFiles.add(mStringLine);
+				}
+			}
+		} catch (IOException e) {
+			Log.e(CAT_TAG, "Couldn't read from resource file.");
+		}
+	    
+	    // Convert to CharSequence
+	    CharSequence[] mCharSequenceFiles = mArrayListFiles.toArray(new CharSequence[mArrayListFiles.size()]);
+	    
+	    return mCharSequenceFiles; 	
 	}
 	
     /**
@@ -193,15 +251,15 @@ public class WittiSettings {
      * @return 		the selected demo file name
      */
 	public String getDemoFile(){
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String mFile = sharedPreferences.getString(KEY_DEMO_FILE, "");
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		String mFile = sharedPrefs.getString(KEY_DEMO_FILE, "");
 		return mFile;
 	}
 	
     /**
      * Sets the demo file frame count
      * 
-     * @param 	frameCount	is the number of frames available for a file on the server
+     * @param 	frameCount	is the number of frames available for a demo file
      */	
 	public void setDemoFrameCount(Integer frameCount){
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
@@ -216,8 +274,8 @@ public class WittiSettings {
      * @return 		the frame count for the selected demo file name
      */
 	public Integer getDemoFrameCount(){
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
-		String mFrameCount = sharedPreferences.getString(KEY_DEMO_FRAMES, "0");
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mSettingsContext);
+		String mFrameCount = sharedPrefs.getString(KEY_DEMO_FRAMES, "0");
 		return Integer.valueOf(mFrameCount);
 	}
 

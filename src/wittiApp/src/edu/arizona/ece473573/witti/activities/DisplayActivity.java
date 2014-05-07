@@ -151,5 +151,6 @@ public class DisplayActivity extends Activity {
     	mSettings.setServerFrameCount(5);
     	mSettings.setServerLocation("http://www.rhizomatos.com/static/lidar/");
     	mSettings.setAutoRefresh(false);
+    	mSettings.setLiveMode(false);
     }
 }

@@ -99,7 +99,7 @@ public class CloudSequence {
     public void loadSettings(Boolean inDemoMode) {
         //pause draw if changing settings
         cancelTasks();
-        mIsLive = true;     //not yet implemented
+        mIsLive = mDisplay.mSettings.getLiveMode();
         mInDemoMode = inDemoMode; //demo or online load
         if(inDemoMode){
             Log.v(CAT_TAG, "Loading settings for demo.");

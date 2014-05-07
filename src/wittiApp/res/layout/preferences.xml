@@ -13,6 +13,12 @@
     <PreferenceCategory 
         android:title="@string/launchCategory"
         android:key="launchPreferencesKey">
+	    <SwitchPreference
+            android:defaultValue="false"
+            android:key="liveSetting"
+            android:title="@string/liveSettingTitle"
+            android:summaryOff="@string/liveSummaryOff"
+             android:summaryOn="@string/liveSummaryOn" />
 	    <EditTextPreference
 	        android:key="serverLocationSetting" 
 	        android:title="@string/serverLocationTitle"
@@ -35,8 +41,6 @@
 	        android:key="demoFileSetting"
 	        android:title="@string/demoFileTitle"
 	        android:dialogTitle="@string/demoFileDialog" 
-	        android:entries="@array/demoFileEntries"
-            android:entryValues="@array/demoFileEntryValues"
             android:defaultValue="@string/defaultDemoFile" />
 	    <EditTextPreference
 	        android:key="demoFramesSetting"

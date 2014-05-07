@@ -18,6 +18,9 @@
     <string name="refreshSettingTitle">Auto-Refresh</string>
     <string name="refreshSummaryOff">Data will be refreshed manually</string>
     <string name="refreshSummaryOn">Data will be refreshed automatically</string>
+    <string name="liveSettingTitle">Live Data</string>
+    <string name="liveSummaryOff">Prerecorded data on the server will be used in launch mode</string>
+    <string name="liveSummaryOn">Live data on the server will be used in launch mode</string>
     <string name="serverLocationTitle">Select Server Location</string>
     <string name="serverLocationDialog">Enter the desired web address of the server for Launch mode</string>
     <string name="defaultServerLocation">http://www.rhizomatos.com/static/lidar/</string>
