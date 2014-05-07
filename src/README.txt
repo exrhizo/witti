@@ -14,6 +14,13 @@ Launch       o- Displays data from a configured HTTP address
 Demo         o- Displays data local to the phone
 Settings     o- Allows modification of the default server location, sequences to load,
                 and data refresh mode.
+				
+
+KNOWN TESTING ISSUES 
+--------------------
+The DemoPlaybackTest.java sometimes fails when run with the other tests. If this occurs, 
+please re-test DemoPlaybackTest.java individually.
+
 
 SERVER SETUP
 ------------
