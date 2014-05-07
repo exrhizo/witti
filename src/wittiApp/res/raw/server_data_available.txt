@@ -2,5 +2,6 @@
 % format:
 % file_name number_of_frames
 % There will be file_name_0000.bin file_name_0001.bin etc..
+parking_lot 30
 sweep 5
 dummy 5

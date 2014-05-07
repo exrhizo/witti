@@ -38,6 +38,10 @@ public class CloudSequence {
     public static final int ERROR_NO_CONNECTION = 1;
     public static final int ERROR_IO = 2;
     public static final int ERROR_CANCEL = 3;
+    public static final int ERROR_EMPTY_RESPONSE = 4;
+    public static final int ERROR_RESPONSE_ERROR = 5;
+    public static final int NO_NEW_LIVE_FRAME = 6;
+    public static final int ERROR_MISSING_HEADER_CTIME = 7;
 
     private static final String CAT_TAG = "WITTI_CloudSequence";
     
@@ -52,8 +56,9 @@ public class CloudSequence {
     //Boolean values to control behavior
     private Boolean mInDemoMode;
     private Boolean mIsLive;              //currently unimplemented A requirement
+    protected int mPreviousCTime;
     private Boolean mIncrementOnLoad;     //default to true, included to allow prefetching
-    //private Boolean mHasSettings;
+    
 
     private String mUrlBase;              //web address to download from
     private String mSequenceTitle;        //title of web sequence to load
@@ -72,6 +77,7 @@ public class CloudSequence {
     public CloudSequence(DisplayActivity display){
         mDisplay = display;
         mCurrentFrame = 0; //There are no frames yet
+        mPreviousCTime = 0; //Start at the begining of time
         mSequence = new ArrayList<PointCloud>();
         mTasks = new HashMap<Integer, ParseTask>();
         //This may give a performance warning but
@@ -93,28 +99,30 @@ public class CloudSequence {
     public void loadSettings(Boolean inDemoMode) {
         //pause draw if changing settings
         cancelTasks();
-        mIsLive = false;     //not yet implemented
+        mIsLive = true;     //not yet implemented
         mInDemoMode = inDemoMode; //demo or online load
         if(inDemoMode){
-        	Log.v(CAT_TAG, "Loading settings for demo.");
+            Log.v(CAT_TAG, "Loading settings for demo.");
         }
         else{
-        	Log.v(CAT_TAG, "Loading settings for server.");
+            Log.v(CAT_TAG, "Loading settings for server.");
         }
         mUrlBase = mDisplay.mSettings.getServerLocation();
         if (mUrlBase.charAt(mUrlBase.length()-1) != '/'){
             mUrlBase = mUrlBase + '/';
         }
+        mResourceTitle = mDisplay.mSettings.getDemoFile();
+        mSequenceTitle = mDisplay.mSettings.getServerFile();
         if (mInDemoMode){
             //Load demo settings
-        	mSequenceTitle = mDisplay.mSettings.getDemoFile();
-        	mResourceTitle = mDisplay.mSettings.getDemoFile();
-        	mAvailableFrameCount = mDisplay.mSettings.getDemoFrameCount();
+            mAvailableFrameCount = mDisplay.mSettings.getDemoFrameCount();
+        }else if (mIsLive){
+            //In live mode
+            mAvailableFrameCount = 3;
         }else{
             //Load server settings
-        	mSequenceTitle = mDisplay.mSettings.getServerFile();
-        	mResourceTitle = mDisplay.mSettings.getServerFile();
-        	mAvailableFrameCount = mDisplay.mSettings.getServerFrameCount();
+            mAvailableFrameCount = mDisplay.mSettings.getServerFrameCount();
+
         }
         //Load auto-refresh setting
         mDisplay.mAutoRefresh = mDisplay.mSettings.getAutoRefresh();
@@ -136,11 +144,16 @@ public class CloudSequence {
      */
     public void refresh(){
         int next = (mCurrentFrame + 1) % mAvailableFrameCount;
+        int prev = ((mCurrentFrame - 1) % mAvailableFrameCount + mAvailableFrameCount)% mAvailableFrameCount;
         if (mSequence.get(next) == null){
             if (! mTasks.containsKey(next)){
                 loadNext();
             }
+            if (mIsLive) mSequence.set(prev, null);
         }else{
+            if (mIsLive) mSequence.set(mCurrentFrame, null);
+            //this could be a race condition but the only
+            //effect would be for one opengl frame to be blank
             mCurrentFrame = next;
         }
     }
@@ -211,7 +224,7 @@ public class CloudSequence {
      * @return current frame number.
      */
     public int getCurrentFrameNum(){
-    	return mCurrentFrame;
+        return mCurrentFrame;
     }
     
     /**
@@ -220,7 +233,7 @@ public class CloudSequence {
      * @return PointCloud at index i.
      */
     public PointCloud getSpecifiedFrame(int i){
-    	return mSequence.get(i);
+        return mSequence.get(i);
     }
     
     /**
@@ -229,7 +242,7 @@ public class CloudSequence {
      * @return size of sequence.
      */
     public int getSequenceSize(){
-    	return mSequence.size();
+        return mSequence.size();
     }
 
     /**
@@ -254,6 +267,8 @@ public class CloudSequence {
                 mCurrentFrame = (mCurrentFrame + 1) % mAvailableFrameCount;
             }
 
+        }else if (result==NO_NEW_LIVE_FRAME){
+            Log.v(CAT_TAG, "No new live frame.");
         }else{
             mDisplay.displayError(error_string);
         }
@@ -289,8 +304,7 @@ public class CloudSequence {
         //Will be called concurrently
         String result;
         if (mIsLive){
-            //TODO A requirement
-            result = "";
+            result = mUrlBase + String.format("live.php?ctime=%d", mPreviousCTime);
         }else{
             result = mUrlBase + mSequenceTitle + String.format("_%04d.bin", position);
         }
@@ -349,15 +363,33 @@ public class CloudSequence {
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
                 
+
+
                 conn.connect();
                 int response = conn.getResponseCode();
                 if(response != 200){
-                    //TODO error
+                    Log.e(CAT_TAG, "HTTP Error code: "+Integer.toString(response));
+                    return ERROR_RESPONSE_ERROR;
+                }
+
+                if (CloudSequence.this.mIsLive){
+                    String ctime_string = conn.getHeaderField("ctime");
+                    if (ctime_string == null){
+                        Log.e(CAT_TAG, "Missing ctime in HTTP header");
+                        return ERROR_MISSING_HEADER_CTIME;
+                    }
+                    int ctime = Integer.parseInt(ctime_string);
+                    if (ctime <= CloudSequence.this.mPreviousCTime){
+                        return NO_NEW_LIVE_FRAME;
+                    }else{
+                        CloudSequence.this.mPreviousCTime = ctime;
+                    }
                 }
 
                 int length = conn.getContentLength();
                 if (length < 1){
-                    //TODO error
+                    Log.e(CAT_TAG, "Empty HTTP content: "+Integer.toString(length));
+                    return ERROR_EMPTY_RESPONSE;
                 }
 
                 is = conn.getInputStream();
@@ -406,6 +438,7 @@ public class CloudSequence {
         @Override
         protected void onCancelled (Integer result){
             //Runs on UI thread
+            Log.d(CAT_TAG, "Task onCancelled");
             CloudSequence.this.onLoadCancel(result, mPosition, mErrorString);
         }
 
