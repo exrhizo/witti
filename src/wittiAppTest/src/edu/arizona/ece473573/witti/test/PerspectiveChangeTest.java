@@ -9,7 +9,6 @@ import junit.framework.Assert;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import edu.arizona.ece473573.witti.activities.CloudCamera;
 import edu.arizona.ece473573.witti.activities.DisplayActivity;
 import edu.arizona.ece473573.witti.cloudview.CloudSurfaceView;
