@@ -1,0 +1,12 @@
+Application Name: Wirelessly Integrating Teleoperation Instrument  (WITTI)
+Team: Witty
+Authors: Brianna Heersink, Brian Smith, Alex Warren
+Date: 06 May 2014
+
+INTALL
+------
+
+RUNNING AND TESTING WITTI APP 
+-----------------
+The Witti app and test app can run on android devices using API14 and higher. Additionally, if running on 
+an emulator, the Android Virtual Device shall have "Use Host GPU" enabled.
