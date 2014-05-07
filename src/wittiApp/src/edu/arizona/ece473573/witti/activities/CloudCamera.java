@@ -6,6 +6,7 @@
 package edu.arizona.ece473573.witti.activities;
 
 import android.opengl.Matrix;
+import android.util.Log;
 
 /**
  * This class controls the camera matrix. It is the primary way of changing the current view 
@@ -18,8 +19,9 @@ public class CloudCamera {
 	
     //private long mLastUpdateTime;
     private float[] mViewMatrix;
-    float eyeX, eyeY;
+    float eyeX, eyeY, eyeZ;
     float lookX, lookY, lookZ;
+    float currThetaX, currThetaY;
     float mThetaDecay;
     
     private float mSpinRate = 0.85f;
@@ -28,7 +30,9 @@ public class CloudCamera {
     	
     	mViewMatrix = new float[16];
 
-        eyeX = 0f; eyeY = 0f;
+        eyeX = 0f; 
+        eyeY = -10.0f;
+        eyeZ = 10.0f;
 
         lookX = 0.0f;
         lookY = 20.0f;
@@ -68,6 +72,8 @@ public class CloudCamera {
 		
 		float tempX, tempY, tempZ;
 		
+		currThetaX = thetaX; currThetaY = thetaY;
+		
 		//Simple rotation matrix calculations to rotate about the Z-axis
 		tempX = (float) ((lookX * Math.cos(thetaX)) - (lookY * Math.sin(thetaX)));
 		tempY = (float) ((lookX * Math.sin(thetaX)) + (lookY * Math.cos(thetaX)));
@@ -78,9 +84,9 @@ public class CloudCamera {
 		tempX = (float) ((lookX * Math.cos(thetaY)) - (lookZ * Math.sin(thetaY)));
 		tempZ = (float) ((-lookX * Math.sin(thetaY)) + (lookZ * Math.cos(thetaY)));
 		lookX = tempX;
-		lookZ = tempZ;
-
-		this.setCamera(0.0f, -10.0f, 10.0f,
+		lookZ = tempZ;	
+		
+		this.setCamera(eyeX, eyeY, eyeZ,
 				lookX, lookY, lookZ,
                 0.0f,   0.0f,  1.0f);
 		
@@ -113,8 +119,52 @@ public class CloudCamera {
      * Resets camera position to the original view.
      */
     public void resetCamera(){
+        eyeX = 0f; 
+        eyeY = -10.0f;
+        eyeZ = 10.0f;
+
+        lookX = 0.0f;
+        lookY = 20.0f;
+        lookZ = 10.0f;
+        
     	this.setCamera(0.0f, -10.0f, 10.0f,
                 0.0f,  20.0f, 10.0f,
                 0.0f,   0.0f,  1.0f);
     }
+
+	public void zoomCamera(float zoom) {
+		
+		//Get look unit vector
+		float mag = (float)Math.sqrt(Math.pow(lookX, 2) + Math.pow(lookY, 2) + Math.pow(lookZ, 2));
+		float xDir = lookX / mag;
+		float yDir = lookY / mag;
+		float zDir = lookZ / mag;
+		
+		//As zoom gets bigger, ie distance between pointers increases
+		//then it should zoom in
+		eyeY += zoom * yDir;
+		eyeX += zoom * xDir;
+		eyeZ += zoom * zDir;
+		//lookY = lookY / zoom;
+		
+		lookY += zoom * yDir;
+		lookX += zoom * xDir;
+		lookZ += zoom * zDir;
+		
+		Log.d(debug, "eyeY: " + eyeY + " zoom =" + zoom);
+		
+		this.setCamera(eyeX, eyeY, eyeZ,
+				lookX,  lookY, lookZ,
+                0.0f,   0.0f,  1.0f);
+	}
+	
+	public float getThetaX()
+	{
+		return currThetaX;
+	}
+	
+	public float getThetaY()
+	{
+		return currThetaY;
+	}
 }
