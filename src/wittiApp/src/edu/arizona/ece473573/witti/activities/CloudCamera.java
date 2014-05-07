@@ -77,10 +77,10 @@ public class CloudCamera {
 		lookX = tempX;
 		lookY = tempY;
 		
-		//Add the rotation about the y-axis
-		tempX = (float) ((lookX * Math.cos(thetaY)) - (lookZ * Math.sin(thetaY)));
-		tempZ = (float) ((-lookX * Math.sin(thetaY)) + (lookZ * Math.cos(thetaY)));
-		lookX = tempX;
+		//Add the rotation about the x-axis
+		tempY = (float) ((lookY * Math.cos(thetaY)) - (lookZ * Math.sin(thetaY)));
+		tempZ = (float) ((lookY * Math.sin(thetaY)) + (lookZ * Math.cos(thetaY)));
+		lookY = tempY;
 		lookZ = tempZ;	
 		
 		this.setCamera(eyeX, eyeY, eyeZ,
