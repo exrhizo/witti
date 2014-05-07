@@ -1,4 +1,10 @@
+This code has been developed by Matt Bunting, extending work done by Jonathan Sprinkle and originally based on code by:
+NetGroup, Politecnico di Torino (Italy)
+CACE Technologies, Davis (California)
+See readVelodyne.cpp for details about the original distribution.
 
+Alex Warren modified this code to provide point cloud files to the
+WITTI app. Details on its usage can be found in the src/README.txt
 
 
 Dependencies
