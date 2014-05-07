@@ -1,0 +1,14 @@
+
+
+
+Dependencies
+* PCAP library
+  in ubuntu:
+  > sudo apt-get install libpcap-dev
+* cmake
+
+Installation
+
+> mkdir build && cd build
+> cmake ..
+> make -j
