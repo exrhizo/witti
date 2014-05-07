@@ -1,22 +1,23 @@
 package edu.arizona.ece473573.witti.test;
 
 import junit.framework.Assert;
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.MotionEvent;
-import android.widget.Button;
 import edu.arizona.ece473573.witti.activities.CloudCamera;
 import edu.arizona.ece473573.witti.activities.DisplayActivity;
 import edu.arizona.ece473573.witti.cloudview.CloudSurfaceView;
 
+/**
+ * 
+ * 	A.5 Perspective Change Requirement: "The phone application software shall be capable of changing
+ * 											the perspective of the displayed data on the phone."
+ */
 public class PerspectiveChangeTest extends ActivityInstrumentationTestCase2<DisplayActivity>{
 	
 	private CloudCamera mCloudCamera;
 	private CloudSurfaceView mCloudSurface;
 	private DisplayActivity mActivity;
-	private Button mRefreshButton;
 	
 	public PerspectiveChangeTest(){
 		super(DisplayActivity.class);
@@ -43,11 +44,14 @@ public class PerspectiveChangeTest extends ActivityInstrumentationTestCase2<Disp
 		
 	}
 	
-	public void testPerspectiveChange()
+	/**
+	 * 
+	 * 	This test does only a rotation change. All expected values were calculated on paper by hand
+	 */
+	public void testRotationChange()
 	{
-		
+		float epsilon = 5.96e-8f;
 
-		Instrumentation inst = getInstrumentation();
 		//Testing with theta = 0.08 rad for thetaX & thetaY
 		//--> currX - prevX && currY - prevY == 28.8
 		float currX = 40f;
@@ -56,21 +60,82 @@ public class PerspectiveChangeTest extends ActivityInstrumentationTestCase2<Disp
 		float prevX = 11.2f;
 		float prevY = 21.2f;
 		
-		//Create the down motion event using the prev values
-		MotionEvent down =  MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 
-				MotionEvent.ACTION_DOWN, prevX, prevY, 0);
-		
-		inst.sendPointerSync(down);
-		
-		//Create the move motion event using the curr values
-		MotionEvent move = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), 
-				MotionEvent.ACTION_MOVE, currX, currY, 0);
-		
-		inst.sendPointerSync(move);
+		mCloudCamera.rotateCamera(	(currX - prevX)/mCloudSurface.getRadius(), 
+									(currY - prevY)/mCloudSurface.getRadius());
 		
 		SystemClock.sleep(100);
 		
 		Assert.assertTrue(mCloudCamera.getThetaX() == 0.08f);
 		Assert.assertTrue(mCloudCamera.getThetaY() == 0.08f);
+		
+		SystemClock.sleep(100);
+		
+		//[x, y, z]
+		float [] lookVals = mCloudCamera.getLook();
+		
+		//Comparing two floats the IBM way
+		//Test value calculated on paper
+		//Comparing lookX
+		Assert.assertTrue(Math.abs((lookVals[0]/-2.392329) - 1) < epsilon);
+		
+		//Comparing lookY
+		Assert.assertTrue(Math.abs((lookVals[1]/19.9360341) - 1) < epsilon);
+		
+		//Comparing lookZ
+		Assert.assertTrue(Math.abs((lookVals[2]/10.0957439) - 1) < epsilon);
+	}
+	
+
+	/**
+	 * 
+	 * 	This test does only a rotation change then performs a zoom. 
+	 * 	All expected values were calculated on paper by hand
+	 */
+	public void testZoom()
+	{
+
+		float epsilon = 5.96e-8f;
+
+		//Testing with theta = 0.08 rad for thetaX & thetaY
+		//--> currX - prevX && currY - prevY == 28.8
+		float currX = 40f;
+		float currY = 50f;
+		
+		float prevX = 11.2f;
+		float prevY = 21.2f;
+		
+		mCloudCamera.rotateCamera(	(currX - prevX)/mCloudSurface.getRadius(), 
+									(currY - prevY)/mCloudSurface.getRadius());
+		
+		//Sending a zoom value of 1.1
+		mCloudCamera.zoomCamera(1.1f);
+		
+		SystemClock.sleep(100);
+		
+		float [] lookVals = mCloudCamera.getLook();
+		
+		float [] eyeVals = mCloudCamera.getEye();
+		
+		//Comparing updated eye values
+		//Actual values calculated on paper
+		//eyeX
+		Assert.assertTrue(Math.abs((eyeVals[0]/-0.11709221667) - 1) < epsilon);
+		//eyeY
+		Assert.assertTrue(Math.abs((eyeVals[1]/-9.02423352997) - 1) < epsilon);
+		//eyeZ
+		Assert.assertTrue(Math.abs((eyeVals[2]/10.49413480831) - 1) < epsilon);
+		
+		//Comparing looks values calculated on paper
+		//eyeX
+		Assert.assertTrue(Math.abs((lookVals[0]/-2.50942121667) - 1) < epsilon);
+		//eyeY
+		Assert.assertTrue(Math.abs((lookVals[1]/20.91180057) - 1) < epsilon);
+		//eyeZ
+		Assert.assertTrue(Math.abs((lookVals[2]/10.5898787083) - 1) < epsilon);
+		
+		
+		
+		
+		
 	}
 }

@@ -8,22 +8,18 @@ package edu.arizona.ece473573.witti.cloudview;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import edu.arizona.ece473573.witti.activities.CloudCamera;
 
 public class CloudSurfaceView  extends GLSurfaceView{
 	
     private static final String CAT_TAG = "WITTI_CloudSurfaceView";
-	private final String debug = "WITTI_DEBUG";
     CloudRenderer mRenderer;
     private CloudCamera mCamera;
     PointCloud mCloudPoints;
     
     //Touch vars
-    private float initialX, initialY;
     private float prevX, prevY, currX, currY;
     private float thetaX, thetaY;
     private final float radius = 360;
@@ -56,6 +52,7 @@ public class CloudSurfaceView  extends GLSurfaceView{
 
     @Override
     public void setRenderer(Renderer renderer){
+    	//super.setEGLConfigChooser(8,8,8,8,16,0);
         super.setRenderer(renderer);
         mRenderer = (CloudRenderer)renderer;
     }
@@ -72,8 +69,6 @@ public class CloudSurfaceView  extends GLSurfaceView{
     public boolean onTouchEvent(MotionEvent me){
     	super.onTouchEvent(me);
     	    	
-    	int pointerIndex = me.getActionIndex();
-    	int pointerId = me.getPointerId(pointerIndex);
     	int maskedAction = me.getActionMasked();
     	/*
     	 * When a user begins to drag their fingers across the screen,
@@ -83,7 +78,6 @@ public class CloudSurfaceView  extends GLSurfaceView{
     	 */
     	switch(maskedAction){
     	case MotionEvent.ACTION_UP:
-    		Log.d(debug, "action up; theta = " + thetaX);
     		//Only send this if we're in a rotational state
     		if(state == 0)
     		{
@@ -95,9 +89,8 @@ public class CloudSurfaceView  extends GLSurfaceView{
     		//ie, if a zoom is initiated, it can only revert back to rotation
     		//after both fingers have been lifted
     		state = 0;
-    		Log.d(debug, "action down");
-    		prevX = initialX = me.getX();
-    		prevY = initialY = me.getY();
+    		prevX =  me.getX();
+    		prevY = me.getY();
     		break;
     	case MotionEvent.ACTION_MOVE:
     		//Log.d(debug, "action move");
@@ -124,13 +117,11 @@ public class CloudSurfaceView  extends GLSurfaceView{
     		}
     		break;
     	case MotionEvent.ACTION_POINTER_DOWN:
-    		Log.d(debug, "action pointer down");
     		state = 1; //Two fingers implies zooming action
     		prevDist = getDistance(me);
     		break;
     	case MotionEvent.ACTION_POINTER_UP:
     		state = 2;//Revert back to
-    		Log.d(debug, "action pointer up");
     		break;
     	default:
     		break;
@@ -151,6 +142,11 @@ public class CloudSurfaceView  extends GLSurfaceView{
     	xDist = me.getX(0) - me.getX(1);
     	yDist = me.getY(0) - me.getY(1);
     	return (float)Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+    }
+    
+    public float getRadius()
+    {
+    	return radius;
     }
     
    

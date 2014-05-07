@@ -6,7 +6,6 @@
 package edu.arizona.ece473573.witti.activities;
 
 import android.opengl.Matrix;
-import android.util.Log;
 
 /**
  * This class controls the camera matrix. It is the primary way of changing the current view 
@@ -14,8 +13,6 @@ import android.util.Log;
  * 
  */
 public class CloudCamera {
-	
-	private final String debug = "WITTI_DEBUG";
 	
     //private long mLastUpdateTime;
     private float[] mViewMatrix;
@@ -151,8 +148,6 @@ public class CloudCamera {
 		lookX += zoom * xDir;
 		lookZ += zoom * zDir;
 		
-		Log.d(debug, "eyeY: " + eyeY + " zoom =" + zoom);
-		
 		this.setCamera(eyeX, eyeY, eyeZ,
 				lookX,  lookY, lookZ,
                 0.0f,   0.0f,  1.0f);
@@ -166,5 +161,17 @@ public class CloudCamera {
 	public float getThetaY()
 	{
 		return currThetaY;
+	}
+	
+	public float[] getEye()
+	{
+		float [] returnArr = {eyeX, eyeY, eyeZ};
+		return returnArr;
+	}
+
+	public float[] getLook()
+	{
+		float [] returnArr = {lookX, lookY, lookZ};
+		return returnArr;
 	}
 }

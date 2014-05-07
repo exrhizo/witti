@@ -13,6 +13,7 @@
         android:targetPackage="edu.arizona.ece473573.witti" />
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <uses-library android:name="android.test.runner" />
