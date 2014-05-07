@@ -1,9 +1,15 @@
+//ECE 573 Project
+//Team: Witty
+//Date: 5/7/14
+//Author: Brian Smith
+
 package edu.arizona.ece473573.witti.test;
 
 import junit.framework.Assert;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import edu.arizona.ece473573.witti.activities.CloudCamera;
 import edu.arizona.ece473573.witti.activities.DisplayActivity;
 import edu.arizona.ece473573.witti.cloudview.CloudSurfaceView;
@@ -76,13 +82,13 @@ public class PerspectiveChangeTest extends ActivityInstrumentationTestCase2<Disp
 		//Comparing two floats the IBM way
 		//Test value calculated on paper
 		//Comparing lookX
-		Assert.assertTrue(Math.abs((lookVals[0]/-2.392329) - 1) < epsilon);
+		Assert.assertTrue(Math.abs((lookVals[0]/-1.5982939) - 1) < epsilon);
 		
 		//Comparing lookY
-		Assert.assertTrue(Math.abs((lookVals[1]/19.9360341) - 1) < epsilon);
+		Assert.assertTrue(Math.abs((lookVals[1]/19.073126) - 1) < epsilon);
 		
 		//Comparing lookZ
-		Assert.assertTrue(Math.abs((lookVals[2]/10.0957439) - 1) < epsilon);
+		Assert.assertTrue(Math.abs((lookVals[2]/11.561199) - 1) < epsilon);
 	}
 	
 
@@ -119,19 +125,19 @@ public class PerspectiveChangeTest extends ActivityInstrumentationTestCase2<Disp
 		//Comparing updated eye values
 		//Actual values calculated on paper
 		//eyeX
-		Assert.assertTrue(Math.abs((eyeVals[0]/-0.11709221667) - 1) < epsilon);
+		Assert.assertTrue(Math.abs((eyeVals[0]/-0.078625664) - 1) < epsilon);
 		//eyeY
-		Assert.assertTrue(Math.abs((eyeVals[1]/-9.02423352997) - 1) < epsilon);
+		Assert.assertTrue(Math.abs((eyeVals[1]/-9.061727) - 1) < epsilon);
 		//eyeZ
-		Assert.assertTrue(Math.abs((eyeVals[2]/10.49413480831) - 1) < epsilon);
+		Assert.assertTrue(Math.abs((eyeVals[2]/10.568736) - 1) < epsilon);
 		
 		//Comparing looks values calculated on paper
 		//eyeX
-		Assert.assertTrue(Math.abs((lookVals[0]/-2.50942121667) - 1) < epsilon);
+		Assert.assertTrue(Math.abs((lookVals[0]/-1.6769196) - 1) < epsilon);
 		//eyeY
-		Assert.assertTrue(Math.abs((lookVals[1]/20.91180057) - 1) < epsilon);
+		Assert.assertTrue(Math.abs((lookVals[1]/20.0114) - 1) < epsilon);
 		//eyeZ
-		Assert.assertTrue(Math.abs((lookVals[2]/10.5898787083) - 1) < epsilon);
+		Assert.assertTrue(Math.abs((lookVals[2]/12.129935) - 1) < epsilon);
 		
 		
 		
