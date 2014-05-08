@@ -14,30 +14,25 @@ import android.opengl.Matrix;
  */
 public class CloudCamera {
 	
-    //private long mLastUpdateTime;
+    private final float PI = 3.14159265f;
     private float[] mViewMatrix;
     float eyeX, eyeY, eyeZ;
     float lookX, lookY, lookZ;
     float currThetaX, currThetaY;
-    float mThetaDecay;
+    float mThetaDecay, mPhiDecay;
     
-    private float mSpinRate = 0.85f;
+    float mTheta, mPhi, mMag;
 
     public CloudCamera(){
     	
     	mViewMatrix = new float[16];
 
-        eyeX = 0f; 
-        eyeY = -10.0f;
-        eyeZ = 10.0f;
-
-        lookX = 0.0f;
-        lookY = 20.0f;
-        lookZ = 10.0f;
+        mTheta = 0;
+        mPhi = 4 / PI;
+        mMag = 20.0f;
         
         mThetaDecay = 0.0f;
-
-        //mLastUpdateTime = System.currentTimeMillis();
+        mPhiDecay = 0.0f;
     	
     }
     
@@ -52,11 +47,19 @@ public class CloudCamera {
      * @param 	eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ: float values
      * 			for current camera matrix
      */
-    public void setCamera(float eyeX, float eyeY, float eyeZ, 
-            float lookX, float lookY, float lookZ, 
-            float upX, float upY, float upZ) {
+    public void setCamera(float theta, float phi, float mag) {
     		
-    	Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
+    	mTheta = theta; mPhi = phi; mMag = mag;
+    	
+    	eyeX = (float) (mag*Math.cos(theta)*Math.cos(phi));
+    	eyeY = (float) (mag*Math.sin(theta)*Math.cos(phi));
+    	eyeZ = (float) (mag*Math.sin(phi));
+
+    	lookX = (float) 0.0f;//(-2*mag*Math.cos(theta)*Math.cos(phi));
+    	lookY = (float) 0.0f;//(-2*mag*Math.sin(theta)*Math.cos(phi));
+    	lookZ = (float) 0.0f;//(-2*mag*Math.sin(phi));
+    	
+    	Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, 0f, 0f, 1f);
     }
 
     /**
@@ -65,50 +68,50 @@ public class CloudCamera {
      * @param 	theta: The current angle calculated from the CloudDisplayView based on how far apart
      * 					the motion events were
      */
-	public void rotateCamera(float thetaX, float thetaY) {
+	public void rotateCamera(float theta, float phi) {
 		
-		float tempX, tempY, tempZ;
+		mTheta += theta; mPhi += phi;
 		
-		currThetaX = thetaX; currThetaY = thetaY;
+		if(mTheta < 0)
+			mTheta = 0;
+		else if(mTheta > 2*PI)
+			mTheta = 2*PI;		
 		
-		//Simple rotation matrix calculations to rotate about the Z-axis
-		tempX = (float) ((lookX * Math.cos(thetaX)) - (lookY * Math.sin(thetaX)));
-		tempY = (float) ((lookX * Math.sin(thetaX)) + (lookY * Math.cos(thetaX)));
-		lookX = tempX;
-		lookY = tempY;
-		
-		//Add the rotation about the x-axis
-		tempY = (float) ((lookY * Math.cos(thetaY)) - (lookZ * Math.sin(thetaY)));
-		tempZ = (float) ((lookY * Math.sin(thetaY)) + (lookZ * Math.cos(thetaY)));
-		lookY = tempY;
-		lookZ = tempZ;	
-		
-		this.setCamera(eyeX, eyeY, eyeZ,
-				lookX, lookY, lookZ,
-                0.0f,   0.0f,  1.0f);
+		this.setCamera(mTheta, mPhi, mMag);
 		
 	}
 	
-	public void rotateCameraPassiveInit(float theta)
+	public void rotateCameraPassiveInit()
 	{
-		mThetaDecay = theta;
+		mThetaDecay = mTheta;
+		mPhiDecay = mPhi;
 	}
 
     public void update(long time){
         //float dt = mLastUpdateTime - time;
         //mLastUpdateTime = time;
         
-        
+    	/*
         if(Math.abs(mThetaDecay) > 0.005f)
         {
             //Log.d(debug, "theta: " + mThetaDecay);
         	mThetaDecay = mThetaDecay * mSpinRate;
-        	rotateCamera(mThetaDecay, 0.0f);
         }
         else
         {
         	mThetaDecay = 0.0f;
         }
+        
+        if(Math.abs(mPhiDecay) > 0.005f)
+        {
+        	mPhiDecay = mPhiDecay * mSpinRate;
+        }
+        else
+        {
+        	mPhiDecay = 0.0f;
+        }
+        
+    	rotateCamera(mThetaDecay, mPhiDecay);*/
 
     }
     
@@ -116,62 +119,34 @@ public class CloudCamera {
      * Resets camera position to the original view.
      */
     public void resetCamera(){
-        eyeX = 0f; 
-        eyeY = -10.0f;
-        eyeZ = 10.0f;
 
-        lookX = 0.0f;
-        lookY = 20.0f;
-        lookZ = 10.0f;
+    	mTheta = 0f; mPhi = 4 / PI; mMag = 20.0f;
         
-    	this.setCamera(0.0f, -10.0f, 10.0f,
-                0.0f,  20.0f, 10.0f,
-                0.0f,   0.0f,  1.0f);
+    	this.setCamera(mTheta, mPhi, mMag);
     }
 
 	public void zoomCamera(float zoom) {
 		
-		//Get look unit vector
-		float mag = (float)Math.sqrt(Math.pow(lookX, 2) + Math.pow(lookY, 2) + Math.pow(lookZ, 2));
-		float xDir = lookX / mag;
-		float yDir = lookY / mag;
-		float zDir = lookZ / mag;
+		if(zoom < 0)
+		{
+			mMag -= 0.5;
+		}
+		else
+		{
+			mMag += 0.5;
+		}
 		
-		//As zoom gets bigger, ie distance between pointers increases
-		//then it should zoom in
-		eyeY += zoom * yDir;
-		eyeX += zoom * xDir;
-		eyeZ += zoom * zDir;
-		//lookY = lookY / zoom;
-		
-		lookY += zoom * yDir;
-		lookX += zoom * xDir;
-		lookZ += zoom * zDir;
-		
-		this.setCamera(eyeX, eyeY, eyeZ,
-				lookX,  lookY, lookZ,
-                0.0f,   0.0f,  1.0f);
+		this.setCamera(mTheta, mPhi, mMag);
 	}
 	
-	public float getThetaX()
+	public float getTheta()
 	{
-		return currThetaX;
+		return mTheta;
 	}
 	
-	public float getThetaY()
+	public float getPhi()
 	{
-		return currThetaY;
+		return mPhi;
 	}
 	
-	public float[] getEye()
-	{
-		float [] returnArr = {eyeX, eyeY, eyeZ};
-		return returnArr;
-	}
-
-	public float[] getLook()
-	{
-		float [] returnArr = {lookX, lookY, lookZ};
-		return returnArr;
-	}
 }

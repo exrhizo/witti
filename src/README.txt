@@ -21,6 +21,10 @@ KNOWN TESTING ISSUES
 The DemoPlaybackTest.java sometimes fails when run with the other tests. If this occurs, 
 please re-test DemoPlaybackTest.java individually.
 
+TESTING CHANGES FROM REQUIREMENTS VERIFICATION
+----------------------------------------------
+To test the A-requirement 
+
 
 SERVER SETUP
 ------------
