@@ -77,7 +77,7 @@ public class CloudRenderer implements Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        mTime += .005;
+        mTime += .003;
         // This multiplies the view matrix by the model matrix, and stores the result in the MVP matrix
         // (which currently contains model * view).
         Matrix.multiplyMM(mMVPMatrix, 0, mCamera.getViewMatrix(), 0, mModelMatrix, 0);

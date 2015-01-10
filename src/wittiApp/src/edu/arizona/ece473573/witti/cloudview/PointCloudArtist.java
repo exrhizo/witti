@@ -53,7 +53,7 @@ public class PointCloudArtist {
             return;
         }
         FloatBuffer vertexBuffer = pc.mVertexBuffer;
-        float height = pc.mHeight/6.0f;
+        float height = pc.mHeight;
         float zBottom = pc.mMinZ - height * (mDisplayActivity.mRenderer.mTime % 1.0f - 1.0f);
         Utils.checkGlError(CAT_TAG, "Draw, Before Use Program");
         GLES20.glUseProgram(mProgId);
@@ -99,11 +99,11 @@ public class PointCloudArtist {
             "uniform float a_height;" +
             "varying vec4 v_color;" +
             "void main(){" +
-                "gl_PointSize = 8.0;" +
+                "gl_PointSize = 6.0;" +
                 "float mix = (a_Position.z-a_z_bottom)/a_height;" +
                 "mix = mix - floor(mix);" +
                 "mix = 4.0 * (mix * mix - mix + .25);" +
-                "mix = mix * mix;" +
+                //"mix = (16.0 * mix * mix - 24.0 * mix + 9.0);" +
                 "mix = mix * mix;" +
                 "mix = mix * mix;" +
                 "v_color = vec4(1.0*mix + .58 - .58*mix," +
