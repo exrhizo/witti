@@ -61,9 +61,7 @@ public class CloudRenderer implements Renderer {
         mPointCloudArtist = new PointCloudArtist(display);
         mTime = 0.0f;
         mCamera = cc;
-        mCamera.setCamera(0.0f, -10.0f, 10.0f,
-                          0.0f,  20.0f, 10.0f,
-                          0.0f,   0.0f,  1.0f);
+        mCamera.setCamera(0.0f, 1.0f, 10.0f);
         Matrix.setIdentityM(mModelMatrix, 0);
         
         mZoom = 1;
